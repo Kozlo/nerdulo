@@ -6,7 +6,8 @@
     "url": "git://github.com/Kozlo/nerdulo.git"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "postinstall": "bower install"
   },
   "dependencies": {
     "express" : "~4.5.1",
