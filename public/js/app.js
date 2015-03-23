@@ -1,0 +1,1 @@
+angular.module('nerdulo', ['ngRoute', 'appRoutes', 'MainCtrl', 'NerdCtrl', 'NerdService', 'CountingGameCtrl', 'AnswerService', 'AllStarCtrl', 'AllStarService']);

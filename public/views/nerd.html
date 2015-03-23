@@ -1,0 +1,39 @@
+<div class="jumbotron text-center">
+    <h1>Nerds and Proud</h1>
+
+    <p>{{ tagline }}</p>
+</div>
+
+<!-- FORM TO CREATE NERDS -->
+<div id="nerd-form" class="row">
+    <div class="col-sm-4 col-sm-offset-4 text-center">
+        <!-- TODO: add Angular form validation here -->
+        <form>
+            <div class="form-group">
+                <!-- BIND THIS TO nerdData.name/tool in ANGULAR -->
+                <input type="text" class="form-control input-lg text-center" placeholder="Nerd name" ng-model="nerdData.name" />
+                <br />
+                <input type="text" class="form-control input-lg text-center" placeholder="Nerd tool" ng-model="nerdData.tool" />
+            </div> <!-- form-group -->
+            <!-- createNerd() WILL CREATE NEW NERD -->
+            <button type="submit" class="btn btn-primary btn-lg" ng-click="createNerd()">Create</button>
+        </form>
+    </div> <!-- col-sm-8 -->
+</div> <!-- row -->
+
+<!-- FORM TO CREATE NERDS -->
+<div id="nerd-list" class="row">
+    <div class="col-sm-6 col-sm-offset-3 text-center">
+        <h3>Nerd List</h3>
+        <div ng-repeat="nerd in nerds  track by $index">
+            <div class="panel panel-default">
+                <div class="panel-heading">Name: {{ nerd.name }}</div>
+                <div class="panel-body">
+                    Tool: {{ nerd.tool }}
+                    <br />
+                    <input type="button" class="btn btn-danger" ng-click="deleteNerd(nerd._id)" value="delete" />
+                </div>
+            </div>
+        </div>
+    </div> <!-- col-sm-8 -->
+</div> <!-- row -->
