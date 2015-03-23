@@ -1,3 +1,3 @@
 module.exports = {
-    url : process.env.DB_NAME || 'mongodb://localhost/nerdulo-dev'
+    url : process.env.MONGOLAB_URI || 'mongodb://localhost/nerdulo-dev'
 }
