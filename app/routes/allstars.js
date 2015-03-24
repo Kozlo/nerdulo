@@ -17,7 +17,10 @@ module.exports = function(app) {
             score = req.body.score,
             time = req.body.time;
 
-        // TODO: add validation here
+        if (typeof name != 'undefined' || typeof score != 'undefined' || typeof time != 'undefined') {
+            res.send({valid: 0, error: "Not all mandatory fields have been entered." });
+            return;
+        }
 
         Allstar.create({
             name: name,

@@ -89,7 +89,7 @@ angular.module('AnswerService', [])
 
         this.generateQuestions = function() {
             var questions= [];
-            for(var i=0 ; i<10; i++) {
+            for(var i=0 ; i<1; i++) {
                 questions.push( new Question(i, optCount, minDev, maxDev, minNum, maxNum) );
             }
             return questions;
