@@ -1,6 +1,6 @@
 angular.module('CountingGameCtrl', [])
 
-    .controller('CountingGameController', function(Answers, AllStars) {
+    .controller('CountingGameController', function($location, Answers, AllStars) {
         var vm = this;
         vm.tagline = 'Select the correct answer to the given math problems.';
 
@@ -63,7 +63,8 @@ angular.module('CountingGameCtrl', [])
             if(!$.isEmptyObject(vm.allStarData)) {
                 AllStars.create(vm.allStarData)
                     .success(function() {
-                        document.location.href = '/allstars';
+                        // when the data is updated, redirect the player to the score board
+                        $location.path('/allstars');
                     });
             } else {
                 console.log('AllStar data is empty');

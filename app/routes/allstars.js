@@ -17,7 +17,8 @@ module.exports = function(app) {
             score = req.body.score,
             time = req.body.time;
 
-        if (typeof name != 'undefined' || typeof score != 'undefined' || typeof time != 'undefined') {
+        if (typeof name == 'undefined' || typeof score == 'undefined' || typeof time == 'undefined') {
+            console.log('Not all mandatory fields have been entered.');
             res.send({valid: 0, error: "Not all mandatory fields have been entered." });
             return;
         }
