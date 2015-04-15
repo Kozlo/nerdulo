@@ -74,6 +74,11 @@ angular.module('AnswerService', [])
                 }
                 return opts;
             },
+            /**
+             * TODO: move to the vm or a separate service
+             * Set the player's answer in the view
+             * @param opt {String || Number}
+             */
             setPlayerAnswer : function(opt) {
                 this.playerAnswer = opt;
                 this.playerPrompt = "Your answer is: " + this.playerAnswer;

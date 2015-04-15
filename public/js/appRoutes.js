@@ -11,6 +11,10 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
         .when('/counting-game', {
             templateUrl: 'views/counting-game.html'
         })
+        // pattern game view
+        .when('/pattern-game', {
+            templateUrl: 'views/games/pattern/game.html'
+        })
         // nerds page that will use the NerdController
         .when('/nerds', {
             templateUrl: 'views/nerd.html',

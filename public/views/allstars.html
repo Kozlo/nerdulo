@@ -4,8 +4,21 @@
     <p>{{ tagline }}</p>
 </div>
 <div id="allstar-list" class="row">
-    <div class="col-sm-6 col-sm-offset-3 text-center">
-        <div ng-repeat="allStar in allStars | orderBy: ['-score', 'time']">
+    <div class="col-sm-6 text-center">
+        <h3>The Counting Game</h3>
+        <div ng-repeat="allStar in allStars | filter : { game: 'count'} | orderBy: ['-score', 'time']">
+            <div class="panel panel-default">
+                <div class="panel-heading"><span class="pull-left">{{ $index + 1 }}.</span><strong>{{ allStar.name }}</strong></div>
+                <div class="panel-body">
+                    <p>Score: <strong>{{ allStar.score }}</strong> points</p>
+                    <p>Time: <strong>{{ allStar.time }}</strong> seconds</p>
+                </div>
+            </div>
+        </div>
+    </div> <!-- col-sm-8 -->
+    <div class="col-sm-6 text-center">
+        <h3>The Pattern Game</h3>
+        <div ng-repeat="allStar in allStars | filter : { game: 'pattern'} | orderBy: ['-score', 'time']">
             <div class="panel panel-default">
                 <div class="panel-heading"><span class="pull-left">{{ $index + 1 }}.</span><strong>{{ allStar.name }}</strong></div>
                 <div class="panel-body">

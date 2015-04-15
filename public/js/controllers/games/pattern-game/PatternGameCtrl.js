@@ -1,15 +1,15 @@
-angular.module('CountingGameCtrl', [])
+angular.module('PatternGameCtrl', [])
 
-    .controller('CountingGameController', function($location, Answers, AllStars) {
+    .controller('PatternGameController', function($location, Patterns, AllStars) {
         var vm = this;
-        vm.tagline = 'Select the correct answer to the given math problems.';
+        vm.tagline = 'Choose the number that fits in the pattern.';
 
-        // indicated is the user is currently playing the game
+        // indicates if the user is currently playing the game
         vm.isPlaying = false;
 
         vm.startGame = function() {
-            // variables for question
-            vm.questions = Answers.generateQuestions();
+            // TODO: move this to a service that in turn used another service (for each respective game)
+            vm.questions = Patterns.generatePatterns();
             vm.isPlaying = true;
             vm.startTime = new Date().getTime();
             vm.currentQuestionNo = 0;
@@ -29,6 +29,7 @@ angular.module('CountingGameCtrl', [])
                 vm.endGame();
             }
         };
+        // TODO: move to a service along with other 'game-related' functions
         vm.endGame = function() {
             var result = 0;
             for (var i = 0; i < vm.questions.length; i++) {
@@ -55,17 +56,17 @@ angular.module('CountingGameCtrl', [])
         };
 
         vm.allStarData = {
-            game: 'count'
+            game: 'pattern'
         };
 
         vm.createAllStar = function () {
             vm.allStarData.score = vm.gameResult;
             vm.allStarData.time = vm.totalSeconds;
-            console.log(vm.allStarData, vm.gameResult, vm.totalSeconds);
             if(!$.isEmptyObject(vm.allStarData)) {
                 AllStars.create(vm.allStarData)
                     .success(function() {
                         // when the data is updated, redirect the player to the score board
+
                         $location.path('/allstars');
                     });
             } else {

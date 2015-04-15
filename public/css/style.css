@@ -3,3 +3,15 @@ body { padding-top:30px; }
 .answer-option {
     display:inline;
 }
+
+.pattern-item-holder {
+    display:inline;
+}
+.pattern-item-holder span {
+    font-size: 15px;
+    margin: 0 5px;
+    padding: 10px 15px;
+}
+.pattern-items-wrapper {
+    margin: 20px 0;
+}

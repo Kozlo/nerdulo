@@ -1,0 +1,45 @@
+<div class="game pattern-game" ng-controller="PatternGameController as pattern">
+    <div class="jumbotron text-center">
+        <!-- only shown before game -->
+        <div ng-hide="pattern.isPlaying">
+            <h1>The Pattern Game</h1>
+
+            <p>{{ pattern.tagline }}</p>
+
+            <button class="btn btn-lg btn-success" ng-click="pattern.startGame()">Start</button>
+        </div>
+        <!-- TODO: if possible move this to a generic answer generation view (also for counting game) -->
+        <!-- only shown when playing -->
+        <div ng-show="pattern.isPlaying && !pattern.gameFinished">
+            <div ng-repeat="q in pattern.questions" ng-show="q.isCurrentQuestion">
+                <p> {{ "Pattern    " + (pattern.currentQuestionNo + 1) + " / " + pattern.questions.length + ":" }}</p>
+                <!-- TODO: replace with pattern-game specific HTML -->
+                <div class="pattern-items-wrapper">
+                    <div ng-repeat=" pi in q.pattern" class="pattern-item-holder">
+                        <span class="label label-default">{{ pi }}</span>
+                    </div>
+                </div>
+                <div class="answer-option" ng-repeat="opt in q.options track by $index">
+                    <button type="button" class="btn btn-default" ng-class="{ active: opt == q.playerAnswer }" ng-click="q.setPlayerAnswer(opt)">{{ opt }}</button>
+                </div>
+                <p>{{ q.playerPrompt }}</p>
+                <button type="button" class="btn bnt-default" ng-click="pattern.submitAnswer()">Submit</button>
+            </div>
+        </div>
+        <div ng-show="pattern.gameFinished">
+            <p>Good job! You got <strong>{{ pattern.gameResult }}</strong> out of <strong>{{ pattern.questions.length }}</strong> questions right in <strong>{{ pattern.gameTime }}</strong>.</p>
+            <p>Submit your score to the wall of fame!</p>
+            <!-- FORM TO CREATE ALLSTARS -->
+            <div id="allstar-form" class="row">
+                <div class="col-sm-4 col-sm-offset-4 text-center">
+                    <form novalidate name="allStartForm" >
+                        <div class="form-group">
+                            <input type="text" class="form-control input-lg text-center" placeholder="Champ's name" ng-model="pattern.allStarData.name" required />
+                        </div> <!-- form-group -->
+                        <button type="submit" ng-disabled="!allStartForm.$valid" class="btn btn-primary btn-lg" ng-click="pattern.createAllStar()">Submit</button>
+                    </form>
+                </div> <!-- col-sm-8 -->
+            </div> <!-- row -->
+        </div>
+    </div>
+</div>

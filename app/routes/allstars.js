@@ -2,6 +2,7 @@ var Allstar = require('../models/allstar');
 
 module.exports = function(app) {
     // GET =============
+    // TODO: make it possible to specify game ID or name
     app.get('/api/allstars', function (req, res) {
         Allstar.find(function (err, allstars) {
             if (err)
@@ -15,7 +16,8 @@ module.exports = function(app) {
     app.post('/api/allstars', function (req, res) {
         var name = req.body.name,
             score = req.body.score,
-            time = req.body.time;
+            time = req.body.time,
+            game = req.body.game;
 
         if (typeof name == 'undefined' || typeof score == 'undefined' || typeof time == 'undefined') {
             console.log('Not all mandatory fields have been entered.');
@@ -26,7 +28,8 @@ module.exports = function(app) {
         Allstar.create({
             name: name,
             score: score,
-            time: time
+            time: time,
+            game: game
         }, function (err, allstar) {
             if (err)
                 res.send(err);
