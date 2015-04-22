@@ -1,6 +1,17 @@
 angular.module('AllStarCtrl', [])
 
-    .controller('AllStarController', function($scope, AllStars) {
+    .controller('AllStarController', function($scope, $location, AllStars) {
+        $scope.showCounting = true;
+
+        $scope.$on("$routeChangeSuccess", function () {
+            // TODO: improve the logic here
+            if ($location.hash() == 'counting-allstar') {
+                $scope.showCounting = true;
+            } else {
+                $scope.showCounting = false;
+            }
+        });
+
         $scope.allStarData = {};
 
         $scope.tagline = 'The hall of fame!';

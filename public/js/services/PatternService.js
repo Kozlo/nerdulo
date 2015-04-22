@@ -121,17 +121,17 @@ angular.module('PatternService', [])
             },
             multiple : {
                 min : 2,
-                max : 4
+                max : 3
             },
             constant : {
-                min : -35,
-                max : 35
+                min : -25,
+                max : 25
             },
             itemCount : 5,
-            optCount : 5,
+            optCount : 7,
             deviance : {
-                min : -30,
-                max : 30
+                min : -25,
+                max : 25
             }
         };
 
