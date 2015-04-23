@@ -1,44 +1,45 @@
 angular.module('AllStarCtrl', [])
 
     .controller('AllStarController', function($scope, $location, AllStars) {
-        $scope.showCounting = true;
+        var vm = this;
+        vm.showCounting = true;
 
         $scope.$on("$routeChangeSuccess", function () {
             // TODO: improve the logic here
             if ($location.hash() == 'counting-allstar') {
-                $scope.showCounting = true;
+                vm.showCounting = true;
             } else {
-                $scope.showCounting = false;
+                vm.showCounting = false;
             }
         });
 
-        $scope.allStarData = {};
+        vm.allStarData = {};
 
-        $scope.tagline = 'The hall of fame!';
+        vm.tagline = 'The hall of fame!';
 
         AllStars.get('/api/allstars')
             .success(function(data){
-                $scope.allStars = data;
+                vm.allStars = data;
             });
 
         // TODO: move the create data to end of the game
-        $scope.createAllStar = function () {
-            if(!$.isEmptyObject($scope.allStarData)) {
-                AllStars.create($scope.allStarData)
+        vm.createAllStar = function () {
+            if(!$.isEmptyObject(vm.allStarData)) {
+                AllStars.create(vm.allStarData)
                     .success(function(data) {
                         console.log('allstar saved successfully');
-                        $scope.allStarData = {}; // clear the form after the new Nerd is created
-                        $scope.allStars = data;
+                        vm.allStarData = {}; // clear the form after the new Nerd is created
+                        vm.allStars = data;
                     });
             } else {
                 console.log('AllStar data is empty');
             }
         };
 
-        $scope.deleteAllStar = function(id) {
+        vm.deleteAllStar = function(id) {
             AllStars.delete(id)
                 .success(function(data) {
-                    $scope.allStars = data;
+                    vm.allStars = data;
                 })
         };
     }

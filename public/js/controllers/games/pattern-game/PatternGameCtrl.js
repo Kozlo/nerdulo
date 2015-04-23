@@ -10,6 +10,9 @@ angular.module('PatternGameCtrl', [])
         vm.startGame = function() {
             // TODO: move this to a service that in turn used another service (for each respective game)
             vm.questions = Patterns.generatePatterns();
+            for (var i=0; i < vm.questions.length; i++) {
+                console.log('ctr:', vm.questions[i].options);
+            }
             vm.isPlaying = true;
             vm.startTime = new Date().getTime();
             vm.currentQuestionNo = 0;

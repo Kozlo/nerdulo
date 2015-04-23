@@ -11,11 +11,11 @@
         <!-- TODO: if possible move this to a generic answer generation view (also for counting game) -->
         <!-- only shown when playing -->
         <div ng-show="pattern.isPlaying && !pattern.gameFinished">
-            <div ng-repeat="q in pattern.questions" ng-show="q.isCurrentQuestion">
+            <div ng-repeat="q in pattern.questions track by $index" ng-show="q.isCurrentQuestion">
                 <p> {{ "Pattern    " + (pattern.currentQuestionNo + 1) + " / " + pattern.questions.length + ":" }}</p>
                 <!-- TODO: replace with pattern-game specific HTML -->
                 <div class="pattern-items-wrapper">
-                    <div ng-repeat=" pi in q.pattern" class="pattern-item-holder">
+                    <div ng-repeat=" pi in q.pattern track by $index" class="pattern-item-holder">
                         <span class="label label-default">{{ pi }}</span>
                     </div>
                 </div>

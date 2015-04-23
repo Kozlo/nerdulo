@@ -1,42 +1,44 @@
-<div class="jumbotron text-center">
-    <h1>All Stars</h1>
+<div ng-controller="AllStarController as starCtrl">
+    <div class="jumbotron text-center">
+        <h1>All Stars</h1>
 
-    <p>{{ tagline }}</p>
-</div>
-<div id="allstar-list" ng-controller="AllStarController">
-    <div class="row">
-        <div class="col-xs-12 col-sm-5 col-sm-offset-4">
-            <div class="nav nav-pills">
-                <!--TODO: add 'class="active"' accordingly-->
-                <li role="presentation"><a href="#counting-allstar">Counting Game</a></li>
-                <li role="presentation"><a href="#pattern-allstar">Pattern Game</a></li>
+        <p>{{ starCtrl.tagline }}</p>
+    </div>
+    <div id="allstar-list">
+        <div class="row">
+            <div class="col-xs-12 col-sm-5 col-sm-offset-4">
+                <div class="nav nav-pills">
+                    <!--TODO: add 'class="active"' accordingly-->
+                    <li ng-class="{ active: starCtrl.showCounting }" role="presentation"><a href="#counting-allstar">Counting Game</a></li>
+                    <li ng-class="{ active: !starCtrl.showCounting }" role="presentation"><a href="#pattern-allstar">Pattern Game</a></li>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class=" col-xs-12 col-sm-8 col-sm-offset-2 text-center" ng-show="showCounting">
-            <h3>The Counting Game</h3>
-            <div ng-repeat="allStar in allStars | filter : { game: 'count'} | orderBy: ['-score', 'time']">
-                <div class="panel panel-default">
-                    <div class="panel-heading"><span class="pull-left">{{ $index + 1 }}.</span><strong>{{ allStar.name }}</strong></div>
-                    <div class="panel-body">
-                        <p>Score: <strong>{{ allStar.score }}</strong> points</p>
-                        <p>Time: <strong>{{ allStar.time }}</strong> seconds</p>
+        <div class="row">
+            <div class=" col-xs-12 col-sm-8 col-sm-offset-2 text-center" ng-show="starCtrl.showCounting">
+                <h3>The Counting Game</h3>
+                <div ng-repeat="allStar in starCtrl.allStars | filter : { game: 'count'} | orderBy: ['-score', 'time']">
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><span class="pull-left">{{ $index + 1 }}.</span><strong>{{ allStar.name }}</strong></div>
+                        <div class="panel-body">
+                            <p>Score: <strong>{{ allStar.score }}</strong> points</p>
+                            <p>Time: <strong>{{ allStar.time }}</strong> seconds</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div> <!-- col-sm-6 -->
-        <div class=" col-xs-12 col-sm-8 col-sm-offset-2 text-center" ng-show="!showCounting">
-            <h3>The Pattern Game</h3>
-            <div ng-repeat="allStar in allStars | filter : { game: 'pattern'} | orderBy: ['-score', 'time']">
-                <div class="panel panel-default">
-                    <div class="panel-heading"><span class="pull-left">{{ $index + 1 }}.</span><strong>{{ allStar.name }}</strong></div>
-                    <div class="panel-body">
-                        <p>Score: <strong>{{ allStar.score }}</strong> points</p>
-                        <p>Time: <strong>{{ allStar.time }}</strong> seconds</p>
+            </div> <!-- col-sm-6 -->
+            <div class=" col-xs-12 col-sm-8 col-sm-offset-2 text-center" ng-show="!starCtrl.showCounting">
+                <h3>The Pattern Game</h3>
+                <div ng-repeat="allStar in starCtrl.allStars | filter : { game: 'pattern'} | orderBy: ['-score', 'time']">
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><span class="pull-left">{{ $index + 1 }}.</span><strong>{{ allStar.name }}</strong></div>
+                        <div class="panel-body">
+                            <p>Score: <strong>{{ allStar.score }}</strong> points</p>
+                            <p>Time: <strong>{{ allStar.time }}</strong> seconds</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div> <!-- col-sm-6 -->
-    </div>
-</div> <!-- allstar-list -->
+            </div> <!-- col-sm-6 -->
+        </div>
+    </div> <!-- allstar-list -->
+</div>

@@ -50,7 +50,7 @@ angular.module('PatternService', [])
              * Hide a random option from the pattern (except for the first one as it's a single digit number)
              */
             hideOption : function() {
-                var hiddenOptNo = this.getRandomInt(1, this.config.optCount - 1),
+                var hiddenOptNo = this.getRandomInt(1, this.config.itemCount - 1),
                     answer = this.pattern[hiddenOptNo];
                 this.pattern[hiddenOptNo] = "?";
                 return answer;
@@ -82,6 +82,7 @@ angular.module('PatternService', [])
                         opts.push(randOpt);
                     }
                 }
+                console.log('srvc:', opts);
                 // return the options, but add the correct answer to the list first
                 return this.addAnswer(opts);
             },
@@ -137,7 +138,7 @@ angular.module('PatternService', [])
 
         this.generatePatterns = function() {
             var questions= [];
-            for(var i=0 ; i<1; i++) {
+            for(var i=0 ; i<10; i++) {
                 questions.push(new Pattern(i, config));
             }
             return questions;
