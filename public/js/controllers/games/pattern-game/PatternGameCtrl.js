@@ -67,7 +67,7 @@ angular.module('PatternGameCtrl', [])
                     .success(function() {
                         // when the data is updated, redirect the player to the score board
 
-                        $location.path('/allstars');
+                        $location.path('/allstars#pattern-allstar');
                     });
             } else {
                 console.log('AllStar data is empty');

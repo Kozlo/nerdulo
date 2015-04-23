@@ -5,7 +5,6 @@ module.exports = function(app) {
     // authentication routes
 
     require('./routes/allstars.js')(app);
-    require('./routes/nerds.js')(app);
 
     // frontend routes =========================================================
     // route to handle all angular requests
