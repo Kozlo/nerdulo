@@ -61,12 +61,12 @@ angular.module('CountingGameCtrl', [])
         vm.createAllStar = function () {
             vm.allStarData.score = vm.gameResult;
             vm.allStarData.time = vm.totalSeconds;
-            console.log(vm.allStarData, vm.gameResult, vm.totalSeconds);
             if(!$.isEmptyObject(vm.allStarData)) {
                 AllStars.create(vm.allStarData)
                     .success(function() {
                         // when the data is updated, redirect the player to the score board
-                        $location.path('/allstars#counting-allstar');
+                        $location.path('/allstars');
+                        $location.hash('counting-allstar');
                     });
             } else {
                 console.log('AllStar data is empty');
