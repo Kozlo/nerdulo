@@ -82,7 +82,6 @@ angular.module('PatternService', [])
                         opts.push(randOpt);
                     }
                 }
-                console.log('srvc:', opts);
                 // return the options, but add the correct answer to the list first
                 return this.addAnswer(opts);
             },

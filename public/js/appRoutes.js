@@ -9,7 +9,7 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
         })
         // counting game view
         .when('/counting-game', {
-            templateUrl: 'views/counting-game.html'
+            templateUrl: 'views/games/counting/game.html'
         })
         // pattern game view
         .when('/pattern-game', {
