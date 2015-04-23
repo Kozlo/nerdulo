@@ -15,15 +15,12 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
         .when('/pattern-game', {
             templateUrl: 'views/games/pattern/game.html'
         })
-        // nerds page that will use the NerdController
-        .when('/nerds', {
-            templateUrl: 'views/nerd.html',
-            controller: 'NerdController'
-        })
+        // scoreboard for all games
         .when('/allstars', {
             templateUrl: 'views/allstars.html',
             controller: 'AllStarController'
         })
+        // view with the team members
         .when('/team', {
             templateUrl: 'views/team.html'
         });
