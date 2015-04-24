@@ -63,7 +63,7 @@ angular.module('PatternService', [])
             optionGenerator : function() {
                 // an array to hold all answers
                 var opts = [];
-                while (opts.length < this.config.optCount) {
+                do {
                     var randOpt;
                     if (this.answer > 30) {
                         // generate a random number that is different from the correct answer by max % specified by the maxDev variable
@@ -81,7 +81,7 @@ angular.module('PatternService', [])
                         //push the non-zero option to the list of available options
                         opts.push(randOpt);
                     }
-                }
+                } while (opts.length < this.config.optCount - 1)
                 // return the options, but add the correct answer to the list first
                 return this.addAnswer(opts);
             },
@@ -124,11 +124,11 @@ angular.module('PatternService', [])
                 max : 3
             },
             constant : {
-                min : -25,
-                max : 25
+                min : -20,
+                max : 20
             },
             itemCount : 5,
-            optCount : 7,
+            optCount : 5,
             deviance : {
                 min : -25,
                 max : 25
