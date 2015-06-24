@@ -8,8 +8,17 @@ angular.module('CountingGameCtrl', [])
         vm.isPlaying = false;
 
         vm.startGame = function() {
-            // variables for question
-            vm.questions = Answers.generateQuestions();
+            // consider moving this to the answer service
+            var config = {
+                questCount: 10,
+                falseOptCount : 5,
+                minDev : -20,
+                maxDev : 20,
+                minNum : 11,
+                maxNum : 29
+            };
+
+            vm.questions = Answers.generateQuestions(config);
             vm.isPlaying = true;
             vm.startTime = new Date().getTime();
             vm.currentQuestionNo = 0;
