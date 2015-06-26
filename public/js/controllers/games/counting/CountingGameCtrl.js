@@ -2,6 +2,7 @@ angular.module('CountingGameCtrl', [])
 
     .controller('CountingGameController', function($location, Answers, AllStars) {
         var vm = this;
+        // TODO: add these proeprties to the first check (see if they have been initialised properly)
         vm.tagline = 'Select the correct answer to the given math problems.';
 
         // indicated is the user is currently playing the game
@@ -17,13 +18,14 @@ angular.module('CountingGameCtrl', [])
                 minNum : 11,
                 maxNum : 29
             };
-
+            // TODO: rename all properties to have the type in front of them
             vm.questions = Answers.generateQuestions(config);
+            vm.questions[0].isCurrentQuestion = true;
             vm.isPlaying = true;
             vm.startTime = new Date().getTime();
             vm.currentQuestionNo = 0;
-            vm.questions[0].isCurrentQuestion = true;
         };
+        // TODO: refactor and write unit tests
         vm.submitAnswer = function() {
             if(!vm.questions[vm.currentQuestionNo].playerAnswer) {
                 vm.questions[vm.currentQuestionNo].playerPrompt = "Please select an answer!";
@@ -38,35 +40,64 @@ angular.module('CountingGameCtrl', [])
                 vm.endGame();
             }
         };
+
+        // TODO: write part separator here START (end game code)
+
+        // TODO: write unit tests
         vm.endGame = function() {
+            vm.gameResult = vm._getGameResult();
+
+            var nTotalSeconds = vm._getTotalSeconds(vm.startTime);
+
+            vm.gameTime = vm._getGameTime(nTotalSeconds);
+        };
+        // TODO: write unit tests
+        vm._getGameResult = function() {
             var result = 0;
+
             for (var i = 0; i < vm.questions.length; i++) {
                 if (vm.questions[i].playerAnswer === vm.questions[i].answer) {
                     result++;
                 }
             }
-            vm.gameResult = result;
-            var endTime = new Date().getTime(),
-                totalSeconds = Math.floor((endTime - vm.startTime) / 1000);
 
-            vm.totalSeconds = totalSeconds;
+            return result;
+        };
+        // TODO: write unit tests
+        vm._getTotalSeconds = function(oStartTime) {
+            var oEndTime = new Date().getTime();
 
-            if (totalSeconds < 60) {
-                vm.gameTime = totalSeconds + " seconds";
+            return vm._calculateTotalSeconds(oStartTime, oEndTime);
+        };
+        // TODO: write unit tests
+        vm._calculateTotalSeconds = function(oStartTime, oEndTime) {
+            return Math.floor((oEndTime - oStartTime) / 1000);
+        };
+        // TODO: write unit tests (and possibly refactor)
+        vm._getGameTime = function(nTotalSeconds) {
+            var sGameTime;
+
+            if (nTotalSeconds < 60) {
+                sGameTime = nTotalSeconds + " seconds";
             } else {
-                var gameMinutes = Math.floor(totalSeconds / 60),
-                    gameSeconds = totalSeconds % 60;
-                vm.gameTime = gameMinutes + " minutes";
-                if (gameSeconds > 0) {
-                    vm.gameTime += " and " + gameSeconds + " seconds";
+                var nGameMinutes = Math.floor(nTotalSeconds / 60),
+                    nGameSeconds = nTotalSeconds % 60;
+                sGameTime = nGameMinutes + " minutes";
+                if (nGameSeconds > 0) {
+                    sGameTime += " and " + nGameSeconds + " seconds";
                 }
             }
+
+            return sGameTime;
         };
 
+        // TODO: write part separator here END (end game code)
+
+        // TODO: refactor and write unit tests
         vm.allStarData = {
             game: 'count'
         };
-
+        // TODO: refactor and write unit tests
         vm.createAllStar = function () {
             vm.allStarData.score = vm.gameResult;
             vm.allStarData.time = vm.totalSeconds;

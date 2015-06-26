@@ -53,9 +53,43 @@ test("Test to see if the controller exists and the correct route is used", funct
 });
 
 test("Does startGame instantiates questions and creates the correct properties", function() {
+    var oTestConfig = {
+        questCount: 10,
+        falseOptCount : 5,
+        minDev : -20,
+        maxDev : 20,
+        minNum : 11,
+        maxNum : 29
+    };
+
     var spy_generateQuestions = sinon.spy(this.ansSrv, "generateQuestions");
 
     this.oCtrl.startGame();
 
-    ok(spy_generateQuestions.called, "Answer service method generateQuestions called")
+    var aQuests = this.oCtrl.questions;
+
+    ok(spy_generateQuestions.called, "Answer service method generateQuestions called");
+    ok(spy_generateQuestions.calledWith(oTestConfig), "generate questions called with the correct config object");
+    ok(aQuests, "Questsions property exists");
+    ok(aQuests.length, "Questions property type is array");
+    equal(aQuests.length, oTestConfig.questCount, "Questions property type is array");
+
+    strictEqual(aQuests[0].isCurrentQuestion, true, "The first question is set as the current question");
+
+    // check the rest of the question to see if they are not set as the current question as well
+    for (var i = 1; i < aQuests.length; i++) {
+        ok(!aQuests[i].isCurrentQuestion, "When starting the game, question no '" + i + "' is not set as the current question.")
+    }
+
+    strictEqual(this.oCtrl.questions[0].isCurrentQuestion, true, "Is playing property is set to true");
+
+    ok(this.oCtrl.isPlaying, "Is playing property exists");
+    strictEqual(this.oCtrl.isPlaying, true, "Is playing property is set to true");
+
+    ok(this.oCtrl.startTime, "Start time property exists");
+    // TODO: change this as the time is only gotten
+    ok(this.oCtrl.startTime instanceof Date, "Start time property type is instance of Date");
+
+    ok(this.oCtrl.currentQuestionNo, "Current question property exists");
+    strictEqual(typeof this.oCtrl.currentQuestionNo, 0, "Current question property is 0 (number)");
 });
