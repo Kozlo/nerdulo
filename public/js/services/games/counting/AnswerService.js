@@ -1,25 +1,25 @@
 angular.module('AnswerService', [])
 
     .service('Answers', function() {
-        function Question(qNo, config) {
-            this.qNo = qNo;
-            this.config = {
-                falseOptCount : config.falseOptCount,
+        function Question(nQuestNo, oConfig) {
+            this.nQuestNo = nQuestNo;
+            this.oConfig = {
+                falseOptCount : oConfig.falseOptCount,
                 deviance : {
-                    min : config.minDev,
-                    max : config.maxDev
+                    min : oConfig.minDev,
+                    max : oConfig.maxDev
                 }
             };
-            this.numbers = {
-                one : this.getRandomInt(config.minNum, config.maxNum),
-                two : this.getRandomInt(config.minNum, config.maxNum)
+            this.oNumbers = {
+                one : this.getRandomInt(oConfig.minNum, oConfig.maxNum),
+                two : this.getRandomInt(oConfig.minNum, oConfig.maxNum)
             };
-            this.answer = this.calculator(this.numbers.one, this.numbers.two);
-            this.falseOptions = this.optionGenerator();
-            this.options = this.addAnswer(this.falseOptions);
-            this.playerAnswer = null;
-            this.isCurrentQuestion = false;
-            this.playerPrompt = "Your answer is: ";
+            this.nAnswer = this.calculator(this.oNumbers.one, this.oNumbers.two);
+            this.aFalseOptions = this.optionGenerator();
+            this.aOptions = this.addAnswer(this.aFalseOptions);
+            this.bIsCurr = false;
+            this.nPlayerAnswer = null;
+            this.sPlayerPrompt = "Your answer is: ";
         }
 
         Question.prototype = {
@@ -44,13 +44,13 @@ angular.module('AnswerService', [])
             optionGenerator : function() {
                 // an array to hold all answers
                 var opts = [];
-                while (opts.length < this.config.falseOptCount - 1) {
+                while (opts.length < this.oConfig.falseOptCount - 1) {
                     // generate a random number that is different from the correct answer by max % specified by the maxDev variable
-                    var randDev = this.getRandomInt(this.config.deviance.min, this.config.deviance.max);
+                    var randDev = this.getRandomInt(this.oConfig.deviance.min, this.oConfig.deviance.max);
                     if (randDev === 0) {
                         continue;
                     }
-                    var randOpt = Math.floor(this.answer * (1 + randDev/100));
+                    var randOpt = Math.floor(this.nAnswer * (1 + randDev/100));
                     // check if the option already is in the list
                     if (opts.indexOf(randOpt) < 0) {
                         //push the non-zero option to the list of available options
@@ -63,35 +63,39 @@ angular.module('AnswerService', [])
             /**
              * Add the correct answer at a random position in the list of options
              */
-            addAnswer : function(opts) {
+            addAnswer : function(aOpts) {
                 //generate a random int (0 till options count) that will be the position of the correct answer in the options
-                var randPos = this.getRandomInt(0, this.config.falseOptCount - 1);
+                var nFalseOptLastIndex = this.oConfig.falseOptCount - 1,
+                    nRandPos = this.getRandomInt(0, nFalseOptLastIndex);
+                
                 // if the new position is at the end of the array, just add it, otherwise replace it with an incorrect answer
-                if (randPos === (this.config.falseOptCount - 1)) {
-                    opts.push(this.answer);
+                if (nRandPos === nFalseOptLastIndex) {
+                    aOpts.push(this.nAnswer);
                 } else {
-                    var tempValue = opts[randPos];
-                    opts[randPos] = this.answer;
-                    opts.push(tempValue);
+                    var nTempValue = aOpts[nRandPos];
+                    
+                    aOpts[nRandPos] = this.nAnswer;
+                    aOpts.push(nTempValue);
                 }
-                return opts;
+                
+                return aOpts;
             },
             /**
              * TODO: move to the vm or a separate service
              * Set the player's answer in the view
              * @param opt {String || Number}
              */
-            setPlayerAnswer : function(opt) {
-                this.playerAnswer = opt;
-                this.playerPrompt = "Your answer is: " + this.playerAnswer;
+            setPlayerAnswer : function(nOpt) {
+                this.nPlayerAnswer = nOpt;
+                this.sPlayerPrompt = "Your answer is: " + this.nPlayerAnswer;
             }
         };
-        this.generateQuestions = function(config) {
-            var questions= [];
-            for(var i=0 ; i<config.questCount   ; i++) {
-                questions.push( new Question(i, config) );
+        this.generateQuestions = function(oConfig) {
+            var aQuests= [];
+            for(var i=0 ; i < oConfig.questCount   ; i++) {
+                aQuests.push( new Question(i, oConfig) );
             }
-            return questions;
+            return aQuests;
         };
     }
 );

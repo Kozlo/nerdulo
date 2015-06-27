@@ -9,11 +9,11 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
         })
         // counting game view
         .when('/counting-game', {
-            templateUrl: 'views/games/counting/game.html'
+            templateUrl: 'views/games/counting/countingGame.html'
         })
         // pattern game view
         .when('/pattern-game', {
-            templateUrl: 'views/games/pattern/game.html'
+            templateUrl: 'views/games/pattern/patternGame.html'
         })
         // scoreboard for all games
         .when('/allstars', {

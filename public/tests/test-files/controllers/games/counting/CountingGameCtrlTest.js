@@ -1,95 +1,104 @@
-// TODO: if smths unclear, check out a good example from: http://jsfiddle.net/boneskull/mGyHt/
+(function() {
+    'use strict';
+
+    //===============================
+    //  Module Initialization
+    //===============================
+
+    module("Counting Game", {
+        setup: function () {
+            var injector = angular.injector(['ng', 'CountingGameCtrl', 'AnswerService', 'AllStarService']);
+
+            this.ansSrv = injector.get('Answers');
+            this.allstars = injector.get('AllStars');
+            // TODO: figure out how to include the actually $location service
+            this.mockLocation = { location: { href: ""} };
 
 
-// TODO: probably replace with expected questions (maybe make sure they are the same and try non-random number generation)
-//var shoppingCartStaticData = [
-//    { "ID": 1, "Name": "Item1", "Price": 100, "Quantity": 5 },
-//    { "ID": 2, "Name": "Item2", "Price": 55, "Quantity": 10 },
-//    { "ID": 3, "Name": "Item3", "Price": 60, "Quantity": 20 },
-//    { "ID": 4, "Name": "Item4", "Price": 65, "Quantity": 8 }
-//];
-// TODO: probably don't need _shopping data and sharedMock
-//Mocks
-var windowMock, httpBackend, _shoppingData, sharedMock;
+            var $controller = injector.get('$controller');
+            this.oCtrl = $controller('CountingGameController',{
+                $location: this.mockLocation,
+                Answers: this.ansSrv,
+                AllStars: this.allstars
+            });
+        },
+        teardown: function () {
 
-//Injector
-var injector;
+        }
+    });
 
-//Controller
-var ctrl;
+    //===============================
+    //  General Tests
+    //===============================
 
-//Scope
-var ctrlScope;
+    test("Test to see if the controller exists and the correct route is used", function() {
+        ok(this.oCtrl, 'The controller exists');
+        // TODO: check what instanceof should be used
+        //ok(this.oCtrl instanceof, "The controller is an instance of...");
+    });
 
-//Data
-var storedItems;
+    //===============================
+    //  Start Game Tests
+    //===============================
 
-module("Counting game test module", {
-    setup: function () {
-        injector = angular.injector(['ng', 'CountingGameCtrl', 'AnswerService', 'AllStarService']);
+    test("Does startGame instantiates questions and creates the correct properties", function() {
+        var oTestConfig = {
+            questCount: 10,
+            falseOptCount : 5,
+            minDev : -20,
+            maxDev : 20,
+            minNum : 11,
+            maxNum : 29
+        };
 
-        this.ansSrv = injector.get('Answers');
-        this.allstars = injector.get('AllStars');
-        // TODO: figure out how to include the actually $location service
-        this.mockLocation = { location: { href: ""} };
+        var spy_generateQuestions = sinon.spy(this.ansSrv, "generateQuestions");
 
+        this.oCtrl.startGame();
 
-        var $controller = injector.get('$controller');
-        this.oCtrl = $controller('CountingGameController',{
-            $location: this.mockLocation,
-            Answers: this.ansSrv,
-            AllStars: this.allstars
-        });
-    },
-    teardown: function () {
+        var aQuests = this.oCtrl.aQuests;
 
-    }
-});
+        ok(spy_generateQuestions.called, "Answer service method generateQuestions called");
+        ok(spy_generateQuestions.calledWith(oTestConfig), "generate questions called with the correct config object");
+        ok(aQuests, "Questsions property exists");
+        ok(aQuests.length, "Questions property type is array");
+        equal(aQuests.length, oTestConfig.questCount, "Questions property type is array");
 
-test("Test to see if the controller exists and the correct route is used", function() {
-    ok(this.oCtrl, 'The controller exists');
-    // TODO: check what instanceof should be used
-    //ok(this.oCtrl instanceof, "The controller is an instance of...");
-});
+        strictEqual(aQuests[0].isCurr, true, "The first question is set as the current question");
 
-test("Does startGame instantiates questions and creates the correct properties", function() {
-    var oTestConfig = {
-        questCount: 10,
-        falseOptCount : 5,
-        minDev : -20,
-        maxDev : 20,
-        minNum : 11,
-        maxNum : 29
-    };
+        // check the rest of the question to see if they are not set as the current question as well
+        for (var i = 1; i < aQuests.length; i++) {
+            ok(!aQuests[i].isCurr, "When starting the game, question no '" + i + "' is not set as the current question.")
+        }
 
-    var spy_generateQuestions = sinon.spy(this.ansSrv, "generateQuestions");
+        strictEqual(this.oCtrl.aQuests[0].isCurr, true, "Is playing property is set to true");
 
-    this.oCtrl.startGame();
+        ok(this.oCtrl.bIsPlaying, "Is playing property exists");
+        strictEqual(this.oCtrl.bIsPlaying, true, "Is playing property is set to true");
 
-    var aQuests = this.oCtrl.questions;
+        ok(this.oCtrl.nStartTime, "Start time property exists");
+        equal(typeof this.oCtrl.nStartTime, "number", "Start time property type is number");
 
-    ok(spy_generateQuestions.called, "Answer service method generateQuestions called");
-    ok(spy_generateQuestions.calledWith(oTestConfig), "generate questions called with the correct config object");
-    ok(aQuests, "Questsions property exists");
-    ok(aQuests.length, "Questions property type is array");
-    equal(aQuests.length, oTestConfig.questCount, "Questions property type is array");
+        notEqual(typeof this.oCtrl.nQuestNo, "undefined",  "Current question property exists");
+        equal(typeof this.oCtrl.nQuestNo, "number", "Current question property type if number");
+        strictEqual(this.oCtrl.nQuestNo, 0, "Current question property is 0 (number)");
+    });
 
-    strictEqual(aQuests[0].isCurrentQuestion, true, "The first question is set as the current question");
+    //===============================
+    //  Submit Answer Tests
+    //===============================
 
-    // check the rest of the question to see if they are not set as the current question as well
-    for (var i = 1; i < aQuests.length; i++) {
-        ok(!aQuests[i].isCurrentQuestion, "When starting the game, question no '" + i + "' is not set as the current question.")
-    }
+    // TODO: write unit  tests
 
-    strictEqual(this.oCtrl.questions[0].isCurrentQuestion, true, "Is playing property is set to true");
+    //===============================
+    //  End Game Tests
+    //===============================
 
-    ok(this.oCtrl.isPlaying, "Is playing property exists");
-    strictEqual(this.oCtrl.isPlaying, true, "Is playing property is set to true");
+    // TODO: write unit  tests
 
-    ok(this.oCtrl.startTime, "Start time property exists");
-    // TODO: change this as the time is only gotten
-    ok(this.oCtrl.startTime instanceof Date, "Start time property type is instance of Date");
+    //===============================
+    //  Submit Results Tests
+    //===============================
 
-    ok(this.oCtrl.currentQuestionNo, "Current question property exists");
-    strictEqual(typeof this.oCtrl.currentQuestionNo, 0, "Current question property is 0 (number)");
-});
+    // TODO: write unit  tests
+
+}());
