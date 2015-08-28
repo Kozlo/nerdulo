@@ -1,0 +1,40 @@
+<!-- TODO: move all strings to the controller (and there create some reusable translation service) and later to a different file (like i18n.properties) -->
+<div class="game counting-game" ng-controller="CountingGameController as oCount">
+    <div class="jumbotron text-center">
+        <!-- only shown before game -->
+        <div ng-hide="oCount.bIsPlaying">
+            <h1>The Counting Game</h1>
+
+            <p>{{ oCount.sTagline }}</p>
+
+            <button class="btn btn-lg btn-success" ng-click="oCount.startGame()">Start</button>
+        </div>
+        <!-- only shown when playing -->
+        <div ng-show="oCount.bIsPlaying && !oCount.bGameFinished">
+            <div ng-repeat="oQuest in oCount.aQuests" ng-show="oQuest.bIsCurr">
+                <p> {{ "Problem " + (oCount.nQuestNo + 1) + " / " + oCount.aQuests.length + ":" }}</p>
+                <p>{{ oQuest.oNumbers.one }} * {{ oQuest.oNumbers.two }}</p>
+                    <div class="answer-option" ng-repeat="nOpt in oQuest.aOptions track by $index">
+                        <button type="button" class="btn btn-default" ng-class="{ active: nOpt == oQuest.nPlayerAnswer }" ng-click="oQuest.setPlayerAnswer(nOpt)">{{ nOpt }}</button>
+                    </div>
+                <p>{{ oQuest.sPlayerPrompt }}</p>
+                <button type="button" class="btn bnt-default" ng-click="oCount.submitAnswer()">Submit</button>
+            </div>
+        </div>
+        <div ng-show="oCount.bGameFinished">
+            <p>Good job! You got <strong>{{ oCount.nGameScore }}</strong> out of <strong>{{ oCount.aQuests.length }}</strong> questions right in <strong>{{ oCount.sGameTime }}</strong>.</p>
+            <p>Submit your score to the wall of fame!</p>
+            <!-- FORM TO CREATE ALLSTARS -->
+            <div id="allstar-form" class="row">
+                <div class="col-sm-4 col-sm-offset-4 text-center">
+                    <form novalidate name="allStartForm" >
+                        <div class="form-group">
+                            <input type="text" class="form-control input-lg text-center" placeholder="Champ's name" ng-model="oCount.oAllStarData.name" required />
+                        </div> <!-- form-group -->
+                        <button type="submit" ng-disabled="!allStartForm.$valid" class="btn btn-primary btn-lg" ng-click="oCount.createAllStar()">Submit</button>
+                    </form>
+                </div> <!-- col-sm-8 -->
+            </div> <!-- row -->
+        </div>
+    </div>
+</div>
