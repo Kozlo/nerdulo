@@ -7,7 +7,7 @@ angular.module('CountingGameCtrl', [])
         //===============================
 
         var vm = this;
-        // TODO: add these proeprties to the first check (see if they have been initialised properly)
+        // TODO: add these properties to the first check (see if they have been initialised properly)
         vm.sTagline = 'Select the correct answer to the given math problems.';
         // indicated is the user is currently playing the game
         vm.bIsPlaying = false;
@@ -16,20 +16,14 @@ angular.module('CountingGameCtrl', [])
         //  Start Game Functionality
         //===============================
 
+        /**
+         * Calls the method to generate questions and set all needed properties.
+         *
+         * @public
+         */
         vm.startGame = function() {
-            // consider moving this to the answer service
-            // TODO: put both dev and num in a property with 'min' and 'max'
-            var oConfig = {
-                questCount: 10,
-                falseOptCount : 5,
-                minDev : -20,
-                maxDev : 20,
-                minNum : 11,
-                maxNum : 29
-            };
-
-            vm.aQuests = Answers.generateQuestions(oConfig);
-            vm.aQuests[0].isCurr = true;
+            vm.aQuests = Answers.generateQuestions();
+            vm.aQuests[0].bIsCurr = true;
             vm.bIsPlaying = true;
             vm.nStartTime = new Date().getTime();
             vm.nQuestNo = 0;
@@ -39,49 +33,124 @@ angular.module('CountingGameCtrl', [])
         //  Submit Answer Functionality
         //===============================
 
-        // TODO: refactor and write unit tests
+        /**
+         * Calls the method to check if the user has selected a valid answer.
+         * If yes, calls the method to proceed to the next question.
+         *
+         * @public
+         */
         vm.submitAnswer = function() {
-            if(!vm.aQuests[vm.nQuestNo].nPlayerAnswer) {
-                vm.aQuests[vm.nQuestNo].sPlayerPrompt = "Please select an answer!";
-                return;
-            }
+            var oCurrQuest = vm.aQuests[vm.nQuestNo],
+                bIsCurrQuestValid = vm._validateAnswer(oCurrQuest);
 
-            // TODO: refactor maybe
-            if ((vm.nQuestNo + 1) < vm.aQuests.length) {
-                vm.aQuests[vm.nQuestNo++].isCurr = false;
-                vm.aQuests[vm.nQuestNo].isCurr = true;
+            if(bIsCurrQuestValid) {
+                vm._processAnswer(oCurrQuest);
+            }
+        };
+
+        /**
+        * Checks is an answer is selected, returns the indicator.
+        * Sets the player prompt if the answer hasn't been selected.
+        *
+        * @private
+        * @param {Object} oCurrQuest the question being inspected
+        * @return {bool} indicator for whether the player prompt has been set.
+        */
+        vm._validateAnswer = function(oCurrQuest) {
+            if(oCurrQuest.nPlayerAnswer) {
+                return true;
             } else {
-                vm.bGameFinished = true;
+                // TODO: remove 'magic' value
+                oCurrQuest.sPlayerPrompt = "Please select an answer!";
+                return false;
+            }
+        };
+
+        /**
+         * Checks if the question is not the last one.
+         * If yes, then calls the method to switch to the new one.
+         * If no, calls the method to end the game.
+         *
+         * @private
+         * @param {Object} oCurrQuest the question being inspected
+         */
+        vm._processAnswer = function(oCurrQuest) {
+            if (!oCurrQuest.bIsLast) {
+                vm._switchToNextQuest(oCurrQuest);
+            } else {
                 vm.endGame();
             }
+        };
+
+        /**
+         * Changes properties for current and next question.
+         * Increases question count iterator.
+         *
+         * @private
+         * @param {Object} oCurrQuest the question being inspected
+         */
+        vm._switchToNextQuest = function(oCurrQuest) {
+            oCurrQuest.bIsCurr = false;
+            vm.nQuestNo++;
+            vm.aQuests[vm.nQuestNo].bIsCurr = true;
         };
 
         //===============================
         //  End Game Functionality
         //===============================
 
-        // TODO: write unit tests
+        /**
+         * Calls the methods needed to end tha game.
+         *
+         * @public
+         */
         vm.endGame = function() {
-            // TODO: in the test also check if the properties have been set...
+            vm.bGameFinished = true;
+
             vm.nGameScore = vm._getGameResult();
 
             vm.nTotalSeconds = vm._getTotalSeconds(vm.nStartTime);
 
             vm.sGameTime = vm._getGameTime(vm.nTotalSeconds);
         };
-        // TODO: write unit tests
+
+        /**
+         * Calls the method to check each answer and returns the number of correct ones.
+         *
+         * @private
+         * @return {number} the number of correct answers
+         */
         vm._getGameResult = function() {
             var nResult = 0;
 
             for (var i = 0; i < vm.aQuests.length; i++) {
-                // TODO: move this out to a different method and make sure the correct property is used
-                if (vm.aQuests[i].nPlayerAnswer === vm.aQuests[i].nAnswer) {
+                var bIsAnswerCorrect = vm._answerChecker(vm.aQuests[i].nPlayerAnswer, vm.aQuests[i].nAnswer);
+
+                if (bIsAnswerCorrect) {
                     nResult++;
                 }
             }
 
             return nResult;
         };
+
+        /**
+         * Compares the passed player answer and the correct answer.
+         * And returns a respective indicator.
+         *
+         * @private
+         * @param {number} nPlayerAnswer the answer the player has given
+         * @param {number} nCorrectAnswer the correct answer to the question
+         * @return {bool} correctness indicator
+         */
+        vm._answerChecker = function(nPlayerAnswer, nCorrectAnswer) {
+            if (nPlayerAnswer === nCorrectAnswer) {
+                return true;
+            }
+            // TODO: research if it's better to return false or nothing
+            return false;
+        };
+
         // TODO: write unit tests
         vm._getTotalSeconds = function(oStartTime) {
             var oEndTime = new Date().getTime();

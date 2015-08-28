@@ -1,100 +1,217 @@
 angular.module('AnswerService', [])
 
     .service('Answers', function() {
-        function Question(nQuestNo, oConfig) {
+        /**
+         * The constructor method for a question.
+         *
+         * @param {number} nQuestNo the number given for the question
+         * @param {Object} oConfig values used to differentiate questions
+         */
+        function Question(nQuestNo, oConfig, bIsLast) {
             this.nQuestNo = nQuestNo;
             this.oConfig = {
                 falseOptCount : oConfig.falseOptCount,
                 deviance : {
-                    min : oConfig.minDev,
-                    max : oConfig.maxDev
+                    min : oConfig.deviance.min,
+                    max : oConfig.deviance.max
                 }
             };
             this.oNumbers = {
-                one : this.getRandomInt(oConfig.minNum, oConfig.maxNum),
-                two : this.getRandomInt(oConfig.minNum, oConfig.maxNum)
+                one : this.getRandomInt(oConfig.number.min, oConfig.number.max),
+                two : this.getRandomInt(oConfig.number.min, oConfig.number.max)
             };
             this.nAnswer = this.calculator(this.oNumbers.one, this.oNumbers.two);
             this.aFalseOptions = this.optionGenerator();
             this.aOptions = this.addAnswer(this.aFalseOptions);
             this.bIsCurr = false;
+            this.bIsLast = bIsLast;
             this.nPlayerAnswer = null;
             this.sPlayerPrompt = "Your answer is: ";
         }
 
         Question.prototype = {
+            // TODO: move to a separate helper class
             /**
-             * TODO: move to a separate helper class
-             * Returns a random integer between min (inclusive) and max (inclusive)
+             * Returns a random integer between min (inclusive) and max (inclusive).
              * Using Math.round() will give you a non-uniform distribution!
+             *
+             * @public
+             * @param {number} nMin the minimum number allowed
+             * @param {number} nMax the maximum number allowed
+             * @return {number} a random integer
              */
-            getRandomInt : function(min, max) {
-                return Math.floor(Math.random() * (max - min + 1)) + min;
+            getRandomInt : function(nMin, nMax) {
+                return Math.floor(Math.random() * (nMax - nMin + 1)) + nMin;
             },
+
+            // TODO: move to a separate helper class
             /**
-             * Return the correct answer to the math problem
+             * Calls getRandomInt until an non-zero value is returned.
+             *
+             * @public
+             * @param {number} nMin the minimum number allowed
+             * @param {number} nMax the maximum number allowed
+             * @return {number} a non-zero random integer
              */
-            calculator : function(numOne, numTwo) {
-                return numOne * numTwo;
+            getNonZeroRandomInt : function(nMin, nMax) {
+                var nRandDev;
+
+                // keep calling getRandomInt until a non-zero number is returned
+                do {
+                    nRandDev = this.getRandomInt(nMin, nMax);
+                } while (isNaN(nRandDev) || nRandDev === 0 );
+
+                return nRandDev;
             },
+
+            // TODO: move to a separate helper class (also add the operation)
+            /**
+             * Return the correct answer to the math problem.
+             *
+             * @public
+             * @param {number} nOne the first number to calculate
+             * @param {number} nTwo the second number to calculate
+             * @return {number} the multiplied result
+             */
+            calculator : function(nOne, nTwo) {
+                return nOne * nTwo;
+            },
+
             /**
              * Returns the specified amount of incorrect answers to the math problem.
-             * Makes sure that the specified answer isn't equal to the answer
+             * Makes sure that the specified answer isn't equal to the answer and doesn't repeat.
+             *
+             * @public
+             * @return {Array} the multiplied result
              */
             optionGenerator : function() {
-                // an array to hold all answers
-                var opts = [];
-                while (opts.length < this.oConfig.falseOptCount - 1) {
-                    // generate a random number that is different from the correct answer by max % specified by the maxDev variable
-                    var randDev = this.getRandomInt(this.oConfig.deviance.min, this.oConfig.deviance.max);
-                    if (randDev === 0) {
-                        continue;
-                    }
-                    var randOpt = Math.floor(this.nAnswer * (1 + randDev/100));
-                    // check if the option already is in the list
-                    if (opts.indexOf(randOpt) < 0) {
-                        //push the non-zero option to the list of available options
-                        opts.push(randOpt);
-                    }
+                var aOpts = [];
+
+                while (aOpts.length < this.oConfig.falseOptCount) {
+                    this.createOption(aOpts);
                 }
-                // return the options, but add the correct answer to the list first
-                return opts;
+
+                return aOpts;
             },
+
             /**
-             * Add the correct answer at a random position in the list of options
+             * Calls the method for getting a random options and attempts to add it to the option array if it doesn't exist yet.
+             *
+             * @public
+             * @param {Array} aOpts an array of options
              */
-            addAnswer : function(aOpts) {
-                //generate a random int (0 till options count) that will be the position of the correct answer in the options
-                var nFalseOptLastIndex = this.oConfig.falseOptCount - 1,
-                    nRandPos = this.getRandomInt(0, nFalseOptLastIndex);
-                
-                // if the new position is at the end of the array, just add it, otherwise replace it with an incorrect answer
-                if (nRandPos === nFalseOptLastIndex) {
-                    aOpts.push(this.nAnswer);
-                } else {
-                    var nTempValue = aOpts[nRandPos];
-                    
-                    aOpts[nRandPos] = this.nAnswer;
-                    aOpts.push(nTempValue);
+            createOption : function(aOpts) {
+                var nRandOpt = this.getRandomOption();
+
+                this.pushUniqueValueToArray(aOpts, nRandOpt);
+            },
+
+            // TODO: move to different helper class
+            /**
+             * Checks if the passed value already exists in the array and pushes it to it if not.
+             *
+             * @public
+             * @param {Array} aValues an array of options
+             * @param {string|number|bool|Object|Array} value the value to be pushed to the array
+             */
+            pushUniqueValueToArray : function(aValues, value) {
+                if (aValues.indexOf(value) < 0) {
+                    aValues.push(value);
                 }
+            },
+
+            /**
+             * Calls the methods for creating a random integer and returns the formatted result.
+             *
+             * @public
+             * @return {number} formatted result.
+             */
+            getRandomOption : function() {
+                var oDev = this.oConfig.deviance,
+                    nRandDev = this.getNonZeroRandomInt(oDev.min, oDev.max);
+
+                return this.processRandomOption(this.nAnswer, nRandDev);
+            },
+
+            /**
+             * Converts the passed deviation to a usable option given the answer.
+             *
+             * @public
+             * @param {number} nAnswer the correct answer to the math problem
+             * @param {number} nDeviation the generated random deviation
+             * @return {number} formatted result.
+             */
+            processRandomOption : function(nAnswer, nDeviation) {
+                var nRandOpt = nAnswer * this.convertNumToMultiple(nDeviation);
+
+                return Math.floor(nRandOpt);
+            },
+
+            // TODO: move to a helper class
+            /**
+             * Converts the passed number to a decimal equivalent and adds 1 (e.g. 10 is converted to 1.1).
+             *
+             * @public
+             * @param {number} nNumber decimal digit to be converted
+             * @return {number} formatted result
+             */
+            convertNumToMultiple : function(nNumber) {
+                return 1 + nNumber / 100;
+            },
+
+            /**
+             * Adds the correct answer at a random position in the list of false options.
+             *
+             * @param {Array} aFalseOpts an array of false options
+             * @return {Array} new array of the answer inserted into the false option array
+             */
+            addAnswer : function(aFalseOpts) {
+                var aOpts = aFalseOpts.slice(),
+                    nRandPos = this.getRandomInt(0, aFalseOpts.length - 1);
+
+                this.insertValueInArray(aOpts, nRandPos, this.nAnswer);
                 
                 return aOpts;
             },
+
+                insertValueInArray : function(aArray, nIndex, value) {
+                aArray.push(aArray[nIndex]);
+                aArray[nIndex] = value;
+            },
+
             /**
-             * TODO: move to the vm or a separate service
              * Set the player's answer in the view
-             * @param opt {String || Number}
+             *
+             * @param {string|number} nOpt
              */
             setPlayerAnswer : function(nOpt) {
                 this.nPlayerAnswer = nOpt;
                 this.sPlayerPrompt = "Your answer is: " + this.nPlayerAnswer;
             }
         };
-        this.generateQuestions = function(oConfig) {
-            var aQuests= [];
-            for(var i=0 ; i < oConfig.questCount   ; i++) {
-                aQuests.push( new Question(i, oConfig) );
+
+        this.generateQuestions = function() {
+            // TODO: do it so that there's only 1 config per answer batch as it's the same for all (e.g. have an onject that has a common config and an array of questions)
+            var aQuests= [],
+                oConfig = {
+                    questCount: 10,
+                    falseOptCount : 4,
+                    deviance : {
+                        min : -20,
+                        max : 20
+                    },
+                    number : {
+                        min : 11,
+                        max : 29
+                    }
+                };
+
+            for (var i=0 ; i < oConfig.questCount   ; i++) {
+                var bIstLast = (i + 1) >= oConfig.questCount;
+
+                aQuests.push( new Question(i, oConfig, bIstLast));
             }
+
             return aQuests;
         };
     }
