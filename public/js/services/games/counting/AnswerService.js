@@ -38,7 +38,7 @@ angular.module('AnswerService', [])
              * @public
              * @param {number} nMin the minimum number allowed
              * @param {number} nMax the maximum number allowed
-             * @return {number} a random integer
+             * @returns {number} a random integer
              */
             getRandomInt : function(nMin, nMax) {
                 return Math.floor(Math.random() * (nMax - nMin + 1)) + nMin;
@@ -51,7 +51,7 @@ angular.module('AnswerService', [])
              * @public
              * @param {number} nMin the minimum number allowed
              * @param {number} nMax the maximum number allowed
-             * @return {number} a non-zero random integer
+             * @returns {number} a non-zero random integer
              */
             getNonZeroRandomInt : function(nMin, nMax) {
                 var nRandDev;
@@ -71,7 +71,7 @@ angular.module('AnswerService', [])
              * @public
              * @param {number} nOne the first number to calculate
              * @param {number} nTwo the second number to calculate
-             * @return {number} the multiplied result
+             * @returns {number} the multiplied result
              */
             calculator : function(nOne, nTwo) {
                 return nOne * nTwo;
@@ -82,7 +82,7 @@ angular.module('AnswerService', [])
              * Makes sure that the specified answer isn't equal to the answer and doesn't repeat.
              *
              * @public
-             * @return {Array} the multiplied result
+             * @returns {Array} the multiplied result
              */
             optionGenerator : function() {
                 var aOpts = [];
@@ -124,7 +124,7 @@ angular.module('AnswerService', [])
              * Calls the methods for creating a random integer and returns the formatted result.
              *
              * @public
-             * @return {number} formatted result.
+             * @returns {number} formatted result.
              */
             getRandomOption : function() {
                 var oDev = this.oConfig.deviance,
@@ -139,7 +139,7 @@ angular.module('AnswerService', [])
              * @public
              * @param {number} nAnswer the correct answer to the math problem
              * @param {number} nDeviation the generated random deviation
-             * @return {number} formatted result.
+             * @returns {number} formatted result.
              */
             processRandomOption : function(nAnswer, nDeviation) {
                 var nRandOpt = nAnswer * this.convertNumToMultiple(nDeviation);
@@ -153,7 +153,7 @@ angular.module('AnswerService', [])
              *
              * @public
              * @param {number} nNumber decimal digit to be converted
-             * @return {number} formatted result
+             * @returns {number} formatted result
              */
             convertNumToMultiple : function(nNumber) {
                 return 1 + nNumber / 100;
@@ -163,7 +163,7 @@ angular.module('AnswerService', [])
              * Adds the correct answer at a random position in the list of false options.
              *
              * @param {Array} aFalseOpts an array of false options
-             * @return {Array} new array of the answer inserted into the false option array
+             * @returns {Array} new array of the answer inserted into the false option array
              */
             addAnswer : function(aFalseOpts) {
                 var aOpts = aFalseOpts.slice(),

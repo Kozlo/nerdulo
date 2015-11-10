@@ -54,7 +54,7 @@ angular.module('CountingGameCtrl', [])
         *
         * @private
         * @param {Object} oCurrQuest the question being inspected
-        * @return {bool} indicator for whether the player prompt has been set.
+        * @returns {bool} indicator for whether the player prompt has been set.
         */
         vm._validateAnswer = function(oCurrQuest) {
             if(oCurrQuest.nPlayerAnswer) {
@@ -118,7 +118,7 @@ angular.module('CountingGameCtrl', [])
          * Calls the method to check each answer and returns the number of correct ones.
          *
          * @private
-         * @return {number} the number of correct answers
+         * @returns {number} the number of correct answers
          */
         vm._getGameResult = function() {
             var nResult = 0;
@@ -141,16 +141,12 @@ angular.module('CountingGameCtrl', [])
          * @private
          * @param {number} nPlayerAnswer the answer the player has given
          * @param {number} nCorrectAnswer the correct answer to the question
-         * @return {bool} correctness indicator
+         * @returns {bool} correctness indicator
          */
         vm._answerChecker = function(nPlayerAnswer, nCorrectAnswer) {
-            if (nPlayerAnswer === nCorrectAnswer) {
-                return true;
-            }
-            // TODO: research if it's better to return false or nothing
-            return false;
+            return nPlayerAnswer === nCorrectAnswer;
         };
-        
+
         /**
          * Calculates the total time spent based on start time and end time.
          *
