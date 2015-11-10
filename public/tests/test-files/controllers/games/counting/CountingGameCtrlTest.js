@@ -194,8 +194,8 @@
         equal(this.oCtrl.nGameScore, nTestGameResult, "nGameScore property set as the return value of _getGameResult.");
 
         ok(stub_getTotalSeconds.called, "_getTotalSeconds called");
-        notEqual(this.oCtrl.nTotalSeconds, "undefined", "nTotalSeconds property exists.");
-        equal(this.oCtrl.nTotalSeconds, nTestTotalSeconds, "nTotalSeconds property set as the return value of _getTotalSeconds.");
+        notEqual(this.oCtrl.iTotalSeconds, "undefined", "iTotalSeconds property exists.");
+        equal(this.oCtrl.iTotalSeconds, nTestTotalSeconds, "iTotalSeconds property set as the return value of _getTotalSeconds.");
 
         ok(stub_getGameTime.called, "getTotalSeconds called");
         notEqual(this.oCtrl.sGameTime, "undefined", "sGameTime property exists.");
@@ -277,6 +277,31 @@
         var iTotalTime = this.oCtrl._calculateTotalSeconds(oStartTime, oEndTime);
 
         equal(iTotalTime, iActualTotalTime, "Total time is calculated properly");
+    });
+
+    test("Does _getGameTime return correctly constructed string given different game time", function() {
+        // various game times
+        var iTime50 = 50,
+            iTime120 = 120,
+            iTime120Minutes = Math.floor(iTime120 / 60),
+            iTime135 = 135,
+            iTime135Minutes = Math.floor(iTime135 / 60),
+            iTime135Seconds = iTime135 % 60;
+
+        // expeted results
+        var iExpected50 = iTime50 + " seconds",
+            iExpected120 = iTime120Minutes + " minutes",
+            iExpected135 = iTime135Minutes + " minutes" + " and " + iTime135Seconds + " seconds";
+
+        // actualtimes
+        var iGameTime50 = this.oCtrl._getGameTime(50),
+            iGameTime120 = this.oCtrl._getGameTime(120),
+            iGameTime135 = this.oCtrl._getGameTime(135);
+
+        // assertions
+        equal(iGameTime50, iExpected50, "When time is " + iTime50 + " seconds, the result is correct");
+        equal(iGameTime120, iExpected120, "When time is " + iTime120 + " seconds, the result is correct");
+        equal(iGameTime135, iExpected135, "When time is " + iTime135 + " seconds, the result is correct");
     });
 
 

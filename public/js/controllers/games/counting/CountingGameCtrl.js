@@ -109,9 +109,9 @@ angular.module('CountingGameCtrl', [])
 
             vm.nGameScore = vm._getGameResult();
 
-            vm.nTotalSeconds = vm._getTotalSeconds(vm.iStartTime);
+            vm.iTotalSeconds = vm._getTotalSeconds(vm.iStartTime);
 
-            vm.sGameTime = vm._getGameTime(vm.nTotalSeconds);
+            vm.sGameTime = vm._getGameTime(vm.iTotalSeconds);
         };
 
         /**
@@ -172,20 +172,26 @@ angular.module('CountingGameCtrl', [])
             return Math.floor((iEndTime - iStartTime) / 1000);
         };
 
-        // TODO: write unit tests (and possibly refactor)
-        vm._getGameTime = function(nTotalSeconds) {
+        /**
+         * Return a string with the time spend in game divided into minutes and seconds.
+         *
+         * @private
+         * @param {int} iTotalSeconds total time in seconds
+         * @returns {string} total game time
+         */
+        vm._getGameTime = function(iTotalSeconds) {
             var sGameTime;
 
-            if (nTotalSeconds < 60) {
-                sGameTime = nTotalSeconds + " seconds";
+            if (iTotalSeconds < 60) {
+                sGameTime = iTotalSeconds + " seconds";
             } else {
-                var nGameMinutes = Math.floor(nTotalSeconds / 60),
-                    nGameSeconds = nTotalSeconds % 60;
+                var iGameMinutes = Math.floor(iTotalSeconds / 60),
+                    iGameSeconds = iTotalSeconds % 60;
 
-                sGameTime = nGameMinutes + " minutes";
+                sGameTime = iGameMinutes + " minutes";
 
-                if (nGameSeconds > 0) {
-                    sGameTime += " and " + nGameSeconds + " seconds";
+                if (iGameSeconds > 0) {
+                    sGameTime += " and " + iGameSeconds + " seconds";
                 }
             }
 
@@ -203,7 +209,7 @@ angular.module('CountingGameCtrl', [])
         // TODO: refactor and write unit tests
         vm.createAllStar = function () {
             vm.oAllStarData.score = vm.nGameScore;
-            vm.oAllStarData.time = vm.nTotalSeconds;
+            vm.oAllStarData.time = vm.iTotalSeconds;
             if(!$.isEmptyObject(vm.oAllStarData)) {
                 AllStars.create(vm.oAllStarData)
                     .success(function() {
