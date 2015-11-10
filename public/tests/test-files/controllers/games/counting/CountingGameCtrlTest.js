@@ -309,6 +309,9 @@
     //  Submit Results Tests
     //===============================
 
-    // TODO: write unit  tests
+    test("Does oAllStarData controller property have the correct properties", function() {
+        notEqual(typeof this.oCtrl.oAllStarData, "undefined", "oAllStartData property exists on the controller");
+        equal(this.oCtrl.oAllStarData.game, "count", "game property on oAllStartData is count");
+    });
 
 }());

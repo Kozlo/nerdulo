@@ -202,10 +202,13 @@ angular.module('CountingGameCtrl', [])
         //  Submit Results Functionality
         //===============================
 
-        // TODO: refactor and write unit tests
+        /**
+         * @property {Object} oAllStarData data property used for saving score
+         */
         vm.oAllStarData = {
             game: 'count'
         };
+
         // TODO: refactor and write unit tests
         vm.createAllStar = function () {
             vm.oAllStarData.score = vm.nGameScore;
