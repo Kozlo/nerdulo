@@ -150,8 +150,14 @@ angular.module('CountingGameCtrl', [])
             // TODO: research if it's better to return false or nothing
             return false;
         };
-
-        // TODO: write unit tests
+        
+        /**
+         * Calculates the total time spent based on start time and end time.
+         *
+         * @private
+         * @param {Object} oStartTime start time
+         * @returns {number} total seconds
+         */
         vm._getTotalSeconds = function(oStartTime) {
             var oEndTime = new Date().getTime();
 

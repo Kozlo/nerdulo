@@ -253,6 +253,21 @@
         equal(bTestAns, false, "_answerChecked returns false when player answer and the passed answer are equal");
     });
 
+    test("Does _getTotalSeconds return the expected result", function() {
+        var iStartTime = 5,
+            iTotalTime = 10;
+
+
+        var stub_calculateTotalSeconds = sinon.stub(this.oCtrl, "_calculateTotalSeconds").returns(iTotalTime);
+
+        var iResult = this.oCtrl._getTotalSeconds(iStartTime);
+
+        ok(stub_calculateTotalSeconds.called, "spy_calculateTotalSeconds called");
+        ok(stub_calculateTotalSeconds.calledWith(iStartTime, sinon.match.any), "spy_calculateTotalSeconds called");
+
+        equal(iResult, iTotalTime, "_getTotalSeconds return the return value of _calculateTotalSeconds");
+    });
+
 
     //===============================
     //  Submit Results Tests
