@@ -70,9 +70,9 @@
         ok(this.oCtrl.nStartTime, "Start time property exists");
         equal(typeof this.oCtrl.nStartTime, "number", "Start time property type is number");
 
-        notEqual(typeof this.oCtrl.nQuestNo, "undefined",  "Current question property exists");
-        equal(typeof this.oCtrl.nQuestNo, "number", "Current question property type if number");
-        strictEqual(this.oCtrl.nQuestNo, 0, "Current question property is 0 (number)");
+        notEqual(typeof this.oCtrl.iQuestNo, "undefined",  "Current question property exists");
+        equal(typeof this.oCtrl.iQuestNo, "number", "Current question property type if number");
+        strictEqual(this.oCtrl.iQuestNo, 0, "Current question property is 0 (number)");
     });
 
     //===============================
@@ -95,7 +95,7 @@
             this.oCtrl.submitAnswer();
 
             ok(stub_validateAnswer.called, "validateAnswer called");
-            ok(stub_validateAnswer.calledWith(this.oCtrl.aQuests[this.oCtrl.nQuestNo]), "validateAnswer called with the current question");
+            ok(stub_validateAnswer.calledWith(this.oCtrl.aQuests[this.oCtrl.iQuestNo]), "validateAnswer called with the current question");
 
             equal(stub_processAnswer.called, bIsQuestValid, "processAnswer method called: " + bIsQuestValid);
 
@@ -157,7 +157,7 @@
     });
 
     test("Does _switchToNextQuest change the properties for the controller properly", function() {
-        var nCurrQuestNo = this.oCtrl.nQuestNo,
+        var nCurrQuestNo = this.oCtrl.iQuestNo,
 
             oTestCurrQuest = {
                 bIsCurr : true
@@ -166,7 +166,7 @@
         this.oCtrl._switchToNextQuest(oTestCurrQuest);
 
         ok(!oTestCurrQuest.bIsCurr, "The bIsCurr indicator for the passed question is set to false");
-        equal(this.oCtrl.nQuestNo, nCurrQuestNo + 1, "The current question indicator has been increased by 1.");
+        equal(this.oCtrl.iQuestNo, nCurrQuestNo + 1, "The current question indicator has been increased by 1.");
         ok(this.oCtrl.aQuests[nCurrQuestNo + 1].bIsCurr, "The bIsCurr indicator for the passed question is set to false");
     });
 
@@ -223,7 +223,7 @@
         ok(stub_answerChecker.called, "_answerChecker called");
 
         for (var i = 0; i < this.oCtrl.aQuests.length; i++) {
-            ok(stub_answerChecker.calledWith(this.oCtrl.aQuests[i].nPlayerAnswer, this.oCtrl.aQuests[i].nAnswer), "_answerChecker called with player answer and correct answer for question: " + i);
+            ok(stub_answerChecker.calledWith(this.oCtrl.aQuests[i].iPlayerAnswer, this.oCtrl.aQuests[i].nAnswer), "_answerChecker called with player answer and correct answer for question: " + i);
         }
 
         equal(stub_answerChecker.callCount, this.oCtrl.aQuests.length, "_answerChecker called count equals question count");
@@ -266,6 +266,16 @@
         ok(stub_calculateTotalSeconds.calledWith(iStartTime, sinon.match.any), "spy_calculateTotalSeconds called");
 
         equal(iResult, iTotalTime, "_getTotalSeconds return the return value of _calculateTotalSeconds");
+    });
+
+    test("Does _calculateTotalSeconds calculate seconds correctly", function() {
+        var oStartTime = new Date().getTime(),
+            oEndTime = new Date().getTime(),
+            iActualTotalTime = Math.floor((oEndTime - oStartTime) / 1000);
+
+        var iTotalTime = this.oCtrl._calculateTotalSeconds(oStartTime, oEndTime);
+
+        equal(iTotalTime, iActualTotalTime, "Total time is calculated properly");
     });
 
 

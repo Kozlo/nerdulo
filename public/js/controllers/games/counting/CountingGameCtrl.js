@@ -25,8 +25,8 @@ angular.module('CountingGameCtrl', [])
             vm.aQuests = Answers.generateQuestions();
             vm.aQuests[0].bIsCurr = true;
             vm.bIsPlaying = true;
-            vm.nStartTime = new Date().getTime();
-            vm.nQuestNo = 0;
+            vm.iStartTime = new Date().getTime();
+            vm.iQuestNo = 0;
         };
 
         //===============================
@@ -40,7 +40,7 @@ angular.module('CountingGameCtrl', [])
          * @public
          */
         vm.submitAnswer = function() {
-            var oCurrQuest = vm.aQuests[vm.nQuestNo],
+            var oCurrQuest = vm.aQuests[vm.iQuestNo],
                 bIsCurrQuestValid = vm._validateAnswer(oCurrQuest);
 
             if(bIsCurrQuestValid) {
@@ -57,7 +57,7 @@ angular.module('CountingGameCtrl', [])
         * @returns {bool} indicator for whether the player prompt has been set.
         */
         vm._validateAnswer = function(oCurrQuest) {
-            if(oCurrQuest.nPlayerAnswer) {
+            if(oCurrQuest.iPlayerAnswer) {
                 return true;
             } else {
                 // TODO: remove 'magic' value
@@ -91,8 +91,8 @@ angular.module('CountingGameCtrl', [])
          */
         vm._switchToNextQuest = function(oCurrQuest) {
             oCurrQuest.bIsCurr = false;
-            vm.nQuestNo++;
-            vm.aQuests[vm.nQuestNo].bIsCurr = true;
+            vm.iQuestNo++;
+            vm.aQuests[vm.iQuestNo].bIsCurr = true;
         };
 
         //===============================
@@ -109,7 +109,7 @@ angular.module('CountingGameCtrl', [])
 
             vm.nGameScore = vm._getGameResult();
 
-            vm.nTotalSeconds = vm._getTotalSeconds(vm.nStartTime);
+            vm.nTotalSeconds = vm._getTotalSeconds(vm.iStartTime);
 
             vm.sGameTime = vm._getGameTime(vm.nTotalSeconds);
         };
@@ -118,13 +118,13 @@ angular.module('CountingGameCtrl', [])
          * Calls the method to check each answer and returns the number of correct ones.
          *
          * @private
-         * @returns {number} the number of correct answers
+         * @returns {int} the number of correct answers
          */
         vm._getGameResult = function() {
             var nResult = 0;
 
             for (var i = 0; i < vm.aQuests.length; i++) {
-                var bIsAnswerCorrect = vm._answerChecker(vm.aQuests[i].nPlayerAnswer, vm.aQuests[i].nAnswer);
+                var bIsAnswerCorrect = vm._answerChecker(vm.aQuests[i].iPlayerAnswer, vm.aQuests[i].nAnswer);
 
                 if (bIsAnswerCorrect) {
                     nResult++;
@@ -139,30 +139,39 @@ angular.module('CountingGameCtrl', [])
          * And returns a respective indicator.
          *
          * @private
-         * @param {number} nPlayerAnswer the answer the player has given
-         * @param {number} nCorrectAnswer the correct answer to the question
+         * @param {int} iPlayerAnswer the answer the player has given
+         * @param {int} nCorrectAnswer the correct answer to the question
          * @returns {bool} correctness indicator
          */
-        vm._answerChecker = function(nPlayerAnswer, nCorrectAnswer) {
-            return nPlayerAnswer === nCorrectAnswer;
+        vm._answerChecker = function(iPlayerAnswer, iCorrectAnswer) {
+            return iPlayerAnswer === iCorrectAnswer;
         };
 
         /**
          * Calculates the total time spent based on start time and end time.
          *
          * @private
-         * @param {Object} oStartTime start time
-         * @returns {number} total seconds
+         * @param {Object} iStartTime start time
+         * @returns {int} total seconds
          */
-        vm._getTotalSeconds = function(oStartTime) {
-            var oEndTime = new Date().getTime();
+        vm._getTotalSeconds = function(iStartTime) {
+            var nEndTime = new Date().getTime();
 
-            return vm._calculateTotalSeconds(oStartTime, oEndTime);
+            return vm._calculateTotalSeconds(iStartTime, nEndTime);
         };
-        // TODO: write unit tests
-        vm._calculateTotalSeconds = function(oStartTime, oEndTime) {
-            return Math.floor((oEndTime - oStartTime) / 1000);
+
+        /**
+         * Calculates total seconds given start and end time.
+         *
+         * @private
+         * @param {int} iStartTime start time
+         * @param {int} iEndTime end time
+         * @returns {int} total seconds
+         */
+        vm._calculateTotalSeconds = function(iStartTime, iEndTime) {
+            return Math.floor((iEndTime - iStartTime) / 1000);
         };
+
         // TODO: write unit tests (and possibly refactor)
         vm._getGameTime = function(nTotalSeconds) {
             var sGameTime;
@@ -172,7 +181,9 @@ angular.module('CountingGameCtrl', [])
             } else {
                 var nGameMinutes = Math.floor(nTotalSeconds / 60),
                     nGameSeconds = nTotalSeconds % 60;
+
                 sGameTime = nGameMinutes + " minutes";
+
                 if (nGameSeconds > 0) {
                     sGameTime += " and " + nGameSeconds + " seconds";
                 }

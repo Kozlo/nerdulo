@@ -12,10 +12,10 @@
         <!-- only shown when playing -->
         <div ng-show="oCount.bIsPlaying && !oCount.bGameFinished">
             <div ng-repeat="oQuest in oCount.aQuests" ng-show="oQuest.bIsCurr">
-                <p> {{ "Problem " + (oCount.nQuestNo + 1) + " / " + oCount.aQuests.length + ":" }}</p>
+                <p> {{ "Problem " + (oCount.iQuestNo + 1) + " / " + oCount.aQuests.length + ":" }}</p>
                 <p>{{ oQuest.oNumbers.one }} * {{ oQuest.oNumbers.two }}</p>
                     <div class="answer-option" ng-repeat="nOpt in oQuest.aOptions track by $index">
-                        <button type="button" class="btn btn-default" ng-class="{ active: nOpt == oQuest.nPlayerAnswer }" ng-click="oQuest.setPlayerAnswer(nOpt)">{{ nOpt }}</button>
+                        <button type="button" class="btn btn-default" ng-class="{ active: nOpt == oQuest.iPlayerAnswer }" ng-click="oQuest.setPlayerAnswer(nOpt)">{{ nOpt }}</button>
                     </div>
                 <p>{{ oQuest.sPlayerPrompt }}</p>
                 <button type="button" class="btn bnt-default" ng-click="oCount.submitAnswer()">Submit</button>
