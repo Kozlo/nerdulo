@@ -67,8 +67,8 @@
         ok(this.oCtrl.bIsPlaying, "Is playing property exists");
         strictEqual(this.oCtrl.bIsPlaying, true, "Is playing property is set to true");
 
-        ok(this.oCtrl.nStartTime, "Start time property exists");
-        equal(typeof this.oCtrl.nStartTime, "number", "Start time property type is number");
+        ok(this.oCtrl.iStartTime, "Start time property exists");
+        equal(typeof this.oCtrl.iStartTime, "number", "Start time property type is number");
 
         notEqual(typeof this.oCtrl.iQuestNo, "undefined",  "Current question property exists");
         equal(typeof this.oCtrl.iQuestNo, "number", "Current question property type if number");
@@ -86,6 +86,7 @@
     }
 
     function runSubmitAnswerTest(bAnsState) {
+        debugger;
         test("Does submitAnswer check the answer and submit it when it's validity is: " + aAnswerStates[i], function () {
             var bIsQuestValid = bAnsState;
 
@@ -107,7 +108,7 @@
     test("Does _validateAnswer return a correct indicator depending on the player answer", function() {
         var sDefaultPlayerPrompt = "Your answer is: ",
             oCurrQuest1 = {
-                nPlayerAnswer : 13,
+                iPlayerAnswer : 13,
                 sPlayerPrompt : sDefaultPlayerPrompt
             },
             oCurrQuest2 = {
