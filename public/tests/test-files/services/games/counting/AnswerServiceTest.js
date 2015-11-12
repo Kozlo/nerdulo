@@ -82,8 +82,8 @@
             }
         }
 
-        notEqual(this.oQuestion.nPlayerAnswer, "undefined", "Question property nPlayerAnswer is set");
-        equal(this.oQuestion.nPlayerAnswer, null, "Question property nPlayerAnswer is set to null");
+        notEqual(this.oQuestion.iPlayerAnswer, "undefined", "Question property iPlayerAnswer is set");
+        equal(this.oQuestion.iPlayerAnswer, null, "Question property iPlayerAnswer is set to null");
 
         notEqual(this.oQuestion.sPlayerPrompt, "undefined", "Question property sPlayerPrompt is set");
         equal(this.oQuestion.sPlayerPrompt, sDefaultPlayerPrompt, "Question property sPlayerPrompt is set to the default one");
@@ -142,13 +142,13 @@
         ok(randIntGen(1, 1, 1, this.oQuestion.getRandomInt), 'Rand int passes valid values when passed: 1 to 1.');
         ok(randIntGen(0, 0, 1, this.oQuestion.getRandomInt), 'Rand int passes valid values when passed: 0 to 0.');
 
-        function randIntGen (nMin, nMax, nCount, fnGetRandomInt) {
-            var nRandInt;
+        function randIntGen (iMin, iMax, iCount, fnGetRandomInt) {
+            var iRandInt;
 
-            for (var i = 0; i < nCount; i++) {
-                nRandInt = fnGetRandomInt(nMin, nMax);
+            for (var i = 0; i < iCount; i++) {
+                iRandInt = fnGetRandomInt(iMin, iMax);
 
-                if (nRandInt < nMin || nRandInt > nMax) {
+                if (iRandInt < iMin || iRandInt > iMax) {
                     return false;
                 }
             }
@@ -177,8 +177,8 @@
         for (var i = 0; i < aOpts.length; i++) {
             equal(typeof aOpts[i], "number", "the type of option " + i + " is 'Number'");
             notEqual(aOpts[i], 0,  "Option " + i + " is not zero.");
-            ok(aOpts[i] > Math.floor(this.oQuestion.nAnswer * (1 + this.oQuestion.oConfig.deviance.min)),  "Option " + i + " value is greater than minimum allowed value.");
-            ok(aOpts[i] < Math.floor(this.oQuestion.nAnswer * (1 + this.oQuestion.oConfig.deviance.max)),  "Option " + i + " value is less than the maximum allowed value.");
+            ok(aOpts[i] > Math.floor(this.oQuestion.iAnswer * (1 + this.oQuestion.oConfig.deviance.min)),  "Option " + i + " value is greater than minimum allowed value.");
+            ok(aOpts[i] < Math.floor(this.oQuestion.iAnswer * (1 + this.oQuestion.oConfig.deviance.max)),  "Option " + i + " value is less than the maximum allowed value.");
         }
 
         var aSortedResult = aOpts.sort(),
@@ -213,7 +213,7 @@
 
         ok(spy_getRandomOption.called, "getRandomOption called");
 
-        equal(aTestOpts.length, 2, "the passsed array has an additional value");
+        equal(aTestOpts.length, 2, "the passed array has an additional value");
 
         spy_getRandomOption.restore();
     });
@@ -243,45 +243,45 @@
 
         ok(spy_processRandomOption.called, "processRandomOption called");
         // TODO: figure out how to get the return value of spy
-        ok(spy_processRandomOption.calledWith(this.oQuestion.nAnswer, sinon.match.any), "processRandomOption called with the answer and thr return value of get non zero random int");
+        ok(spy_processRandomOption.calledWith(this.oQuestion.iAnswer, sinon.match.any), "processRandomOption called with the answer and thr return value of get non zero random int");
 
         spy_getNonZeroRandomInt.restore();
         spy_processRandomOption.restore();
     });
 
     test("Does processRandomOption formats the passed value correctltly", function() {
-        var nTestDev = 20,
-            nExpRandOpt = this.oQuestion.nAnswer * this.oQuestion.convertNumToMultiple(nTestDev),
-            nExpResult = Math.floor(nExpRandOpt);
+        var iTestDev = 20,
+            iExpRandOpt = this.oQuestion.iAnswer * this.oQuestion.convertNumToMultiple(iTestDev),
+            iExpResult = Math.floor(iExpRandOpt);
 
         var spy_convertNumToMultiple = sinon.spy(this.oQuestion, "convertNumToMultiple"),
             spy_MathFloor = sinon.spy(Math, "floor");
 
-        var nOpt = this.oQuestion.processRandomOption(this.oQuestion.nAnswer, nTestDev);
+        var iOpt = this.oQuestion.processRandomOption(this.oQuestion.iAnswer, iTestDev);
 
         ok(spy_convertNumToMultiple.called, "convertNumToMltpl called");
 
         ok(spy_MathFloor.called, "MathFloor called");
-        ok(spy_MathFloor.calledWith(nExpRandOpt), "MathFloor called with the generated random option");
+        ok(spy_MathFloor.calledWith(iExpRandOpt), "MathFloor called with the generated random option");
 
-        equal(nOpt, nExpResult, "The result is as exoected");
+        equal(iOpt, iExpResult, "The result is as exoected");
 
         spy_convertNumToMultiple.restore();
         spy_MathFloor.restore();
     });
 
     test("Does convertNumToMultiple convert a number to a fraction (divided by 100) + 1", function() {
-        var nTestNum1 = 3,
-            nTestNum2 = 5,
-            nTestNum3 = -55;
+        var iTestNum1 = 3,
+            iTestNum2 = 5,
+            iTestNum3 = -55;
 
-        var nMult1 = this.oQuestion.convertNumToMultiple(nTestNum1),
-            nMult2 = this.oQuestion.convertNumToMultiple(nTestNum2),
-            nMult3 = this.oQuestion.convertNumToMultiple(nTestNum3);
+        var iMult1 = this.oQuestion.convertNumToMultiple(iTestNum1),
+            iMult2 = this.oQuestion.convertNumToMultiple(iTestNum2),
+            iMult3 = this.oQuestion.convertNumToMultiple(iTestNum3);
 
-        equal(nMult1, 1 + nTestNum1 / 100, "The first number " + nTestNum1 + " is converted correctly: " + nMult1);
-        equal(nMult2, 1 + nTestNum2 / 100, "The first number " + nTestNum2 + " is converted correctly: " + nMult2);
-        equal(nMult3, 1 + nTestNum3 / 100, "The first number " + nTestNum2 + " is converted correctly: " + nMult3);
+        equal(iMult1, 1 + iTestNum1 / 100, "The first number " + iTestNum1 + " is converted correctly: " + iMult1);
+        equal(iMult2, 1 + iTestNum2 / 100, "The first number " + iTestNum2 + " is converted correctly: " + iMult2);
+        equal(iMult3, 1 + iTestNum3 / 100, "The first number " + iTestNum3 + " is converted correctly: " + iMult3);
     });
 
     test("Does addAnswer method adds the correct answer to the array of generated options properly", function() {
@@ -299,7 +299,7 @@
         ok(spy_insertValueInArray.called, "insertValueInArray called");
         ok(spy_insertValueInArray.calledWith(aOpts, sinon.match.any), "insertValueInArray called");
 
-        ok(aOpts.indexOf(this.oQuestion.nAnswer) >= 0, "The answer has been added to the options");
+        ok(aOpts.indexOf(this.oQuestion.iAnswer) >= 0, "The answer has been added to the options");
         equal(aOpts.length, nOldLength + 1, "The length of the returned array is larger than that of the passed one by 1");
 
         spy_getRandomInt.restore();
@@ -307,11 +307,11 @@
     });
 
     test("Does setPlayerAnswer sets the player answer and the player prompt properly", function() {
-        var nTestOpt = 2;
+        var iTestOpt = 2;
 
-        this.oQuestion.setPlayerAnswer(nTestOpt);
+        this.oQuestion.setPlayerAnswer(iTestOpt);
 
-        equal(this.oQuestion.nPlayerAnswer, nTestOpt, "player answer property is set correctly");
-        equal(this.oQuestion.sPlayerPrompt, "Your answer is: " + nTestOpt, "player prompt property is set correctly");
+        equal(this.oQuestion.iPlayerAnswer, iTestOpt, "player answer property is set correctly");
+        equal(this.oQuestion.sPlayerPrompt, "Your answer is: " + iTestOpt, "player prompt property is set correctly");
     });
 }());

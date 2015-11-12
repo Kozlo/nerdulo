@@ -4,11 +4,11 @@ angular.module('AnswerService', [])
         /**
          * The constructor method for a question.
          *
-         * @param {number} nQuestNo the number given for the question
+         * @param {int} iQuestNo the number given for the question
          * @param {Object} oConfig values used to differentiate questions
          */
-        function Question(nQuestNo, oConfig, bIsLast) {
-            this.nQuestNo = nQuestNo;
+        function Question(iQuestNo, oConfig, bIsLast) {
+            this.iQuestNo = iQuestNo;
             this.oConfig = {
                 falseOptCount : oConfig.falseOptCount,
                 deviance : {
@@ -20,12 +20,12 @@ angular.module('AnswerService', [])
                 one : this.getRandomInt(oConfig.number.min, oConfig.number.max),
                 two : this.getRandomInt(oConfig.number.min, oConfig.number.max)
             };
-            this.nAnswer = this.calculator(this.oNumbers.one, this.oNumbers.two);
+            this.iAnswer = this.calculator(this.oNumbers.one, this.oNumbers.two);
             this.aFalseOptions = this.optionGenerator();
             this.aOptions = this.addAnswer(this.aFalseOptions);
             this.bIsCurr = false;
             this.bIsLast = bIsLast;
-            this.nPlayerAnswer = null;
+            this.iPlayerAnswer = null;
             this.sPlayerPrompt = "Your answer is: ";
         }
 
@@ -36,12 +36,12 @@ angular.module('AnswerService', [])
              * Using Math.round() will give you a non-uniform distribution!
              *
              * @public
-             * @param {number} nMin the minimum number allowed
-             * @param {number} nMax the maximum number allowed
-             * @returns {number} a random integer
+             * @param {int} iMin the minimum number allowed
+             * @param {int} iMax the maximum number allowed
+             * @returns {int} a random integer
              */
-            getRandomInt : function(nMin, nMax) {
-                return Math.floor(Math.random() * (nMax - nMin + 1)) + nMin;
+            getRandomInt : function(iMin, iMax) {
+                return Math.floor(Math.random() * (iMax - iMin + 1)) + iMin;
             },
 
             // TODO: move to a separate helper class
@@ -49,19 +49,19 @@ angular.module('AnswerService', [])
              * Calls getRandomInt until an non-zero value is returned.
              *
              * @public
-             * @param {number} nMin the minimum number allowed
-             * @param {number} nMax the maximum number allowed
-             * @returns {number} a non-zero random integer
+             * @param {int} iMin the minimum number allowed
+             * @param {int} iMax the maximum number allowed
+             * @returns {int} a non-zero random integer
              */
-            getNonZeroRandomInt : function(nMin, nMax) {
-                var nRandDev;
+            getNonZeroRandomInt : function(iMin, iMax) {
+                var iRandDev;
 
                 // keep calling getRandomInt until a non-zero number is returned
                 do {
-                    nRandDev = this.getRandomInt(nMin, nMax);
-                } while (isNaN(nRandDev) || nRandDev === 0 );
+                    iRandDev = this.getRandomInt(iMin, iMax);
+                } while (isNaN(iRandDev) || iRandDev === 0 );
 
-                return nRandDev;
+                return iRandDev;
             },
 
             // TODO: move to a separate helper class (also add the operation)
@@ -69,12 +69,12 @@ angular.module('AnswerService', [])
              * Return the correct answer to the math problem.
              *
              * @public
-             * @param {number} nOne the first number to calculate
-             * @param {number} nTwo the second number to calculate
-             * @returns {number} the multiplied result
+             * @param {int} iOne the first number to calculate
+             * @param {int} iTwo the second number to calculate
+             * @returns {int} the multiplied result
              */
-            calculator : function(nOne, nTwo) {
-                return nOne * nTwo;
+            calculator : function(iOne, iTwo) {
+                return iOne * iTwo;
             },
 
             /**
@@ -101,9 +101,9 @@ angular.module('AnswerService', [])
              * @param {Array} aOpts an array of options
              */
             createOption : function(aOpts) {
-                var nRandOpt = this.getRandomOption();
+                var iRandOpt = this.getRandomOption();
 
-                this.pushUniqueValueToArray(aOpts, nRandOpt);
+                this.pushUniqueValueToArray(aOpts, iRandOpt);
             },
 
             // TODO: move to different helper class
@@ -112,7 +112,7 @@ angular.module('AnswerService', [])
              *
              * @public
              * @param {Array} aValues an array of options
-             * @param {string|number|bool|Object|Array} value the value to be pushed to the array
+             * @param {string|int|bool|Object|Array} value the value to be pushed to the array
              */
             pushUniqueValueToArray : function(aValues, value) {
                 if (aValues.indexOf(value) < 0) {
@@ -124,27 +124,27 @@ angular.module('AnswerService', [])
              * Calls the methods for creating a random integer and returns the formatted result.
              *
              * @public
-             * @returns {number} formatted result.
+             * @returns {int} formatted result.
              */
             getRandomOption : function() {
                 var oDev = this.oConfig.deviance,
-                    nRandDev = this.getNonZeroRandomInt(oDev.min, oDev.max);
+                    iRandDev = this.getNonZeroRandomInt(oDev.min, oDev.max);
 
-                return this.processRandomOption(this.nAnswer, nRandDev);
+                return this.processRandomOption(this.iAnswer, iRandDev);
             },
 
             /**
              * Converts the passed deviation to a usable option given the answer.
              *
              * @public
-             * @param {number} nAnswer the correct answer to the math problem
-             * @param {number} nDeviation the generated random deviation
-             * @returns {number} formatted result.
+             * @param {int} iAnswer the correct answer to the math problem
+             * @param {int} nDeviation the generated random deviation
+             * @returns {int} formatted result.
              */
-            processRandomOption : function(nAnswer, nDeviation) {
-                var nRandOpt = nAnswer * this.convertNumToMultiple(nDeviation);
+            processRandomOption : function(iAnswer, iDeviation) {
+                var iRandOpt = iAnswer * this.convertNumToMultiple(iDeviation);
 
-                return Math.floor(nRandOpt);
+                return Math.floor(iRandOpt);
             },
 
             // TODO: move to a helper class
@@ -152,11 +152,11 @@ angular.module('AnswerService', [])
              * Converts the passed number to a decimal equivalent and adds 1 (e.g. 10 is converted to 1.1).
              *
              * @public
-             * @param {number} nNumber decimal digit to be converted
-             * @returns {number} formatted result
+             * @param {int} iNumber decimal digit to be converted
+             * @returns {int} formatted result
              */
-            convertNumToMultiple : function(nNumber) {
-                return 1 + nNumber / 100;
+            convertNumToMultiple : function(iNumber) {
+                return 1 + iNumber / 100;
             },
 
             /**
@@ -169,7 +169,7 @@ angular.module('AnswerService', [])
                 var aOpts = aFalseOpts.slice(),
                     nRandPos = this.getRandomInt(0, aFalseOpts.length - 1);
 
-                this.insertValueInArray(aOpts, nRandPos, this.nAnswer);
+                this.insertValueInArray(aOpts, nRandPos, this.iAnswer);
                 
                 return aOpts;
             },
@@ -182,11 +182,11 @@ angular.module('AnswerService', [])
             /**
              * Set the player's answer in the view
              *
-             * @param {string|number} nOpt
+             * @param {string|int} opt
              */
-            setPlayerAnswer : function(nOpt) {
-                this.nPlayerAnswer = nOpt;
-                this.sPlayerPrompt = "Your answer is: " + this.nPlayerAnswer;
+            setPlayerAnswer : function(opt) {
+                this.iPlayerAnswer = opt;
+                this.sPlayerPrompt = "Your answer is: " + this.iPlayerAnswer;
             }
         };
 

@@ -124,7 +124,7 @@ angular.module('CountingGameCtrl', [])
             var nResult = 0;
 
             for (var i = 0; i < vm.aQuests.length; i++) {
-                var bIsAnswerCorrect = vm._answerChecker(vm.aQuests[i].iPlayerAnswer, vm.aQuests[i].nAnswer);
+                var bIsAnswerCorrect = vm._answerChecker(vm.aQuests[i].iPlayerAnswer, vm.aQuests[i].iAnswer);
 
                 if (bIsAnswerCorrect) {
                     nResult++;
