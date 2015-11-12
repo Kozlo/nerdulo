@@ -190,8 +190,8 @@
         equal(this.oCtrl.bGameFinished, true, "game finished indicator is set to true.");
 
         ok(stub_getTotalSeconds.called, "_getTotalSeconds called");
-        notEqual(this.oCtrl.nGameScore, "undefined", "nGameScore property exists.");
-        equal(this.oCtrl.nGameScore, nTestGameResult, "nGameScore property set as the return value of _getGameResult.");
+        notEqual(this.oCtrl.iGameScore, "undefined", "iGameScore property exists.");
+        equal(this.oCtrl.iGameScore, nTestGameResult, "iGameScore property set as the return value of _getGameResult.");
 
         ok(stub_getTotalSeconds.called, "_getTotalSeconds called");
         notEqual(this.oCtrl.iTotalSeconds, "undefined", "iTotalSeconds property exists.");
@@ -207,12 +207,12 @@
     });
 
     test("Does _getGameResult return the correct number of answers properly", function() {
-        var nWrongAnswers = 2,
-            nReturnedWrongAnswers = 0;
+        var iWrongAnswers = 2,
+            iReturnedWrongAnswers = 0;
 
-        var stub_answerChecker = sinon.stub(this.oCtrl, "_answerChecker", function(nIndex) {
-            if (nReturnedWrongAnswers < nWrongAnswers) {
-                nReturnedWrongAnswers++;
+        var stub_answerChecker = sinon.stub(this.oCtrl, "_answerChecker", function() {
+            if (iReturnedWrongAnswers < iWrongAnswers) {
+                iReturnedWrongAnswers++;
                 return false;
             } else {
                 return true;
@@ -224,31 +224,31 @@
         ok(stub_answerChecker.called, "_answerChecker called");
 
         for (var i = 0; i < this.oCtrl.aQuests.length; i++) {
-            ok(stub_answerChecker.calledWith(this.oCtrl.aQuests[i].iPlayerAnswer, this.oCtrl.aQuests[i].nAnswer), "_answerChecker called with player answer and correct answer for question: " + i);
+            ok(stub_answerChecker.calledWith(this.oCtrl.aQuests[i].iPlayerAnswer, this.oCtrl.aQuests[i].iAnswer), "_answerChecker called with player answer and correct answer for question: " + i);
         }
 
         equal(stub_answerChecker.callCount, this.oCtrl.aQuests.length, "_answerChecker called count equals question count");
 
-        equal(nTestResults, this.oCtrl.aQuests.length - nWrongAnswers, "The result equals the passed correct answers");
+        equal(nTestResults, this.oCtrl.aQuests.length - iWrongAnswers, "The result equals the passed correct answers");
 
         stub_answerChecker.restore();
     });
 
     test("Does _answerChecker return true when a correct answer is provided", function() {
-        var nTestPlayerAns = 3,
-            nTestCorrectAns = 3;
+        var iTestPlayerAns = 3,
+            iTestCorrectAns = 3;
 
-        var bTestAns = this.oCtrl._answerChecker(nTestPlayerAns, nTestCorrectAns);
+        var bTestAns = this.oCtrl._answerChecker(iTestPlayerAns, iTestCorrectAns);
 
         // TODO: must be true...
         equal(bTestAns, true, "_answerChecked returns false when player answer and the passed answer are equal");
     });
 
     test("Does _answerChecker return true when an incorrect answer is provided", function() {
-        var nTestPlayerAns = 3,
-            nTestCorrectAns = 4;
+        var iTestPlayerAns = 3,
+            iTestCorrectAns = 4;
 
-        var bTestAns = this.oCtrl._answerChecker(nTestPlayerAns, nTestCorrectAns);
+        var bTestAns = this.oCtrl._answerChecker(iTestPlayerAns, iTestCorrectAns);
 
         // TODO: must be true...
         equal(bTestAns, false, "_answerChecked returns false when player answer and the passed answer are equal");
@@ -312,6 +312,29 @@
     test("Does oAllStarData controller property have the correct properties", function() {
         notEqual(typeof this.oCtrl.oAllStarData, "undefined", "oAllStartData property exists on the controller");
         equal(this.oCtrl.oAllStarData.game, "count", "game property on oAllStartData is count");
+    });
+
+    test("Does createAllStar method creates and all start properly, if applicable", function() {
+        var iTestScore = 13,
+            iTestTime = 23;
+
+        // clean all star data before proceeding
+        this.oCtrl.oAllStarData = {};
+
+        // set the data for testing
+        this.oCtrl.iGameScore = iTestScore;
+        this.oCtrl.iTotalSeconds = iTestTime;
+
+        var stub_create = sinon.stub(this.oCtrl, "_createAllStar");
+
+        this.oCtrl.createAllStar();
+
+        // allstar data should be set to the properties on the controller
+        equal(this.oCtrl.oAllStarData.score, iTestScore, "score assigned to all star data correctly");
+        equal(this.oCtrl.oAllStarData.time, iTestTime, "time assigned to all star data correctly");
+
+        ok(stub_create.called, "allstar create called");
+        ok(stub_create.calledWith(this.oCtrl.oAllStarData), "all star create called with the all star data object");
     });
 
 }());

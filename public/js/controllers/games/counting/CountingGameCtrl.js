@@ -107,7 +107,7 @@ angular.module('CountingGameCtrl', [])
         vm.endGame = function() {
             vm.bGameFinished = true;
 
-            vm.nGameScore = vm._getGameResult();
+            vm.iGameScore = vm._getGameResult();
 
             vm.iTotalSeconds = vm._getTotalSeconds(vm.iStartTime);
 
@@ -121,17 +121,17 @@ angular.module('CountingGameCtrl', [])
          * @returns {int} the number of correct answers
          */
         vm._getGameResult = function() {
-            var nResult = 0;
+            var iResult = 0;
 
             for (var i = 0; i < vm.aQuests.length; i++) {
                 var bIsAnswerCorrect = vm._answerChecker(vm.aQuests[i].iPlayerAnswer, vm.aQuests[i].iAnswer);
 
                 if (bIsAnswerCorrect) {
-                    nResult++;
+                    iResult++;
                 }
             }
 
-            return nResult;
+            return iResult;
         };
 
         /**
@@ -209,20 +209,36 @@ angular.module('CountingGameCtrl', [])
             game: 'count'
         };
 
-        // TODO: refactor and write unit tests
+        /**
+         * Creates an entry for the score the user got.
+         *
+         * @public
+         */
         vm.createAllStar = function () {
-            vm.oAllStarData.score = vm.nGameScore;
-            vm.oAllStarData.time = vm.iTotalSeconds;
-            if(!$.isEmptyObject(vm.oAllStarData)) {
-                AllStars.create(vm.oAllStarData)
-                    .success(function() {
-                        // when the data is updated, redirect the player to the score board
-                        $location.path('/allstars');
-                        $location.hash('counting-allstar');
-                    });
+            var oData = vm.oAllStarData;
+
+            oData.score = vm.iGameScore;
+            oData.time = vm.iTotalSeconds;
+
+            if(!$.isEmptyObject(oData)) {
+                vm._createAllStar(oData);
             } else {
                 console.log('AllStar data is empty');
             }
+        };
+
+        /**
+         * Calls the all star promise create.
+         *
+         * @private
+         */
+        vm._createAllStar = function (oAllStarData) {
+            AllStars.create(oAllStarData)
+                .success(function() {
+                    // when the data is updated, redirect the player to the score board
+                    $location.path('/allstars');
+                    $location.hash('counting-allstar');
+                });
         };
     }
 );
