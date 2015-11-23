@@ -53,6 +53,44 @@
         equal(JSON.stringify(this.oQuestion.oConfig), JSON.stringify(oExpectedConfig), "Actual and expected config match");
     });
 
+    test("Does generateQuestions return expected questions", function() {
+
+        var spy_getIsLast = sinon.spy(this.oAnsSrv, "_getIsLast"),
+            spy_getNewQuestion = sinon.spy(this.oAnsSrv, "_getNewQuestion");
+
+        var aQuests = this.oAnsSrv.generateQuestions();
+
+        ok(spy_getIsLast.called, "_getIsLast called");
+        equal(spy_getIsLast.callCount, this.oAnsSrv.oConfig.questCount, "_getIsLast call count equals the question count specified in the config");
+
+        ok(spy_getNewQuestion.called, "_getNewQuestion called");
+
+        spy_getIsLast.restore();
+        spy_getNewQuestion.restore();
+
+        ok(aQuests, "questions are generated");
+        equal(aQuests.length, this.oAnsSrv.oConfig.questCount, "correct number of questions are generated");
+    });
+
+    test("Does _getNewQuestion return properly constructed questions given different input", function() {
+        var oNonLastQuest = this.oAnsSrv._getNewQuestion(0, this.oAnsSrv.oConfig, false),
+            oLastQuest = this.oAnsSrv._getNewQuestion(0, this.oAnsSrv.oConfig, true);
+
+        equal(oNonLastQuest.bIsLast, false, "the non last question's bIsLast property is set to false");
+        equal(oLastQuest.bIsLast, true, "the last question's bIsLast property is set to true");
+    });
+
+    test("Does _getIsLast return the indicator for the last question correctly", function() {
+
+        var bNonLastQuestion = this.oAnsSrv._getIsLast(0, 5),
+            bLastQuestion = this.oAnsSrv._getIsLast(4, 5),
+            bWrongQuestion = this.oAnsSrv._getIsLast(10, 3);
+
+        equal(bNonLastQuestion, false, "Method returns false when the question is not the last one");
+        equal(bLastQuestion, true, "Method returns true when the question is the last one");
+        equal(bWrongQuestion, true, "Method returns true when the question index is above question count - 1");
+    });
+
     //===============================
     //  Public Method Tests
     //===============================

@@ -1,9 +1,69 @@
 angular.module('AnswerService', [])
 
     .service('Answers', function() {
+
+        this.oConfig = {
+            questCount: 10,
+            falseOptCount : 4,
+            deviance : {
+                min : -20,
+                max : 20
+            },
+            number : {
+                min : 11,
+                max : 29
+            }
+        };
+
+
+        /**
+         * Generates and returns questions for the counting game.
+         *
+         * @public
+         * @returns {Array} generated questions
+         */
+        this.generateQuestions = function() {
+            var aQuests= [];
+
+            for (var i=0 ; i < this.oConfig.questCount ; i++) {
+                var bIsLast = this._getIsLast(i, this.oConfig.questCount),
+                    oQuestion = this._getNewQuestion(i, this.oConfig, bIsLast);
+
+                aQuests.push(oQuestion);
+            }
+
+            return aQuests;
+        };
+
         /**
          * The constructor method for a question.
          *
+         * @private
+         * @param {int} iIndex the number of the question
+         * @param {Object} oConfig the question's config
+         * @param {bool} bIsLast indicator for if the questions is the last one
+         * @returns {Object} generated question
+         */
+        this._getNewQuestion = function(iIndex, oConfig, bIsLast) {
+            return new Question(iIndex, oConfig, bIsLast);
+        };
+
+        /**
+         * Calculates if the current question is the last one.
+         *
+         * @private
+         * @param {int} iIndex the number of the question
+         * @param {int} iQuestCount total number of available questions
+         * @returns {bool} indicator for whether the given question is the last one
+         */
+        this._getIsLast = function(iIndex, iQuestCount) {
+            return (iIndex + 1) >= iQuestCount;
+        };
+
+        /**
+         * The constructor method for a question.
+         *
+         * @public
          * @param {int} iQuestNo the number given for the question
          * @param {Object} oConfig values used to differentiate questions
          */
@@ -188,31 +248,6 @@ angular.module('AnswerService', [])
                 this.iPlayerAnswer = opt;
                 this.sPlayerPrompt = "Your answer is: " + this.iPlayerAnswer;
             }
-        };
-
-        this.generateQuestions = function() {
-            // TODO: do it so that there's only 1 config per answer batch as it's the same for all (e.g. have an onject that has a common config and an array of questions)
-            var aQuests= [],
-                oConfig = {
-                    questCount: 10,
-                    falseOptCount : 4,
-                    deviance : {
-                        min : -20,
-                        max : 20
-                    },
-                    number : {
-                        min : 11,
-                        max : 29
-                    }
-                };
-
-            for (var i=0 ; i < oConfig.questCount   ; i++) {
-                var bIstLast = (i + 1) >= oConfig.questCount;
-
-                aQuests.push( new Question(i, oConfig, bIstLast));
-            }
-
-            return aQuests;
         };
     }
 );
