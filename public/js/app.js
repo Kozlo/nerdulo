@@ -1,4 +1,4 @@
-// TODO: seaprate the controllers and services in separately
+// TODO: separate the controllers and services
 angular.module('nerdulo', [
     'ngRoute',
     'appRoutes',

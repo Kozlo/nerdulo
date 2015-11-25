@@ -35,7 +35,7 @@
     //===============================
 
     test("Test to see if the controller exists and the correct route is used", function() {
-        ok(this.oCtrl, 'The controller exists');
+        ok(this.oCtrl, 'The Counting Game controller exists');
         // TODO: check what instanceof should be used
         //ok(this.oCtrl instanceof, "The controller is an instance of...");
     });
@@ -86,7 +86,6 @@
     }
 
     function runSubmitAnswerTest(bAnsState) {
-        debugger;
         test("Does submitAnswer check the answer and submit it when it's validity is: " + aAnswerStates[i], function () {
             var bIsQuestValid = bAnsState;
 

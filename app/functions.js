@@ -10,4 +10,4 @@ function isNotProd(req, res, next) {
 
 module.exports = {
     isNotProd : isNotProd
-}
+};
