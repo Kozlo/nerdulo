@@ -138,44 +138,47 @@ angular.module('PatternService', [])
              */
             _optionGenerator : function(iRequiredOptionCount) {
                 // an array to hold all answers
-                var aOpts = [];
+                var aOptions = [];
 
                 do {
-                    var iRandOpt = this._getRandomOption(this.iAnswer);
+                    var iRandOpt = this._getRandomOption();
 
-                    // check if the option already is in the list
-                    if (aOpts.indexOf(iRandOpt) < 0 && iRandOpt !== 0) {
-                        //push the non-zero option to the list of available options
-                        aOpts.push(iRandOpt);
-                    }
-                } while (aOpts.length < iRequiredOptionCount);
+                    this._addOptionToArray(iRandOpt, aOptions);
+                } while (aOptions.length < iRequiredOptionCount);
 
-                // return the options, but add the correct answer to the list first
-                return this._addAnswer(aOpts);
+                // add the correct answer to the list first
+                // TODO: once addAnswer has been changed, simply call the method with the options and return aOptions instead
+                var aOptionsWithAnswer = this._addAnswer(aOptions);
+
+                return aOptionsWithAnswer;
             },
 
-            // TODO: write unit test and add JSDoc
-            _getRandomOption: function(iAnswer) {
-                // TODO: optimize this method
-                // TODO: replace the reference to config with arguments passed to the method
-                var iRandOpt;
-
-                if (iAnswer > 30) {
+            // TODO: write unit tests (2 scenarios) and add JSDoc
+            _getRandomOption: function() {
+                if (this.iAnswer > 30) {
                     // generate a random number that is different from the correct answer by max % specified by the maxDev variable
                     var iRandDev = this._getRandomInt(this.oConfig.deviance.min, this.oConfig.deviance.max);
 
-                    iRandOpt = Math.floor(iAnswer * (1 + iRandDev / 100));
+                    return Math.floor(this.iAnswer * (1 + iRandDev / 100));
                 } else {
-                    iRandOpt = this._getRandomInt(-this.oConfig.optCount, this.oConfig.optCount);
+                    return this._getRandomInt(-this.oConfig.optCount, this.oConfig.optCount);
                 }
+            },
 
-                return iRandOpt;
+            // TODO: write unit test and add JSDoc
+            _addOptionToArray: function(iRandOpt, aOpts) {
+                // check if the option already is in the list
+                if (aOpts.indexOf(iRandOpt) < 0 && iRandOpt !== 0) {
+                    //push the non-zero option to the list of available options
+                    aOpts.push(iRandOpt);
+                }
             },
 
             /** TODO: move to a seaprate service
              * Add the correct answer at a random position in the list of options
              */
             _addAnswer : function(opts) {
+                // TODO: instead of returning a new array, simply add the options in the passed one
                 //generate a random int (0 till options count) that will be the position of the correct answer in the options
                 var randPos = this._getRandomInt(0, this.oConfig.optCount - 1);
                 // if the new position is at the end of the array, just add it, otherwise replace it with an incorrect answer
