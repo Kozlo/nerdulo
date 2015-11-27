@@ -13,17 +13,17 @@ angular.module('PatternGameCtrl', [])
             vm.isPlaying = true;
             vm.startTime = new Date().getTime();
             vm.currentQuestionNo = 0;
-            vm.questions[0].isCurrentQuestion = true;
+            vm.questions[0].bIsCurrentQuestion = true;
         };
         vm.submitAnswer = function() {
-            if(!vm.questions[vm.currentQuestionNo].playerAnswer) {
-                vm.questions[vm.currentQuestionNo].playerPrompt = "Please select an answer!";
+            if(!vm.questions[vm.currentQuestionNo].iPlayerAnswer) {
+                vm.questions[vm.currentQuestionNo].sPlayerPrompt = "Please select an answer!";
                 return;
             }
 
             if ((vm.currentQuestionNo + 1) < vm.questions.length) {
-                vm.questions[vm.currentQuestionNo++].isCurrentQuestion = false;
-                vm.questions[vm.currentQuestionNo].isCurrentQuestion = true;
+                vm.questions[vm.currentQuestionNo++].bIsCurrentQuestion = false;
+                vm.questions[vm.currentQuestionNo].bIsCurrentQuestion = true;
             } else {
                 vm.gameFinished = true;
                 vm.endGame();
@@ -33,7 +33,7 @@ angular.module('PatternGameCtrl', [])
         vm.endGame = function() {
             var result = 0;
             for (var i = 0; i < vm.questions.length; i++) {
-                if (vm.questions[i].playerAnswer === vm.questions[i].answer) {
+                if (vm.questions[i].iPlayerAnswer === vm.questions[i].iAnswer) {
                     result++;
                 }
             }

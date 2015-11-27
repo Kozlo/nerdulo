@@ -25,7 +25,7 @@ angular.module('AnswerService', [])
         this.generateQuestions = function() {
             var aQuests= [];
 
-            for (var i=0 ; i < this.oConfig.questCount ; i++) {
+            for (var i = 0 ; i < this.oConfig.questCount ; i++) {
                 var bIsLast = this._getIsLast(i, this.oConfig.questCount),
                     oQuestion = this._getNewQuestion(i, this.oConfig, bIsLast);
 

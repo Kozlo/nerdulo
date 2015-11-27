@@ -11,18 +11,18 @@
         <!-- TODO: if possible move this to a generic answer generation view (also for counting game) -->
         <!-- only shown when playing -->
         <div ng-show="pattern.isPlaying && !pattern.gameFinished">
-            <div ng-repeat="q in pattern.questions track by $index" ng-show="q.isCurrentQuestion">
+            <div ng-repeat="q in pattern.questions track by $index" ng-show="q.bIsCurrentQuestion">
                 <p> {{ "Pattern    " + (pattern.currentQuestionNo + 1) + " / " + pattern.questions.length + ":" }}</p>
                 <!-- TODO: replace with pattern-game specific HTML -->
                 <div class="pattern-items-wrapper">
-                    <div ng-repeat=" pi in q.pattern track by $index" class="pattern-item-holder">
+                    <div ng-repeat=" pi in q.aPattern track by $index" class="pattern-item-holder">
                         <span class="label label-default">{{ pi }}</span>
                     </div>
                 </div>
-                <div class="answer-option" ng-repeat="opt in q.options track by $index">
-                    <button type="button" class="btn btn-default" ng-class="{ active: opt == q.playerAnswer }" ng-click="q.setPlayerAnswer(opt)">{{ opt }}</button>
+                <div class="answer-option" ng-repeat="opt in q.oOptions track by $index">
+                    <button type="button" class="btn btn-default" ng-class="{ active: opt == q.iPlayerAnswer }" ng-click="q.setPlayerAnswer(opt)">{{ opt }}</button>
                 </div>
-                <p>{{ q.playerPrompt }}</p>
+                <p>{{ q.sPlayerPrompt }}</p>
                 <button type="button" class="btn bnt-default" ng-click="pattern.submitAnswer()">Submit</button>
             </div>
         </div>
