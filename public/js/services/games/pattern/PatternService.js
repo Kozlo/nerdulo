@@ -37,23 +37,23 @@ angular.module('PatternService', [])
             return aQuestions;
         };
 
-        function Pattern(qNo, config) {
+        function Pattern(qNo, oConfig) {
             this.qNo = qNo;
             this.oConfig = {
-                startNum: this._getRandomInt(config.startNum.min, config.startNum.max),
-                multiple: this._getRandomInt(config.multiple.min, config.multiple.max),
-                constant: this._getRandomInt(config.constant.min, config.constant.max),
-                itemCount: config.itemCount,
-                optCount : config.optCount,
+                startNum: this._getRandomInt(oConfig.startNum.min, oConfig.startNum.max),
+                multiple: this._getRandomInt(oConfig.multiple.min, oConfig.multiple.max),
+                constant: this._getRandomInt(oConfig.constant.min, oConfig.constant.max),
+                itemCount: oConfig.itemCount,
+                optCount : oConfig.optCount,
                 deviance : {
-                    min: config.deviance.min,
-                    max: config.deviance.max
+                    min: oConfig.deviance.min,
+                    max: oConfig.deviance.max
                 }
             };
-            this.aPattern = this.patternGenerator();
+            this.aPattern = this._patternGenerator();
             // the answer is omitted and replaced with options
-            this.iAnswer = this.hideOption();
-            this.oOptions = this.optionGenerator();
+            this.iAnswer = this._hideOption();
+            this.oOptions = this._optionGenerator();
             this.iPlayerAnswer = null;
             this.bIsCurrentQuestion = false;
             this.sPlayerPrompt = "Your answer is: ";
@@ -71,7 +71,7 @@ angular.module('PatternService', [])
              * Generated an array with numbers following a pattern
              * @return {Array} pattern
              */
-            patternGenerator : function() {
+            _patternGenerator : function() {
                 // initialize the pattern item array with the starting number as the first item
                 var pattern = [];
                 pattern.push(this.oConfig.startNum);
@@ -84,7 +84,7 @@ angular.module('PatternService', [])
             /**
              * Hide a random option from the pattern (except for the first one as it's a single digit number)
              */
-            hideOption : function() {
+            _hideOption : function() {
                 var hiddenOptNo = this._getRandomInt(1, this.oConfig.itemCount - 1),
                     answer = this.aPattern[hiddenOptNo];
 
@@ -97,7 +97,7 @@ angular.module('PatternService', [])
              * Makes sure thspotat the specified answer isn't equal to the answer
              * @return {Array} options
              */
-            optionGenerator : function() {
+            _optionGenerator : function() {
                 // an array to hold all answers
                 var opts = [];
                 do {
@@ -120,12 +120,12 @@ angular.module('PatternService', [])
                     }
                 } while (opts.length < this.oConfig.optCount - 1)
                 // return the options, but add the correct answer to the list first
-                return this.addAnswer(opts);
+                return this._addAnswer(opts);
             },
             /** TODO: move to a seaprate service
              * Add the correct answer at a random position in the list of options
              */
-            addAnswer : function(opts) {
+            _addAnswer : function(opts) {
                 //generate a random int (0 till options count) that will be the position of the correct answer in the options
                 var randPos = this._getRandomInt(0, this.oConfig.optCount - 1);
                 // if the new position is at the end of the array, just add it, otherwise replace it with an incorrect answer
