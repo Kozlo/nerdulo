@@ -94,4 +94,64 @@
             equal(oPattern.sPlayerPrompt, "Your answer is: ", "oOptions property is seto to 'Your answer is: ' for question " + i);
         }
     });
+
+    //===============================
+    //  Private Pattern Method Tests
+    //===============================
+
+    test('Does _getRandomInt generate an integer given different input', function() {
+        // test different values many times to see if it ever surpassed the specified bounds
+        ok(randIntGen(1, 10, 1000, this.oPattern._getRandomInt), 'Rand int passes valid values when passed: 1 to -10.');
+        ok(randIntGen(-10, -1, 1000, this.oPattern._getRandomInt), 'Rand int passes valid values when passed: -10 to -1.');
+        ok(randIntGen(-100000, 100000, 1000, this.oPattern._getRandomInt), 'Rand int passes valid values when passed: 1 to -10.');
+        ok(randIntGen(1, 1, 1, this.oPattern._getRandomInt), 'Rand int passes valid values when passed: 1 to 1.');
+        ok(randIntGen(0, 0, 1, this.oPattern._getRandomInt), 'Rand int passes valid values when passed: 0 to 0.');
+
+        function randIntGen (iMin, iMax, iCount, fnGetRandomInt) {
+            var iRandInt;
+
+            for (var i = 0; i < iCount; i++) {
+                iRandInt = fnGetRandomInt(iMin, iMax);
+
+                if (iRandInt < iMin || iRandInt > iMax) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    });
+
+    test("Does _patternGenerator generate patterns correctly", function() {
+        var aExpectedPattern = [];
+
+        aExpectedPattern.push(this.oPattern.oConfig.startNum);
+
+        // generate item count - 1 as the first one is already set
+        for (var i=0; i < this.oPattern.oConfig.itemCount - 1; i++) {
+            aExpectedPattern.push(aExpectedPattern[i] * this.oPattern.oConfig.multiple + this.oPattern.oConfig.constant);
+        }
+
+        var aActualPatterns = this.oPattern._patternGenerator();
+
+        deepEqual(aActualPatterns, aExpectedPattern, "Patterns are generated correctly");
+    });
+
+    test("Does _hideOption returns the correct answer and hides it in the pattern", function() {
+        var iNotSoRandomInt = 2,
+            iExpectedAnswer = this.oPattern.aPattern[iNotSoRandomInt];
+
+        var stub_getRandomInt = sinon.stub(this.oPattern, "_getRandomInt").returns(iNotSoRandomInt);
+
+        var iActualAnswer = this.oPattern._hideOption();
+
+        ok(stub_getRandomInt.called, "_getRandomInt called");
+        ok(stub_getRandomInt.calledWith(1, this.oPattern.oConfig.itemCount - 1), "_getRandomInt called");
+
+        equal(iExpectedAnswer, iActualAnswer, "The correct answer is returned");
+
+        equal(this.oPattern.aPattern[iNotSoRandomInt], "?", "The correct answer has been replaced with a question mark in the pattern");
+
+        stub_getRandomInt.restore();
+    });
 }());

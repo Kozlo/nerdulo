@@ -3,6 +3,11 @@ angular.module('PatternService', [])
     .service('Patterns', function() {
 
         // TODO: sort these according to difficulty
+        /**
+         * Configuration used for generating patterns.
+         *
+         * @public
+         */
         this.oConfig = {
             startNum : {
                 min : 9,
@@ -25,18 +30,33 @@ angular.module('PatternService', [])
             patternCount: 10
         };
 
+        /**
+         * Construct and return the specified number of patterns
+         *
+         * @public
+         * @returns {Array} patterns
+         */
         this.generatePatterns = function() {
-            var aQuestions= [];
+            var aPatterns = [];
 
             for (var i = 0 ; i < this.oConfig.patternCount; i++) {
                 var oPattern = new Pattern(i, this.oConfig);
 
-                aQuestions.push(oPattern);
+                aPatterns.push(oPattern);
             }
 
-            return aQuestions;
+            return aPatterns;
         };
 
+        // TODO: figure out how to unit test this properly
+        /**
+         * Constructor method for the Pattern class
+         *
+         * @public
+         * @param {int} qNo the number of the current pattern
+         * @param {Object} oConfig configuration
+         * @returns {int} a random integer
+         */
         function Pattern(qNo, oConfig) {
             this.qNo = qNo;
             this.oConfig = {
@@ -53,75 +73,105 @@ angular.module('PatternService', [])
             this.aPattern = this._patternGenerator();
             // the answer is omitted and replaced with options
             this.iAnswer = this._hideOption();
-            this.oOptions = this._optionGenerator();
+            this.oOptions = this._optionGenerator(oConfig.optCount - 1);
             this.iPlayerAnswer = null;
             this.bIsCurrentQuestion = false;
             this.sPlayerPrompt = "Your answer is: ";
         }
         //
         Pattern.prototype = {
-            /** TODO: move to a different service and also use in counting game
-             * Returns a random integer between min (inclusive) and max (inclusive)
-             * Using Math.round() will give you a non-uniform distribution!
-             */
-            _getRandomInt : function(min, max) {
-                return Math.floor(Math.random() * (max - min + 1)) + min;
-            },
+            // TODO: move to a separate helper class
             /**
-             * Generated an array with numbers following a pattern
-             * @return {Array} pattern
+             * Returns a random integer between min (inclusive) and max (inclusive).
+             * Using Math.round() will give you a non-uniform distribution!
+             *
+             * @private
+             * @param {int} iMin the minimum number allowed
+             * @param {int} iMax the maximum number allowed
+             * @returns {int} a random integer
+             */
+            _getRandomInt : function(iMin, iMax) {
+                return Math.floor(Math.random() * (iMax - iMin + 1)) + iMin;
+            },
+
+            /**
+             * Generates an array with numbers following a pattern
+             *
+             * @private
+             * @returns {Array} aPattern
              */
             _patternGenerator : function() {
                 // initialize the pattern item array with the starting number as the first item
-                var pattern = [];
-                pattern.push(this.oConfig.startNum);
+                var aPattern = [];
+
+                aPattern.push(this.oConfig.startNum);
+
                 // generate item count - 1 as the first one is already set
                 for (var i=0; i < this.oConfig.itemCount - 1; i++) {
-                    pattern.push(pattern[i] * this.oConfig.multiple + this.oConfig.constant);
+                    aPattern.push(aPattern[i] * this.oConfig.multiple + this.oConfig.constant);
                 }
-                return pattern;
+
+                return aPattern;
             },
+
             /**
-             * Hide a random option from the pattern (except for the first one as it's a single digit number)
+             * Hides a random option from the pattern (except for the first one as it's a single digit number).
+             *
+             * @private
+             * @returns {int} the correct answer
              */
             _hideOption : function() {
-                var hiddenOptNo = this._getRandomInt(1, this.oConfig.itemCount - 1),
-                    answer = this.aPattern[hiddenOptNo];
+                // pass 1 as the first argument to make sure the hidden field is not the first one (i.e. index 0)
+                var iHiddenOptNo = this._getRandomInt(1, this.oConfig.itemCount - 1),
+                    iAnswer = this.aPattern[iHiddenOptNo];
 
-                this.aPattern[hiddenOptNo] = "?";
+                this.aPattern[iHiddenOptNo] = "?";
 
-                return answer;
+                return iAnswer;
             },
-            /** TODO: move to a separate service (here it's different than in the counting game)
+
+            /**
              * Generates the specified amount of incorrect answers to the math problem.
-             * Makes sure thspotat the specified answer isn't equal to the answer
-             * @return {Array} options
+             * Makes sure that the specified answer isn't equal to the answer
+             *
+             * @returns {Array} incorrect options to choose from
              */
-            _optionGenerator : function() {
+            _optionGenerator : function(iRequiredOptionCount) {
                 // an array to hold all answers
-                var opts = [];
+                var aOpts = [];
+
                 do {
-                    var randOpt;
-                    if (this.iAnswer > 30) {
-                        // generate a random number that is different from the correct answer by max % specified by the maxDev variable
-                        var randDev = this._getRandomInt(this.oConfig.deviance.min, this.oConfig.deviance.max);
-                        randOpt = Math.floor(this.iAnswer * (1 + randDev/100));
-                    } else {
-                        randOpt = this._getRandomInt(-this.oConfig.optCount, this.oConfig.optCount);
-                    }
-                    // make sure the option is not 0
-                    if (randOpt === 0) {
-                        continue;
-                    }
+                    var iRandOpt = this._getRandomOption(this.iAnswer);
+
                     // check if the option already is in the list
-                    if (opts.indexOf(randOpt) < 0) {
+                    if (aOpts.indexOf(iRandOpt) < 0 && iRandOpt !== 0) {
                         //push the non-zero option to the list of available options
-                        opts.push(randOpt);
+                        aOpts.push(iRandOpt);
                     }
-                } while (opts.length < this.oConfig.optCount - 1)
+                } while (aOpts.length < iRequiredOptionCount);
+
                 // return the options, but add the correct answer to the list first
-                return this._addAnswer(opts);
+                return this._addAnswer(aOpts);
             },
+
+            // TODO: write unit test and add JSDoc
+            _getRandomOption: function(iAnswer) {
+                // TODO: optimize this method
+                // TODO: replace the reference to config with arguments passed to the method
+                var iRandOpt;
+
+                if (iAnswer > 30) {
+                    // generate a random number that is different from the correct answer by max % specified by the maxDev variable
+                    var iRandDev = this._getRandomInt(this.oConfig.deviance.min, this.oConfig.deviance.max);
+
+                    iRandOpt = Math.floor(iAnswer * (1 + iRandDev / 100));
+                } else {
+                    iRandOpt = this._getRandomInt(-this.oConfig.optCount, this.oConfig.optCount);
+                }
+
+                return iRandOpt;
+            },
+
             /** TODO: move to a seaprate service
              * Add the correct answer at a random position in the list of options
              */
