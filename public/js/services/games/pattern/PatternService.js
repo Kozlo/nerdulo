@@ -77,6 +77,7 @@ angular.module('PatternService', [])
             this.iPlayerAnswer = null;
             this.bIsCurrentQuestion = false;
             this.sPlayerPrompt = "Your answer is: ";
+            this.iOptionValueNorm = 30;
         }
         //
         Pattern.prototype = {
@@ -134,70 +135,98 @@ angular.module('PatternService', [])
              * Generates the specified amount of incorrect answers to the math problem.
              * Makes sure that the specified answer isn't equal to the answer
              *
-             * @returns {Array} incorrect options to choose from
+             * @private
+             * @param {int} iRequiredOptionCount how many options should be created
+             * @returns {Array} incorrect options to choose from with answer added
              */
             _optionGenerator : function(iRequiredOptionCount) {
                 // an array to hold all answers
                 var aOptions = [];
 
                 do {
-                    var iRandOpt = this._getRandomOption();
+                    var iRandOpt = this._getRandomOption(this.iAnswer, this.iOptionValueNorm);
 
                     this._addOptionToArray(iRandOpt, aOptions);
                 } while (aOptions.length < iRequiredOptionCount);
 
-                // add the correct answer to the list first
-                // TODO: once addAnswer has been changed, simply call the method with the options and return aOptions instead
-                var aOptionsWithAnswer = this._addAnswer(aOptions);
+                // call the method to add the correct answer to the list first
+                this._addAnswer(this.iAnswer, this.oConfig.optCount - 1, aOptions);
 
-                return aOptionsWithAnswer;
+                return aOptions;
             },
 
-            // TODO: write unit tests (2 scenarios) and add JSDoc
-            _getRandomOption: function() {
-                if (this.iAnswer > 30) {
+            /**
+             * Generates a random integer based on how
+             *
+             * @private
+             * @param {int} iRequiredOptionCount how many options should be created
+             * @param {int} iNorm at which point should lower value be considered
+             * @returns {Array} incorrect options to choose from with answer added
+             */
+            _getRandomOption: function(iAnswer, iNorm) {
+                var iRandomOption;
+
+                if (iAnswer > iNorm) {
                     // generate a random number that is different from the correct answer by max % specified by the maxDev variable
                     var iRandDev = this._getRandomInt(this.oConfig.deviance.min, this.oConfig.deviance.max);
 
-                    return Math.floor(this.iAnswer * (1 + iRandDev / 100));
+                    iRandomOption = this._convertDevToOption(iRandDev);
                 } else {
-                    return this._getRandomInt(-this.oConfig.optCount, this.oConfig.optCount);
+                    iRandomOption =  this._getRandomInt(-this.oConfig.optCount, this.oConfig.optCount);
                 }
+
+                return iRandomOption;
             },
 
-            // TODO: write unit test and add JSDoc
+            /**
+             * Generates an option based on the deviation passed and the current option's answer.
+             *
+             * The result should be an integer larger/smaller by the percentage passed.
+             *
+             * @private
+             * @param {int} iRandDev deviation from the correct answer
+             * @returns {int} incorrect answer
+             */
+            _convertDevToOption: function(iRandDev) {
+                return Math.floor(this.iAnswer * (1 + iRandDev / 100));
+            },
+
+            /**
+             * Checks if the passed value is already in the array and is 0. If not, then adds to the specified array.
+             *
+             * @private
+             * @param {int} iRandOpt option to add to array
+             * @param {Array} aOpts array of patterns
+             */
             _addOptionToArray: function(iRandOpt, aOpts) {
                 // check if the option already is in the list
-                if (aOpts.indexOf(iRandOpt) < 0 && iRandOpt !== 0) {
+                if (aOpts.indexOf(iRandOpt) === -1 && iRandOpt !== 0) {
                     //push the non-zero option to the list of available options
                     aOpts.push(iRandOpt);
                 }
             },
 
-            /** TODO: move to a seaprate service
-             * Add the correct answer at a random position in the list of options
+            /**
+             * Adds the specified answer to array.
+             *
+             * @private
+             * @param {int} iAnswer answer to the question
+             * @param {int} iOptLastIndex index of the last option
+             * @param {Array} aOpts array of patterns
              */
-            _addAnswer : function(opts) {
-                // TODO: instead of returning a new array, simply add the options in the passed one
-                //generate a random int (0 till options count) that will be the position of the correct answer in the options
-                var randPos = this._getRandomInt(0, this.oConfig.optCount - 1);
-                // if the new position is at the end of the array, just add it, otherwise replace it with an incorrect answer
-                if (randPos === (this.oConfig.optCount - 1)) {
-                    opts.push(this.iAnswer);
-                } else {
-                    var tempValue = opts[randPos];
-                    opts[randPos] = this.iAnswer;
-                    opts.push(tempValue);
-                }
-                return opts;
+            _addAnswer : function(iAnswer, iOptLastIndex, aOpts) {
+                var iRandPos = this._getRandomInt(0, iOptLastIndex);
+
+                aOpts.splice(iRandPos, 0, iAnswer);
             },
+
             /**
              * TODO: move to the vm or a separate service
              * Set the player's answer in the view
-             * @param opt {String || Number}
+             * @param iOpt {String || Number}
              */
-            setPlayerAnswer : function(opt) {
-                this.iPlayerAnswer = opt;
+            setPlayerAnswer : function(iOpt) {
+                this.iPlayerAnswer = iOpt;
                 this.sPlayerPrompt = "Your answer is: " + this.iPlayerAnswer;
             }
         };
