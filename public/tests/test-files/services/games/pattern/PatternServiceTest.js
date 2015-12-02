@@ -87,7 +87,7 @@
 
             equal(oPattern.iPlayerAnswer, null, "iPlayerAnswer is initialized to null for question " + i);
 
-            equal(oPattern.bIsCurrentQuestion, false, "bIsCurrentQuestion is initialized to false for question " + i);
+            equal(oPattern.bIsCurr, false, "bIsCurrentQuestion is initialized to false for question " + i);
 
             ok(oPattern.sPlayerPrompt, "sPlayerPrompt property exists for question " + i);
             equal(typeof oPattern.sPlayerPrompt, "string", "sPlayerPrompt property type is string for question " + i);

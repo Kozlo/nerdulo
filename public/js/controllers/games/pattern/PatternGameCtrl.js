@@ -1,45 +1,64 @@
 angular.module('PatternGameCtrl', [])
 
     .controller('PatternGameController', function($location, Patterns, AllStars) {
-        var vm = this;
-        vm.tagline = 'Choose the number that fits in the pattern.';
+        //===============================
+        //  Properties and Variables
+        //===============================
 
+        var vm = this;
+
+        vm.tagline = 'Choose the number that fits in the pattern.';
         // indicates if the user is currently playing the game
         vm.isPlaying = false;
 
+        //===============================
+        //  Start Game Functionality
+        //===============================
+
+        // TODO: check if some things could be re-used from counting game and consider adding to a separate service
         vm.startGame = function() {
-            // TODO: move this to a service that in turn used another service (for each respective game)
-            vm.questions = Patterns.generatePatterns();
-            vm.isPlaying = true;
-            vm.startTime = new Date().getTime();
-            vm.currentQuestionNo = 0;
-            vm.questions[0].bIsCurrentQuestion = true;
+            vm.aQuests = Patterns.generatePatterns();
+            vm.aQuests[0].bIsCurr = true;
+            vm.bIsPlaying = true;
+            vm.iStartTime = new Date().getTime();
+            vm.iQuestNo = 0;
         };
+
+        //===============================
+        //  Submit Answer Functionality
+        //===============================
+
+        // TODO: check if some things could be re-used from counting game and consider adding to a separate service
         vm.submitAnswer = function() {
-            if(!vm.questions[vm.currentQuestionNo].iPlayerAnswer) {
-                vm.questions[vm.currentQuestionNo].sPlayerPrompt = "Please select an answer!";
+            if(!vm.aQuests[vm.iQuestNo].iPlayerAnswer) {
+                vm.aQuests[vm.iQuestNo].sPlayerPrompt = "Please select an answer!";
                 return;
             }
 
-            if ((vm.currentQuestionNo + 1) < vm.questions.length) {
-                vm.questions[vm.currentQuestionNo++].bIsCurrentQuestion = false;
-                vm.questions[vm.currentQuestionNo].bIsCurrentQuestion = true;
+            if ((vm.iQuestNo + 1) < vm.aQuests.length) {
+                vm.aQuests[vm.iQuestNo++].bIsCurr = false;
+                vm.aQuests[vm.iQuestNo].bIsCurr = true;
             } else {
                 vm.gameFinished = true;
                 vm.endGame();
             }
         };
-        // TODO: move to a service along with other 'game-related' functions
+
+        //===============================
+        //  End Game Functionality
+        //===============================
+
+        // TODO: check if some things could be re-used from counting game and consider adding to a separate service
         vm.endGame = function() {
             var result = 0;
-            for (var i = 0; i < vm.questions.length; i++) {
-                if (vm.questions[i].iPlayerAnswer === vm.questions[i].iAnswer) {
+            for (var i = 0; i < vm.aQuests.length; i++) {
+                if (vm.aQuests[i].iPlayerAnswer === vm.aQuests[i].iAnswer) {
                     result++;
                 }
             }
             vm.gameResult = result;
             var endTime = new Date().getTime(),
-                totalSeconds = Math.floor((endTime - vm.startTime) / 1000);
+                totalSeconds = Math.floor((endTime - vm.iStartTime) / 1000);
 
             vm.totalSeconds = totalSeconds;
 
@@ -55,6 +74,11 @@ angular.module('PatternGameCtrl', [])
             }
         };
 
+        //===============================
+        //  Submit Results Functionality
+        //===============================
+
+        // TODO: create re-usable code that would be used for both pattern game and counting game
         vm.allStarData = {
             game: 'pattern'
         };

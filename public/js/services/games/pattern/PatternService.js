@@ -70,14 +70,14 @@ angular.module('PatternService', [])
                     max: oConfig.deviance.max
                 }
             };
+            this.iOptionValueNorm = 30;
             this.aPattern = this._patternGenerator();
             // the answer is omitted and replaced with options
             this.iAnswer = this._hideOption();
             this.oOptions = this._optionGenerator(oConfig.optCount - 1);
             this.iPlayerAnswer = null;
-            this.bIsCurrentQuestion = false;
+            this.bIsCurr = false;
             this.sPlayerPrompt = "Your answer is: ";
-            this.iOptionValueNorm = 30;
         }
         //
         Pattern.prototype = {

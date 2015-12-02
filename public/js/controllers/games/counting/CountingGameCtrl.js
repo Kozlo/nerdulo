@@ -1,13 +1,12 @@
 angular.module('CountingGameCtrl', [])
 
     .controller('CountingGameController', function($location, Answers, AllStars) {
-        // TODO: for all method write JSDoc-style comments
         //===============================
         //  Properties and Variables
         //===============================
 
         var vm = this;
-        // TODO: add these properties to the first check (see if they have been initialised properly)
+
         vm.sTagline = 'Select the correct answer to the given math problems.';
         // indicated is the user is currently playing the game
         vm.bIsPlaying = false;

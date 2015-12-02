@@ -1,7 +1,7 @@
 <div class="game pattern-game" ng-controller="PatternGameController as pattern">
     <div class="jumbotron text-center">
         <!-- only shown before game -->
-        <div ng-hide="pattern.isPlaying">
+        <div ng-hide="pattern.bIsPlaying">
             <h1>The Pattern Game</h1>
 
             <p>{{ pattern.tagline }}</p>
@@ -10,9 +10,9 @@
         </div>
         <!-- TODO: if possible move this to a generic answer generation view (also for counting game) -->
         <!-- only shown when playing -->
-        <div ng-show="pattern.isPlaying && !pattern.gameFinished">
-            <div ng-repeat="q in pattern.questions track by $index" ng-show="q.bIsCurrentQuestion">
-                <p> {{ "Pattern    " + (pattern.currentQuestionNo + 1) + " / " + pattern.questions.length + ":" }}</p>
+        <div ng-show="pattern.bIsPlaying && !pattern.gameFinished">
+            <div ng-repeat="q in pattern.aQuests track by $index" ng-show="q.bIsCurr">
+                <p> {{ "Pattern    " + (pattern.iQuestNo + 1) + " / " + pattern.aQuests.length + ":" }}</p>
                 <!-- TODO: replace with pattern-game specific HTML -->
                 <div class="pattern-items-wrapper">
                     <div ng-repeat=" pi in q.aPattern track by $index" class="pattern-item-holder">
@@ -27,7 +27,7 @@
             </div>
         </div>
         <div ng-show="pattern.gameFinished">
-            <p>Good job! You got <strong>{{ pattern.gameResult }}</strong> out of <strong>{{ pattern.questions.length }}</strong> questions right in <strong>{{ pattern.gameTime }}</strong>.</p>
+            <p>Good job! You got <strong>{{ pattern.gameResult }}</strong> out of <strong>{{ pattern.qQuests.length }}</strong> questions right in <strong>{{ pattern.gameTime }}</strong>.</p>
             <p>Submit your score to the wall of fame!</p>
             <!-- FORM TO CREATE ALLSTARS -->
             <div id="allstar-form" class="row">
