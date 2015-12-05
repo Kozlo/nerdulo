@@ -3,6 +3,7 @@ angular.module('nerdulo', [
     'ngRoute',
     'appRoutes',
     'MainCtrl',
+    'GameCtrl',
     'CountingGameCtrl',
     'PatternGameCtrl',
     'AnswerService',
