@@ -7,11 +7,9 @@
 
     module("Pattern Service", {
         setup: function () {
-            var injector = angular.injector(['ng', 'PatternGameCtrl', 'PatternService', 'AllStarService']);
+            var injector = angular.injector(['ng', 'PatternGameCtrl', 'PatternService']);
 
             this.oPtrnSrv = injector.get('Patterns');
-            // TODO: figure out if this is needed at all
-            this.oAllstars = injector.get('AllStars');
 
             this.aPatterns = this.oPtrnSrv.generatePatterns();
             // TODO: think of a better way to do this
@@ -53,6 +51,9 @@
     });
 
     test("Does generatePatterns return the expected result", function() {
+        var spy_getIsLast = sinon.spy(this.oPtrnSrv, "_getIsLast"),
+            spy_getNewPattern = sinon.spy(this.oPtrnSrv, "_getNewPattern");
+
         var aPatterns = this.oPtrnSrv.generatePatterns();
 
         equal(aPatterns.length, this.oPtrnSrv.oConfig.patternCount, "Pattern count matches the amount specified in config");
@@ -60,6 +61,7 @@
         for (var i = 0; i < aPatterns.length; i++) {
             var oPattern = aPatterns[i],
                 oConfig = oPattern.oConfig;
+
             equal(oPattern.qNo, i, "The qNo property for question " + i + " number is " + i);
 
             // check all config properties
@@ -89,6 +91,12 @@
 
             equal(oPattern.bIsCurr, false, "bIsCurrentQuestion is initialized to false for question " + i);
 
+            if (i < (aPatterns.length - 1)) {
+                equal(oPattern.bIsLast, false, "bIsLast set to false for question " + i);
+            } else {
+                equal(oPattern.bIsLast, true, "bIsLast set to true for question " + i);
+            }
+
             ok(oPattern.sPlayerPrompt, "sPlayerPrompt property exists for question " + i);
             equal(typeof oPattern.sPlayerPrompt, "string", "sPlayerPrompt property type is string for question " + i);
             equal(oPattern.sPlayerPrompt, "Your answer is: ", "oOptions property is seto to 'Your answer is: ' for question " + i);
@@ -97,6 +105,36 @@
             equal(typeof oPattern.iOptionValueNorm, "number", "iOptionValueNorm property type is number for question " + i);
             equal(oPattern.iOptionValueNorm, 30, "iOptionValueNorm property value is 30 for question " + i);
         }
+
+        var iLastPatternIndex = aPatterns.length - 1;
+        equal(aPatterns[iLastPatternIndex].bIsLast, true, "bIsLast set to true for the last question, question number  " + iLastPatternIndex);
+
+        ok(spy_getIsLast.called, "_getIsLast called");
+        equal(spy_getIsLast.callCount, this.oPtrnSrv.oConfig.patternCount, "_getIsLast call count equals the question count specified in the config");
+
+        ok(spy_getNewPattern.called, "_getNewPattern called");
+
+        spy_getIsLast.restore();
+        spy_getNewPattern.restore();
+    });
+
+    test("Does _getNewPattern return properly constructed patterns given different input", function() {
+        var oNonLastQuest = this.oPtrnSrv._getNewPattern(0, this.oPtrnSrv.oConfig, false),
+            oLastQuest = this.oPtrnSrv._getNewPattern(0, this.oPtrnSrv.oConfig, true);
+
+        equal(oNonLastQuest.bIsLast, false, "the non last pattern's bIsLast property is set to false");
+        equal(oLastQuest.bIsLast, true, "the last pattern's bIsLast property is set to true");
+    });
+
+    test("Does _getIsLast return the indicator for the last question correctly", function() {
+
+        var bNonLastQuestion = this.oPtrnSrv._getIsLast(0, 5),
+            bLastQuestion = this.oPtrnSrv._getIsLast(4, 5),
+            bWrongQuestion = this.oPtrnSrv._getIsLast(10, 3);
+
+        equal(bNonLastQuestion, false, "Method returns false when the question is not the last one");
+        equal(bLastQuestion, true, "Method returns true when the question is the last one");
+        equal(bWrongQuestion, true, "Method returns true when the question index is above question count - 1");
     });
 
     //===============================

@@ -234,7 +234,8 @@ angular.module('AnswerService', [])
                 return aOpts;
             },
 
-                insertValueInArray : function(aArray, nIndex, value) {
+            // TODO: write unit test and add JSDoc
+            insertValueInArray : function(aArray, nIndex, value) {
                 aArray.push(aArray[nIndex]);
                 aArray[nIndex] = value;
             },

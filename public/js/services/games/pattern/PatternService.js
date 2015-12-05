@@ -40,7 +40,8 @@ angular.module('PatternService', [])
             var aPatterns = [];
 
             for (var i = 0 ; i < this.oConfig.patternCount; i++) {
-                var oPattern = new Pattern(i, this.oConfig);
+                var bIsLast = this._getIsLast(i, this.oConfig.patternCount),
+                    oPattern = this._getNewPattern(i, this.oConfig, bIsLast);
 
                 aPatterns.push(oPattern);
             }
@@ -48,16 +49,41 @@ angular.module('PatternService', [])
             return aPatterns;
         };
 
-        // TODO: figure out how to unit test this properly
+        /**
+         * The constructor method for a pattern.
+         *
+         * @private
+         * @param {int} iIndex the number of the pattern
+         * @param {Object} oConfig the question's config
+         * @param {bool} bIsLast indicator for if the pattern is the last one
+         * @returns {Object} generated pattern
+         */
+        this._getNewPattern = function(iIndex, oConfig, bIsLast) {
+            return new Pattern(iIndex, oConfig, bIsLast);
+        };
+
+        /**
+         * Calculates if the current pattern is the last one.
+         *
+         * @private
+         * @param {int} iIndex the number of the pattern
+         * @param {int} iQuestCount total number of available patterns
+         * @returns {bool} indicator for whether the given pattern is the last one
+         */
+        this._getIsLast = function(iIndex, iQuestCount) {
+            return (iIndex + 1) >= iQuestCount;
+        };
+
         /**
          * Constructor method for the Pattern class
          *
          * @public
          * @param {int} qNo the number of the current pattern
          * @param {Object} oConfig configuration
+         * @param {boolean} bIsLast is this pattern the last one
          * @returns {int} a random integer
          */
-        function Pattern(qNo, oConfig) {
+        function Pattern(qNo, oConfig, bIsLast) {
             this.qNo = qNo;
             this.oConfig = {
                 startNum: this._getRandomInt(oConfig.startNum.min, oConfig.startNum.max),
@@ -77,6 +103,7 @@ angular.module('PatternService', [])
             this.oOptions = this._optionGenerator(oConfig.optCount - 1);
             this.iPlayerAnswer = null;
             this.bIsCurr = false;
+            this.bIsLast = bIsLast;
             this.sPlayerPrompt = "Your answer is: ";
         }
         //

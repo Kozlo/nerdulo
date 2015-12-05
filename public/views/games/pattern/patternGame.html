@@ -1,42 +1,42 @@
-<div class="game pattern-game" ng-controller="PatternGameController as pattern">
+<div class="game pattern-game" ng-controller="PatternGameController as oPattern">
     <div class="jumbotron text-center">
         <!-- only shown before game -->
-        <div ng-hide="pattern.bIsPlaying">
+        <div ng-hide="oPattern.bIsPlaying">
             <h1>The Pattern Game</h1>
 
-            <p>{{ pattern.tagline }}</p>
+            <p>{{ oPattern.sTagline }}</p>
 
-            <button class="btn btn-lg btn-success" ng-click="pattern.startGame()">Start</button>
+            <button class="btn btn-lg btn-success" ng-click="oPattern.startGame()">Start</button>
         </div>
         <!-- TODO: if possible move this to a generic answer generation view (also for counting game) -->
         <!-- only shown when playing -->
-        <div ng-show="pattern.bIsPlaying && !pattern.gameFinished">
-            <div ng-repeat="q in pattern.aQuests track by $index" ng-show="q.bIsCurr">
-                <p> {{ "Pattern    " + (pattern.iQuestNo + 1) + " / " + pattern.aQuests.length + ":" }}</p>
+        <div ng-show="oPattern.bIsPlaying && !oPattern.bGameFinished">
+            <div ng-repeat="oQuest in oPattern.aQuests track by $index" ng-show="oQuest.bIsCurr">
+                <p> {{ "Pattern " + (oPattern.iQuestNo + 1) + " / " + oPattern.aQuests.length + ":" }}</p>
                 <!-- TODO: replace with pattern-game specific HTML -->
                 <div class="pattern-items-wrapper">
-                    <div ng-repeat=" pi in q.aPattern track by $index" class="pattern-item-holder">
-                        <span class="label label-default">{{ pi }}</span>
+                    <div ng-repeat=" oPtrnItem in oQuest.aPattern track by $index" class="pattern-item-holder">
+                        <span class="label label-default">{{ oPtrnItem }}</span>
                     </div>
                 </div>
-                <div class="answer-option" ng-repeat="opt in q.oOptions track by $index">
-                    <button type="button" class="btn btn-default" ng-class="{ active: opt == q.iPlayerAnswer }" ng-click="q.setPlayerAnswer(opt)">{{ opt }}</button>
+                <div class="answer-option" ng-repeat="opt in oQuest.oOptions track by $index">
+                    <button type="button" class="btn btn-default" ng-class="{ active: opt == oQuest.iPlayerAnswer }" ng-click="oQuest.setPlayerAnswer(opt)">{{ opt }}</button>
                 </div>
-                <p>{{ q.sPlayerPrompt }}</p>
-                <button type="button" class="btn bnt-default" ng-click="pattern.submitAnswer()">Submit</button>
+                <p>{{ oQuest.sPlayerPrompt }}</p>
+                <button type="button" class="btn bnt-default" ng-click="oPattern.submitAnswer()">Submit</button>
             </div>
         </div>
-        <div ng-show="pattern.gameFinished">
-            <p>Good job! You got <strong>{{ pattern.gameResult }}</strong> out of <strong>{{ pattern.qQuests.length }}</strong> questions right in <strong>{{ pattern.gameTime }}</strong>.</p>
+        <div ng-show="oPattern.bGameFinished">
+            <p>Good job! You got <strong>{{ oPattern.iGameScore }}</strong> out of <strong>{{ oPattern.aQuests.length }}</strong> questions right in <strong>{{ oPattern.sGameTime }}</strong>.</p>
             <p>Submit your score to the wall of fame!</p>
             <!-- FORM TO CREATE ALLSTARS -->
             <div id="allstar-form" class="row">
                 <div class="col-sm-4 col-sm-offset-4 text-center">
                     <form novalidate name="allStartForm" >
                         <div class="form-group">
-                            <input type="text" class="form-control input-lg text-center" placeholder="Champ's name" ng-model="pattern.allStarData.name" required />
+                            <input type="text" class="form-control input-lg text-center" placeholder="Champ's name" ng-model="oPattern.oAllStarData.name" required />
                         </div> <!-- form-group -->
-                        <button type="submit" ng-disabled="!allStartForm.$valid" class="btn btn-primary btn-lg" ng-click="pattern.createAllStar()">Submit</button>
+                        <button type="submit" ng-disabled="!allStartForm.$valid" class="btn btn-primary btn-lg" ng-click="oPattern.createAllStar()">Submit</button>
                     </form>
                 </div> <!-- col-sm-8 -->
             </div> <!-- row -->

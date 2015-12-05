@@ -7,22 +7,22 @@
 
     module("Pattern Game", {
         setup: function () {
-            var injector = angular.injector(['ng', 'PatternGameCtrl', 'PatternService', 'AllStarService']);
-
-            this.ptrnSrv = injector.get('Patterns');
-            this.allstars = injector.get('AllStars');
-            // TODO: figure out how to include the actually $location service
-            this.mockLocation = {location: {href: ""}};
-
-            var $controller = injector.get('$controller');
-
-            this.oCtrl = $controller('PatternGameController', {
-                $location: this.mockLocation,
-                Patterns: this.ptrnSrv,
-                AllStars: this.allstars
+            // create a mock module for the test, needs to also be included by the injector below
+            angular.module('GameCtrl', []).controller('GameController', function() {
+                this._startGame = function() {};
             });
 
-            // make sure the game is started as it's needed for proper tests
+            var injector = angular.injector(['ng', 'PatternGameCtrl', 'GameCtrl', 'PatternService']),
+                $controller = injector.get('$controller');
+
+            // TODO see if this is needed
+            this.oPtrnSrv = injector.get('Patterns');
+            this.oCtrl = $controller('PatternGameController',{
+                controller: $controller,
+                Patterns: this.oPtrnSrv
+            });
+
+            // re-start the game for each test
             this.oCtrl.startGame();
         },
         teardown: function () {
@@ -41,7 +41,40 @@
     });
 
     //===============================
+    //  Property checks
+    //===============================
+
+    test("Does the controller have all the necessary properties", function() {
+        var sGame ="pattern",
+            sAllStarTarget = "pattern-allstar",
+            sTagline = "Choose the number that fits in the pattern.";
+
+        notEqual(typeof this.oCtrl.oAllStarData, "undefined", "oAllStartData property exists on the controller");
+        equal(this.oCtrl.oAllStarData.game, sGame, "game property on oAllStartData is " + sGame);
+
+        equal(this.oCtrl.sAllStarTarget, sAllStarTarget, "sAllStarTarget property is set to : " + sAllStarTarget);
+
+        equal(this.oCtrl.sTagline, sTagline, "sTagline property is set to: " + sTagline);
+    });
+
+    //===============================
     //  Start Game Tests
     //===============================
 
+    test("Does startGame instantiates questions and creates the correct properties", function() {
+        var aTestQuestions = ["testQuestion"];
+
+        var stub_generatePatterns = sinon.stub(this.oPtrnSrv, "generatePatterns").returns(aTestQuestions),
+            stub_startGame = sinon.stub(this.oCtrl, "_startGame");
+
+        this.oCtrl.startGame();
+
+        ok(stub_generatePatterns.called, "Answer service method generateQuestions called");
+
+        ok(stub_startGame.called, "Private method _startGame called");
+        ok(stub_startGame.calledWith(aTestQuestions), "Private method _startGame called with the generated questions");
+
+        stub_generatePatterns.restore();
+        stub_startGame.restore();
+    });
 }());

@@ -7,11 +7,9 @@
 
     module("Answer Service", {
         setup: function () {
-            var injector = angular.injector(['ng', 'CountingGameCtrl', 'AnswerService', 'AllStarService']);
+            var injector = angular.injector(['ng', 'CountingGameCtrl', 'AnswerService']);
 
             this.oAnsSrv = injector.get('Answers');
-            // TODO: figure out if this is needed at all
-            this.oAllstars = injector.get('AllStars');
 
             // TODO: move this to a test anc check if config values are correct
             this.oConfig =  {
@@ -65,11 +63,11 @@
 
         ok(spy_getNewQuestion.called, "_getNewQuestion called");
 
-        spy_getIsLast.restore();
-        spy_getNewQuestion.restore();
-
         ok(aQuests, "questions are generated");
         equal(aQuests.length, this.oAnsSrv.oConfig.questCount, "correct number of questions are generated");
+
+        spy_getIsLast.restore();
+        spy_getNewQuestion.restore();
     });
 
     test("Does _getNewQuestion return properly constructed questions given different input", function() {

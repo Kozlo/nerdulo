@@ -7,9 +7,9 @@ var mongoose = require('mongoose');
 // TODO: perhaps create another model for games (e.g. have ID for games insteas of string names
 // TODO: in back-end code make sure either name or playerId is specified
 module.exports = mongoose.model('AllStar', {
-    game : { type: String, requried: true, default: 'count' },
+    game : { type: String, required: true, default: 'count' },
     score : { type : Number, required: true },
     time : { type : Number, required: true },
-    name : { type : String },
+    name : { type : String, required: true, default: "Anonymous" },
     playerId : { type: String }
 });

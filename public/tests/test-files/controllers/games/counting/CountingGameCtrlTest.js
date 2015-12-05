@@ -12,10 +12,9 @@
                 this._startGame = function() {};
             });
 
-            var injector = angular.injector(['ng', 'CountingGameCtrl', 'GameCtrl', 'AnswerService', 'AllStarService']),
+            var injector = angular.injector(['ng', 'CountingGameCtrl', 'GameCtrl', 'AnswerService']),
                 $controller = injector.get('$controller');
 
-            // TODO see if this is needed
             this.ansSrv = injector.get('Answers');
             this.oCtrl = $controller('CountingGameController',{
                 controller: $controller,
@@ -38,7 +37,6 @@
         ok(this.oCtrl, 'The Counting Game controller exists');
         // TODO: check what instanceof should be used
         //ok(this.oCtrl instanceof, "The controller is an instance of...");
-        // TODO: check if the properties have been created properly (like all star data tagline etc.)
     });
 
     //===============================

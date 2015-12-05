@@ -139,7 +139,7 @@ angular.module('GameCtrl', [])
          *
          * @private
          * @param {int} iPlayerAnswer the answer the player has given
-         * @param {int} nCorrectAnswer the correct answer to the question
+         * @param {int} iCorrectAnswer the correct answer to the question
          * @returns {bool} correctness indicator
          */
         this._answerChecker = function(iPlayerAnswer, iCorrectAnswer) {
