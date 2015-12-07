@@ -29,8 +29,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // override with the X-HTTP-Method-Override header in the request. simulate DELETE/PUT
 app.use(methodOverride('X-HTTP-Method-Override'));
 
-// set the static files location /public/img will be /img for users
-app.use(express.static(__dirname + '/public'));
+// set the static files location /dist/img will be /img for users
+// TODO: differentiate between development env (use un-compiled files) and tes/prod envs where compiled sources should be used
+app.use(express.static(__dirname + '/dist'));
 
 // routes ==================================================
 require('./app/routes')(app); // configure our routes
