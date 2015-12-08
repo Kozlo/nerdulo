@@ -20,7 +20,7 @@
     "gulp-ngmin": "^0.3.0",
     "gulp-plumber": "^1.0.1",
     "gulp-sass": "^2.1.0",
-    "gulp-imagein": "^2.4.0"
+    "gulp-imagemin": "^2.4.0"
   },
   "engines": {
     "node": "0.10.25",
