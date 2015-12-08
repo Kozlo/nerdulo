@@ -66,15 +66,18 @@ gulp.task('static', ['images', 'libs']);
 // Watch task
 // Watches JS to saved changes and builds when changes occur
 gulp.task('watch', function() {
-    gulp.watch('src/scss/**/*.scss', ['sass']);
-    gulp.watch('src/js/*.js', ['scripts']);
+    if (!isProduction()) {
+        gulp.watch('src/scss/**/*.scss', ['sass']);
+        gulp.watch('src/js/*.js', ['scripts']);
+    }
 });
 
 // The default task simply runs other tasks by passing the name of the tasks in an array
 // the very first task cleans the directory to make sure no old files are there
-//gulp.task('build', ['clean']);
 gulp.task('default', ['clean'], function() {
     gulp.start(['sass', 'scripts', 'views', 'static', 'watch'])
 });
 
-//gulp.task('default', ['clean', 'sass', 'scripts', 'views', 'static', 'watch']);
+function isProduction() {
+    return process.env.NODE_ENV === "PRODUCTION"
+}
