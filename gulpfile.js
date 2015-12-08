@@ -2,7 +2,8 @@ var gulp = require('gulp'),
     clean = require('gulp-clean'),
     ngmin = require('gulp-ngmin'), // uglifies the AngularJS-specific code
     sass = require('gulp-sass'), // compiles SASS code
-    plumber = require('gulp-plumber'); // let's gulp keep watching even if errors occur in the code
+    plumber = require('gulp-plumber'), // let's gulp keep watching even if errors occur in the code
+    imagemin = require('gulp-imagemin');
 
 // TODO: add paths variable here and use it in code
 
@@ -49,6 +50,7 @@ gulp.task('views', function() {
 // Images section
 gulp.task('images', function() {
     gulp.src('src/images/**/*') // get all files from all folders
+        .pipe(imagemin())
         .pipe(gulp.dest('dist/images'));
 });
 
