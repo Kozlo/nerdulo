@@ -1,17 +1,21 @@
-body { padding-top:30px; }
+body {
+  padding-top: 30px;
+}
 
 .answer-option {
-    display:inline;
+  display: inline;
 }
 
 .pattern-item-holder {
-    display:inline;
-}
-.pattern-item-holder span {
+  display: inline;
+
+  span {
     font-size: 15px;
     margin: 0 5px;
     padding: 10px 15px;
+  }
 }
+
 .pattern-items-wrapper {
-    margin: 20px 0;
+  margin: 20px 0;
 }

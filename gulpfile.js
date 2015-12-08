@@ -1,21 +1,26 @@
 var gulp = require('gulp'),
     clean = require('gulp-clean'),
     ngmin = require('gulp-ngmin'), // uglifies the AngularJS-specific code
-// TODO: add back one SASS has been added to project
-    //sass = require('gulp-ruby-sass'), // compiles SASS code
+    sass = require('gulp-sass'), // compiles SASS code
     plumber = require('gulp-plumber'); // let's gulp keep watching even if errors occur in the code
+
+// TODO: add paths variable here and use it in code
 
 // Clean task
 gulp.task('clean', function() {
-    gulp.src('dist')
-        .pipe(clean({
-            read: false
-        }));
+    // IMPORTANT: need to return the stream so that Gulp knows the clean task is asynchronous, and doesn't run dependencies before this is done
+    return gulp.src('dist', { read: false })
+        .pipe(clean());
 });
 
-// TODO: replace with SASS files when it will be added to project
-gulp.task('css', function() {
-    gulp.src('src/css/**/*.css') // get all files from all folders
+// SASS task
+// Compiles SASS files into CSS
+gulp.task('sass', function() {
+    gulp.src('src/scss/**/*.scss')
+        .pipe(plumber()) // make sure gulp doesn't break if errors occur
+        .pipe(sass.sync({
+            outputStyle: 'compressed'
+        }).on('error', sass.logError))// compress the compiled CSS, also make sure it's run synchronously, otherwise clean command won't work on start
         .pipe(gulp.dest('dist/css'));
 });
 
@@ -56,24 +61,18 @@ gulp.task('libs', function() {
 // Static files task combination task
 gulp.task('static', ['images', 'libs']);
 
-// TODO: add once SASS has been added to project
-//gulp.task('styles', function() {
-//    gulp.src('scss/**/*.scss')
-//	.pipe(plumber()) // make sure gulp doesn't break if errors occur
-//	.pipe(sass({
-//	    style: 'compressed'
-//	})) // compress the compiled CSS
-//	.pips(gulp.dest('css/'));
-//});
-
 // Watch task
 // Watches JS to saved changes and builds when changes occur
 gulp.task('watch', function() {
-    gulp.watch('js/*.js', ['scripts']);
-    // TODO: add once the
-    //gulp.watch('scss/**/*.scss', ['styles']);
+    gulp.watch('src/scss/**/*.scss', ['sass']);
+    gulp.watch('src/js/*.js', ['scripts']);
 });
 
 // The default task simply runs other tasks by passing the name of the tasks in an array
 // the very first task cleans the directory to make sure no old files are there
-gulp.task('default', ['clean', 'css', 'scripts', 'views', 'static']);
+//gulp.task('build', ['clean']);
+gulp.task('default', ['clean'], function() {
+    gulp.start(['sass', 'scripts', 'views', 'static', 'watch'])
+});
+
+//gulp.task('default', ['clean', 'sass', 'scripts', 'views', 'static', 'watch']);
