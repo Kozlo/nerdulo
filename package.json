@@ -7,7 +7,7 @@
   },
   "scripts": {
     "start": "node server.js",
-    "postinstall": "bower install && gulp default"
+    "postinstall": "bower install && gulp default --env production"
   },
   "dependencies": {
     "express": "~4.5.1",
@@ -20,7 +20,8 @@
     "gulp-ngmin": "^0.3.0",
     "gulp-plumber": "^1.0.1",
     "gulp-sass": "^2.1.0",
-    "gulp-imagemin": "^2.4.0"
+    "gulp-imagemin": "^2.4.0",
+    "gulp-environments": "^0.1.1"
   },
   "engines": {
     "node": "0.10.25",

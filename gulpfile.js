@@ -3,7 +3,8 @@ var gulp = require('gulp'),
     ngmin = require('gulp-ngmin'), // uglifies the AngularJS-specific code
     sass = require('gulp-sass'), // compiles SASS code
     plumber = require('gulp-plumber'), // let's gulp keep watching even if errors occur in the code
-    imagemin = require('gulp-imagemin');
+    imagemin = require('gulp-imagemin'),
+    environments = require('gulp-environments'); // allows setting for which environments to
 
 // TODO: add paths variable here and use it in code
 
@@ -64,11 +65,13 @@ gulp.task('libs', function() {
 gulp.task('static', ['images', 'libs']);
 
 // Watch task
-// Watches JS to saved changes and builds when changes occur
+// Watches JS, SCSS, and HTML for saved changes and builds when changes occur
 gulp.task('watch', function() {
-    if (!isProduction()) {
+    // only add the watchers if running on development
+    if (!environments.production()) {
         gulp.watch('src/scss/**/*.scss', ['sass']);
         gulp.watch('src/js/*.js', ['scripts']);
+        gulp.watch('src/views/**/*.html', ['views']);
     }
 });
 
@@ -77,7 +80,3 @@ gulp.task('watch', function() {
 gulp.task('default', ['clean'], function() {
     gulp.start(['sass', 'scripts', 'views', 'static', 'watch'])
 });
-
-function isProduction() {
-    return process.env.NODE_ENV === "PRODUCTION"
-}
