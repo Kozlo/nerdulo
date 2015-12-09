@@ -11,13 +11,16 @@ module.exports = function(app) {
     // testing routes =========================================================
     // route for unit testing
     app.get('/unit_test',functions.isNotProd, function(req, res) {
-        res.sendfile('./src/tests/main.qunit.testsuite.html');
+
+        if (process.env.NODE_ENV !== "PRODUCTION") {
+            console.log("Not on production, sending test files...");
+            res.sendFile('src/tests/main.qunit.testsuite.html', { root: "./" });
+        }
     });
 
     // frontend routes =========================================================
     // route to handle all angular requests (this needs to be the very last one)
     app.get('*', function(req, res) {
-        // TODO: differentiate between dev and non-dev environment
-        res.sendfile('./dist/index.html'); // load our dist/index.html file
+        res.sendFile('dist/index.html', { root: "./" }); // load our dist/index.html file
     });
 };
