@@ -1,12 +1,13 @@
 {
   "name": "nerdulo",
+  "version": "0.1.1",
   "main": "server.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/Kozlo/nerdulo.git"
   },
   "scripts": {
-    "start": "node server.js",
+    "start": "npm start",
     "postinstall": "bower install && gulp default --env production"
   },
   "dependencies": {
@@ -21,14 +22,12 @@
     "gulp-plumber": "^1.0.1",
     "gulp-sass": "^2.1.0",
     "gulp-imagemin": "^2.4.0",
-    "gulp-environments": "^0.1.1"
+    "gulp-environments": "^0.1.1",
+    "gulp-autoprefixer": "^3.1.0",
+    "gulp-livereload": "^3.8.1"
   },
   "engines": {
     "node": "^4.2.3",
     "npm": "^3.5.1"
-  },
-  "devDependencies": {
-    "gulp-autoprefixer": "^3.1.0",
-    "gulp-livereload": "^3.8.1"
   }
 }
