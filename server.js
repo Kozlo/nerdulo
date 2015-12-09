@@ -32,10 +32,6 @@ app.use(methodOverride('X-HTTP-Method-Override'));
 // set the static files location /dist/img will be /img for users
 app.use(express.static(__dirname + '/dist'));
 
-if (process.env.NODE_ENV !== "production") {
-    console.log("Not on production, enabling test files");
-    //app.use(express.static(__dirname + '/src'));
-}
 // routes ==================================================
 require('./app/routes')(app); // configure our routes
 

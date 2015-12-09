@@ -12,15 +12,14 @@ var prod = environments.production,
 
 // TODO: add paths variable here and use it in code
 
-// Clean task
+// Clean task - deleted the dist folder
 gulp.task('clean', function() {
     // IMPORTANT: need to return the stream so that Gulp knows the clean task is asynchronous, and doesn't run dependencies before this is done
     return gulp.src('dist', { read: false })
         .pipe(clean());
 });
 
-// SASS task
-// Compiles SASS files into CSS
+// SASS task - Compiles SASS files into CSS
 gulp.task('sass', function() {
     gulp.src('src/scss/**/*.scss')
         .pipe(plumber()) // make sure gulp doesn't break if errors occur
@@ -32,8 +31,7 @@ gulp.task('sass', function() {
         .pipe(livereload());
 });
 
-// Scripts Task
-// Uglifies and moves JS files
+// Scripts Task - Uglifies and moves JS files
 gulp.task('scripts', function() {
     // TODO: figure out why ngmin isn't working properly
     gulp.src('src/js/**/*.js')// get all JavaScript files from the js folder
@@ -43,6 +41,7 @@ gulp.task('scripts', function() {
         .pipe(livereload());
 });
 
+// Views section
 gulp.task('views', function() {
     // move the index files
     gulp.src('src/index.html') // get all files from all folders
@@ -66,18 +65,26 @@ gulp.task('images', function() {
         .pipe(livereload());
 });
 
-// libraries section
+// Libraries section
 gulp.task('libs', function() {
     gulp.src('src/libs/**/*') // get all files from all folders
         .pipe(gulp.dest('dist/libs'))
         .pipe(livereload());
 });
 
-// Static files task combination task
+// Tests section - if the development environment is used, load tests
+gulp.task('tests', function() {
+    if (dev()) {
+        gulp.src('src/tests/**/*') // get all files from all folders
+            .pipe(gulp.dest('dist/tests'))
+            .pipe(livereload());
+    }
+});
+
+// Static files - task combination task
 gulp.task('static', ['images', 'libs']);
 
-// Watch task
-// Watches JS, SCSS, and HTML for saved changes and builds when changes occur
+// Watch task - Watches JS, SCSS, and HTML for saved changes and builds when changes occur
 gulp.task('watch', function() {
     // only add the watchers if running on development
     if (dev()) {
@@ -91,5 +98,5 @@ gulp.task('watch', function() {
 // The default task simply runs other tasks by passing the name of the tasks in an array
 // the very first task cleans the directory to make sure no old files are there
 gulp.task('default', ['clean'], function() {
-    gulp.start(['sass', 'scripts', 'views', 'static', 'watch'])
+    gulp.start(['sass', 'scripts', 'views', 'static', 'tests', 'watch'])
 });
