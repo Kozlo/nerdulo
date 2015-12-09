@@ -7,27 +7,28 @@
     "url": "git://github.com/Kozlo/nerdulo.git"
   },
   "scripts": {
-    "start": "npm start",
+    "start": "node server.js",
     "postinstall": "bower install && gulp default --env production"
   },
   "dependencies": {
     "express": "^4.13.3",
-    "mongoose": "^4.2.10",
     "body-parser": "^1.14.1",
     "method-override": "^2.3.5",
+    "mongoose": "^4.3.0 ",
     "bower": "^1.7.0",
     "gulp": "^3.9.0",
+    "gulp-autoprefixer": "^3.1.0",
     "gulp-clean": "^0.3.1",
+    "gulp-environments": "^0.1.1",
+    "gulp-imagemin": "^2.4.0",
+    "gulp-livereload": "^3.8.1",
     "gulp-ngmin": "^0.3.0",
     "gulp-plumber": "^1.0.1",
     "gulp-sass": "^2.1.0",
-    "gulp-imagemin": "^2.4.0",
-    "gulp-environments": "^0.1.1",
-    "gulp-autoprefixer": "^3.1.0",
-    "gulp-livereload": "^3.8.1"
+    "kerberos": "0.0.17"
   },
   "engines": {
-    "node": "^4.2.3",
-    "npm": "^3.5.1"
+    "node": "4.2.3",
+    "npm": "3.5.1"
   }
 }
