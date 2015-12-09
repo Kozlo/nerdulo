@@ -12,7 +12,7 @@ module.exports = function(app) {
     // route for unit testing
     app.get('/unit_test',functions.isNotProd, function(req, res) {
 
-        if (process.env.NODE_ENV !== "PRODUCTION") {
+        if (process.env.NODE_ENV !== "production") {
             console.log("Not on production, sending test files...");
             res.sendFile('src/tests/main.qunit.testsuite.html', { root: "./" });
         }

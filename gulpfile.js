@@ -29,7 +29,7 @@ gulp.task('sass', function() {
         })
         .on('error', sass.logError))// compress the compiled CSS, also make sure it's run synchronously, otherwise clean command won't work on start
         .pipe(gulp.dest('dist/css'))
-        .pipe(dev(livereload()));
+        .pipe(livereload());
 });
 
 // Scripts Task
@@ -40,19 +40,19 @@ gulp.task('scripts', function() {
         .pipe(plumber()) // make sure gulp doesn't break if errors occur
         .pipe(prod(ngmin()))// uglify the JS files with the AngularJS-friendly version, do it only on production
         .pipe(gulp.dest('dist/js'))
-        .pipe(dev(livereload()));
+        .pipe(livereload());
 });
 
 gulp.task('views', function() {
     // move the index files
     gulp.src('src/index.html') // get all files from all folders
         .pipe(gulp.dest('dist'))
-        .pipe(dev(livereload()));
+        .pipe(livereload());
 
     // move all other views
     gulp.src('src/views/**/*.html') // get all files from all folders
         .pipe(gulp.dest('dist/views'))
-        .pipe(dev(livereload()));
+        .pipe(livereload());
 });
 
 
@@ -63,14 +63,14 @@ gulp.task('images', function() {
     gulp.src('src/images/**/*') // get all files from all folders
         .pipe(imagemin())
         .pipe(gulp.dest('dist/images'))
-        .pipe(dev(livereload()));
+        .pipe(livereload());
 });
 
 // libraries section
 gulp.task('libs', function() {
     gulp.src('src/libs/**/*') // get all files from all folders
         .pipe(gulp.dest('dist/libs'))
-        .pipe(dev(livereload()));
+        .pipe(livereload());
 });
 
 // Static files task combination task
