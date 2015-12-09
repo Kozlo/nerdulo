@@ -30,7 +30,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride('X-HTTP-Method-Override'));
 
 // set the static files location /dist/img will be /img for users
-app.use(express.static(__dirname + '/dist'));
+app.use(express.static(__dirname + '/src'));
 
 if (process.env.NODE_ENV !== "PRODUCTION") {
     console.log("Not on production, enabling test files");
