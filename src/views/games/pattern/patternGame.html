@@ -6,7 +6,7 @@
 
             <p>{{ oPattern.sTagline }}</p>
 
-            <button class="btn btn-lg btn-success" ng-click="oPattern.startGame()">Start</button>
+            <button class="btn btn-lg btn-warning round" ng-click="oPattern.startGame()">Start</button>
         </div>
         <!-- TODO: if possible move this to a generic answer generation view (also for counting game) -->
         <!-- only shown when playing -->
@@ -16,14 +16,15 @@
                 <!-- TODO: replace with pattern-game specific HTML -->
                 <div class="pattern-items-wrapper">
                     <div ng-repeat=" oPtrnItem in oQuest.aPattern track by $index" class="pattern-item-holder">
-                        <span class="label label-default">{{ oPtrnItem }}</span>
+                        <!--<span class="label label-default">{{ oPtrnItem }}</span>-->
+                        <button type="button" class="btn btn-warning round" disabled>{{ oPtrnItem }}</button>
                     </div>
                 </div>
                 <div class="answer-option" ng-repeat="opt in oQuest.oOptions track by $index">
-                    <button type="button" class="btn btn-default" ng-class="{ active: opt == oQuest.iPlayerAnswer }" ng-click="oQuest.setPlayerAnswer(opt)">{{ opt }}</button>
+                    <button type="button" class="btn btn-lg btn-default outline btn-answer-option" ng-class="{ active: opt == oQuest.iPlayerAnswer }" ng-click="oQuest.setPlayerAnswer(opt)">{{ opt }}</button>
                 </div>
                 <p>{{ oQuest.sPlayerPrompt }}</p>
-                <button type="button" class="btn bnt-default" ng-click="oPattern.submitAnswer()">Submit</button>
+                <button type="button" class="btn btn-lg btn-success round" ng-click="oPattern.submitAnswer()">Submit</button>
             </div>
         </div>
         <div ng-show="oPattern.bGameFinished">
@@ -36,7 +37,7 @@
                         <div class="form-group">
                             <input type="text" class="form-control input-lg text-center" placeholder="Champ's name" ng-model="oPattern.oAllStarData.name" required />
                         </div> <!-- form-group -->
-                        <button type="submit" ng-disabled="!allStartForm.$valid" class="btn btn-primary btn-lg" ng-click="oPattern.createAllStar()">Submit</button>
+                        <button type="submit" ng-disabled="!allStartForm.$valid" class="btn btn-primary btn-lg sharp" ng-click="oPattern.createAllStar()">Submit</button>
                     </form>
                 </div> <!-- col-sm-8 -->
             </div> <!-- row -->

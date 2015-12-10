@@ -4,6 +4,10 @@ angular.module('AllStarCtrl', [])
         var vm = this;
         vm.showCounting = true;
 
+        vm.switchGame = function(sGame) {
+            $location.hash(sGame);
+        };
+
         $scope.$on("$routeChangeSuccess", function () {
             // TODO: improve the logic here
             if ($location.hash() == 'counting-allstar') {

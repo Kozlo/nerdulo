@@ -6,10 +6,10 @@
     </div>
     <div id="allstar-list">
         <div class="row">
-            <div class="col-xs-12 col-sm-5 col-sm-offset-4">
-                <div class="nav nav-pills">
-                    <li ng-class="{ active: starCtrl.showCounting }" role="presentation"><a href="#counting-allstar">Counting Game</a></li>
-                    <li ng-class="{ active: !starCtrl.showCounting }" role="presentation"><a href="#pattern-allstar">Pattern Game</a></li>
+            <div class="col-xs-12 col-sm-8 col-sm-offset-2 text-center">
+                <div class="btn-group" role="group" aria-label="...">
+                    <button ng-class="{ 'outline': !starCtrl.showCounting }" class="btn btn-primary" ng-click="starCtrl.switchGame('counting-allstar')">Counting Game</button>
+                    <button ng-class="{ 'outline': starCtrl.showCounting }" class="btn btn-primary" ng-click="starCtrl.switchGame('pattern-allstar')">Pattern Game</button>
                 </div>
             </div>
         </div>

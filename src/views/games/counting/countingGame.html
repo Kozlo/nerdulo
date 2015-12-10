@@ -7,7 +7,7 @@
 
             <p>{{ oCount.sTagline }}</p>
 
-            <button class="btn btn-lg btn-success" ng-click="oCount.startGame()">Start</button>
+            <button class="btn btn-lg btn-warning round" ng-click="oCount.startGame()">Start</button>
         </div>
         <!-- only shown when playing -->
         <div ng-show="oCount.bIsPlaying && !oCount.bGameFinished">
@@ -15,10 +15,10 @@
                 <p> {{ "Problem " + (oCount.iQuestNo + 1) + " / " + oCount.aQuests.length + ":" }}</p>
                 <p>{{ oQuest.oNumbers.one }} * {{ oQuest.oNumbers.two }}</p>
                     <div class="answer-option" ng-repeat="nOpt in oQuest.aOptions track by $index">
-                        <button type="button" class="btn btn-default" ng-class="{ active: nOpt == oQuest.iPlayerAnswer }" ng-click="oQuest.setPlayerAnswer(nOpt)">{{ nOpt }}</button>
+                        <button type="button" class="btn btn-lg btn-default outline btn-answer-option" ng-class="{ active: nOpt == oQuest.iPlayerAnswer }" ng-click="oQuest.setPlayerAnswer(nOpt)">{{ nOpt }}</button>
                     </div>
                 <p>{{ oQuest.sPlayerPrompt }}</p>
-                <button type="button" class="btn bnt-default" ng-click="oCount.submitAnswer()">Submit</button>
+                <button type="button" class="btn btn-lg btn-success round" ng-click="oCount.submitAnswer()">Submit</button>
             </div>
         </div>
         <div ng-show="oCount.bGameFinished">
@@ -31,7 +31,7 @@
                         <div class="form-group">
                             <input type="text" class="form-control input-lg text-center" placeholder="Champ's name" ng-model="oCount.oAllStarData.name" required />
                         </div> <!-- form-group -->
-                        <button type="submit" ng-disabled="!allStartForm.$valid" class="btn btn-primary btn-lg" ng-click="oCount.createAllStar()">Submit</button>
+                        <button type="submit" ng-disabled="!allStartForm.$valid" class="btn btn-primary btn-lg sharp" ng-click="oCount.createAllStar()">Submit</button>
                     </form>
                 </div> <!-- col-sm-8 -->
             </div> <!-- row -->

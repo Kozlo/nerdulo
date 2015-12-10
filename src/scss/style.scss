@@ -1,5 +1,18 @@
 body {
   padding-top: 30px;
+  background-color: #DFE2DB;
+}
+
+#game-list {
+  a {
+    margin: 10px 0;
+    color: #fff;
+    width: 80%;
+    max-width: 600px;
+    .game-list-item {
+
+    }
+  }
 }
 
 .answer-option {
@@ -18,4 +31,8 @@ body {
 
 .pattern-items-wrapper {
   margin: 20px 0;
+}
+
+.btn-answer-option {
+  margin: 5px 0;
 }
