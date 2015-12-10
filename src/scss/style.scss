@@ -3,15 +3,17 @@ body {
   background-color: #DFE2DB;
 }
 
+#main-image {
+  max-width: 165px;
+  margin: auto;
+}
+
 #game-list {
   a {
     margin: 10px 0;
     color: #fff;
     width: 80%;
     max-width: 600px;
-    .game-list-item {
-
-    }
   }
 }
 
