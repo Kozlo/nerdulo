@@ -11,11 +11,11 @@ module.exports = function(app) {
     // testing routes =========================================================
     // route for unit testing
     app.get('/unit_test',functions.isNotProd, function(req, res) {
-
-        if (process.env.NODE_ENV !== "production") {
-            console.log("Not on production, sending test files...");
-            res.sendFile('src/tests/main.qunit.testsuite.html', { root: "./" });
-        }
+        // For demo purposes now I'm enabling tests on production
+        //if (process.env.NODE_ENV !== "production") {
+        //    console.log("Not on production, sending test files...");
+            res.sendFile('dist/tests/main.qunit.testsuite.html', { root: "./" });
+        //}
     });
 
     // frontend routes =========================================================

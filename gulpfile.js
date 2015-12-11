@@ -74,11 +74,12 @@ gulp.task('libs', function() {
 
 // Tests section - if the development environment is used, load tests
 gulp.task('tests', function() {
-    if (dev()) {
+    // For demo purposes I'm now enabling tests on production
+    //if (dev()) {
         gulp.src('src/tests/**/*') // get all files from all folders
             .pipe(gulp.dest('dist/tests'))
             .pipe(livereload());
-    }
+    //}
 });
 
 // Static files - task combination task
