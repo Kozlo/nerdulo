@@ -11,21 +11,22 @@
     "postinstall": "bower install && gulp default --env production"
   },
   "dependencies": {
-    "express": "^4.13.3",
     "body-parser": "^1.14.1",
-    "method-override": "^2.3.5",
-    "mongoose": "^4.3.0 ",
     "bower": "^1.7.0",
+    "express": "^4.13.3",
+    "kerberos": "^0.0.17",
+    "mongodb": "^2.0.52",
+    "mongoose": "^4.3.1",
+    "method-override": "^2.3.5",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.1.0",
-    "gulp-clean": "^0.3.1",
+    "gulp-rimraf": "^0.2.0",
     "gulp-environments": "^0.1.1",
     "gulp-imagemin": "^2.4.0",
     "gulp-livereload": "^3.8.1",
-    "gulp-ngmin": "^0.3.0",
+    "gulp-ng-annotate": "^1.1.0",
     "gulp-plumber": "^1.0.1",
-    "gulp-sass": "^2.1.0",
-    "kerberos": "0.0.17"
+    "gulp-sass": "^2.1.0"
   },
   "engines": {
     "node": "4.2.3",

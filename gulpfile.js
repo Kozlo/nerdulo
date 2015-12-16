@@ -1,6 +1,6 @@
 var gulp = require('gulp'),
-    clean = require('gulp-clean'),
-    ngmin = require('gulp-ngmin'), // uglifies the AngularJS-specific code
+    rimraf = require('gulp-rimraf'),
+    ngAnnotate = require('gulp-ng-annotate'), // uglifies the AngularJS-specific code
     sass = require('gulp-sass'), // compiles SASS code
     plumber = require('gulp-plumber'), // let's gulp keep watching even if errors occur in the code
     imagemin = require('gulp-imagemin'),
@@ -16,7 +16,7 @@ var prod = environments.production,
 gulp.task('clean', function() {
     // IMPORTANT: need to return the stream so that Gulp knows the clean task is asynchronous, and doesn't run dependencies before this is done
     return gulp.src('dist', { read: false })
-        .pipe(clean());
+        .pipe(rimraf());
 });
 
 // SASS task - Compiles SASS files into CSS
@@ -36,7 +36,7 @@ gulp.task('scripts', function() {
     // TODO: figure out why ngmin isn't working properly
     gulp.src('src/js/**/*.js')// get all JavaScript files from the js folder
         .pipe(plumber()) // make sure gulp doesn't break if errors occur
-        .pipe(prod(ngmin()))// uglify the JS files with the AngularJS-friendly version, do it only on production
+        .pipe(prod(ngAnnotate()))// uglify the JS files with the AngularJS-friendly version, do it only on production
         .pipe(gulp.dest('dist/js'))
         .pipe(livereload());
 });
