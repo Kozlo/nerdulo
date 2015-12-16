@@ -1,35 +1,35 @@
-<div ng-controller="AllStarController as starCtrl">
+<div ng-controller="AllStarController as oStarCtrl">
     <div class="jumbotron text-center">
         <h1>All Stars</h1>
 
-        <p>{{ starCtrl.tagline }}</p>
+        <p>{{ oStarCtrl.tagline }}</p>
     </div>
     <div id="allstar-list">
         <div class="row">
             <div class="col-xs-12 col-sm-8 col-sm-offset-2 text-center">
                 <h3>Games</h3>
                 <div class="btn-group" role="group" aria-label="...">
-                    <button ng-class="{ 'outline': !starCtrl.showCounting }" class="btn btn-primary" ng-click="starCtrl.switchGame('counting-allstar')">Counting</button>
-                    <button ng-class="{ 'outline': starCtrl.showCounting }" class="btn btn-primary" ng-click="starCtrl.switchGame('pattern-allstar')">Pattern</button>
+                    <button ng-class="{ 'outline': !oStarCtrl.showCounting }" class="btn btn-primary" ng-click="oStarCtrl.switchGame('counting-allstar')">Counting</button>
+                    <button ng-class="{ 'outline': oStarCtrl.showCounting }" class="btn btn-primary" ng-click="oStarCtrl.switchGame('pattern-allstar')">Pattern</button>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class=" col-xs-12 col-sm-8 col-sm-offset-2 text-center" ng-show="starCtrl.showCounting">
+            <div class=" col-xs-12 col-sm-8 col-sm-offset-2 text-center" ng-show="oStarCtrl.showCounting">
                 <h3>The Counting Game</h3>
-                <div ng-repeat="allStar in starCtrl.allStars | filter : { game: 'count'} | orderBy: ['-score', 'time']">
+                <div ng-repeat="oAllStar in oStarCtrl.allStars | filter : { game: 'count'} | orderBy: ['-score', 'time']">
                     <div class="panel panel-default">
-                        <div class="panel-heading"><span class="pull-left">{{ $index + 1 }}.</span><strong>{{ allStar.name }}</strong></div>
+                        <div class="panel-heading"><span class="pull-left">{{ $index + 1 }}.</span><strong>{{ oAllStar   .name }}</strong></div>
                         <div class="panel-body">
-                            <p>Score: <strong>{{ allStar.score }}</strong> points</p>
-                            <p>Time: <strong>{{ allStar.time }}</strong> seconds</p>
+                            <p>Score: <strong>{{ oAllStar.score }}</strong> points</p>
+                            <p>Time: <strong>{{ oAllStar.time }}</strong> seconds</p>
                         </div>
                     </div>
                 </div>
             </div> <!-- col-sm-6 -->
-            <div class=" col-xs-12 col-sm-8 col-sm-offset-2 text-center" ng-show="!starCtrl.showCounting">
+            <div class=" col-xs-12 col-sm-8 col-sm-offset-2 text-center" ng-show="!oStarCtrl.showCounting">
                 <h3>The Pattern Game</h3>
-                <div ng-repeat="allStar in starCtrl.allStars | filter : { game: 'pattern'} | orderBy: ['-score', 'time']">
+                <div ng-repeat="allStar in oStarCtrl.allStars | filter : { game: 'pattern'} | orderBy: ['-score', 'time']">
                     <div class="panel panel-default">
                         <div class="panel-heading"><span class="pull-left">{{ $index + 1 }}.</span><strong>{{ allStar.name }}</strong></div>
                         <div class="panel-body">
