@@ -11,7 +11,7 @@
 
             this.oPtrnSrv = injector.get('Patterns');
 
-            this.aPatterns = this.oPtrnSrv.generatePatterns();
+            this.aPatterns = this.oPtrnSrv.generateQuestions();
             // TODO: think of a better way to do this
             this.oPattern = this.aPatterns[0];
         },
@@ -26,6 +26,7 @@
 
     test("Is the config for the answers as expected", function () {
         var oExpectedConfig = {
+            questCount: 10,
             startNum : {
                 min : 9,
                 max : 15
@@ -43,20 +44,19 @@
             deviance : {
                 min : -25,
                 max : 25
-            },
-            patternCount: 10
+            }
         };
 
         deepEqual(this.oPtrnSrv.oConfig, oExpectedConfig, "Pattern Serciec config matches the expected config");
     });
 
-    test("Does generatePatterns return the expected result", function() {
+    test("Does generateQuestions return the expected result", function() {
         var spy_getIsLast = sinon.spy(this.oPtrnSrv, "_getIsLast"),
-            spy_getNewPattern = sinon.spy(this.oPtrnSrv, "_getNewPattern");
+            spy_getNewQuestion = sinon.spy(this.oPtrnSrv, "_getNewQuestion");
 
-        var aPatterns = this.oPtrnSrv.generatePatterns();
+        var aPatterns = this.oPtrnSrv.generateQuestions();
 
-        equal(aPatterns.length, this.oPtrnSrv.oConfig.patternCount, "Pattern count matches the amount specified in config");
+        equal(aPatterns.length, this.oPtrnSrv.oConfig.questCount, "Pattern count matches the amount specified in config");
 
         for (var i = 0; i < aPatterns.length; i++) {
             var oPattern = aPatterns[i],
@@ -110,17 +110,17 @@
         equal(aPatterns[iLastPatternIndex].bIsLast, true, "bIsLast set to true for the last question, question number  " + iLastPatternIndex);
 
         ok(spy_getIsLast.called, "_getIsLast called");
-        equal(spy_getIsLast.callCount, this.oPtrnSrv.oConfig.patternCount, "_getIsLast call count equals the question count specified in the config");
+        equal(spy_getIsLast.callCount, this.oPtrnSrv.oConfig.questCount, "_getIsLast call count equals the question count specified in the config");
 
-        ok(spy_getNewPattern.called, "_getNewPattern called");
+        ok(spy_getNewQuestion.called, "_getNewQuestion called");
 
         spy_getIsLast.restore();
-        spy_getNewPattern.restore();
+        spy_getNewQuestion.restore();
     });
 
-    test("Does _getNewPattern return properly constructed patterns given different input", function() {
-        var oNonLastQuest = this.oPtrnSrv._getNewPattern(0, this.oPtrnSrv.oConfig, false),
-            oLastQuest = this.oPtrnSrv._getNewPattern(0, this.oPtrnSrv.oConfig, true);
+    test("Does _getNewQuestion return properly constructed patterns given different input", function() {
+        var oNonLastQuest = this.oPtrnSrv._getNewQuestion(0, this.oPtrnSrv.oConfig, false),
+            oLastQuest = this.oPtrnSrv._getNewQuestion(0, this.oPtrnSrv.oConfig, true);
 
         equal(oNonLastQuest.bIsLast, false, "the non last pattern's bIsLast property is set to false");
         equal(oLastQuest.bIsLast, true, "the last pattern's bIsLast property is set to true");

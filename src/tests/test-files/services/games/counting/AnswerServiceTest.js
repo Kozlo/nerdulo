@@ -14,10 +14,10 @@
             // TODO: move this to a test anc check if config values are correct
             this.oConfig =  {
                 questCount: 10,
-                falseOptCount : 4,
+                optCount : 5,
                 deviance : {
-                    min : -20,
-                    max : 20
+                    min : -25,
+                    max : 25
                 },
                 number : {
                     min : 11,
@@ -41,7 +41,7 @@
     test("Is the config for the answers as expected", function() {
         // TODO; refactor this
         var oExpectedConfig = {
-            falseOptCount : this.oConfig.falseOptCount,
+            optCount : this.oConfig.optCount,
             deviance : {
                 min : this.oConfig.deviance.min,
                 max : this.oConfig.deviance.max
@@ -99,7 +99,7 @@
         // check if the generated question count is as per config
         equal(this.aAnswers.length, this.oConfig.questCount  , 'The specified number of questions are as expected: ' + this.oConfig.questCount);
         // check if count of all options is as specified
-        ok(answerOptionCounter(this.aAnswers, this.oConfig),'Generated option count for each answer matches config amount: ' + this.oConfig.falseOptCount);
+        ok(answerOptionCounter(this.aAnswers, this.oConfig),'Generated option count for each answer matches config amount: ' + this.oConfig.optCount);
         // check if option values are of type number and and within the specified range (min, max deviation)
         ok(answerOptionChecker(this.aAnswers, this.oConfig),
             'Generated option values are numbers and in the range allowed by min and max deviation: ' + this.oConfig.deviance.max, + ' - ' + this.oConfig.deviance.min);
@@ -125,11 +125,12 @@
         equal(this.oQuestion.sPlayerPrompt, sDefaultPlayerPrompt, "Question property sPlayerPrompt is set to the default one");
 
         function answerOptionCounter(aAnswers, oConfig) {
-            var bCorrect = true;
+            var bCorrect = true,
+                iFalseOptCount = oConfig.optCount - 1;
 
             for (var i = 0; i < aAnswers.length; i++) {
-                if (aAnswers[i].aFalseOptions.length !== oConfig.falseOptCount) {
-                    equal(aAnswers[i].aOptions.length, oConfig.falseOptCount + 1, 'The number of options for answer ' + i + ' is wrong');
+                if (aAnswers[i].aFalseOptions.length !== iFalseOptCount) {
+                    equal(aAnswers[i].aOptions.length, oConfig.optCount, 'The number of options for answer ' + i + ' is wrong');
                     bCorrect = false;
                 }
             }
@@ -201,14 +202,16 @@
     });
 
     test("Does optionGenerator generate valid answer options", function() {
+        var iFalseOptCount = this.oConfig.optCount - 1;
+
         var spy_createOption = sinon.spy(this.oQuestion, "createOption");
 
         var aOpts = this.oQuestion.optionGenerator();
 
         ok(spy_createOption.called, "createOption called");
-        ok(spy_createOption.callCount >= this.oConfig.falseOptCount, "getRandomInt called at least the same amount of times as there are false options");
+        ok(spy_createOption.callCount >= iFalseOptCount, "getRandomInt called at least the same amount of times as there are false options");
 
-        equal(aOpts.length, this.oConfig.falseOptCount, "the number of generated options equals false option count specified in the config");
+        equal(aOpts.length, iFalseOptCount, "the number of generated options equals false option count specified in the config");
 
         for (var i = 0; i < aOpts.length; i++) {
             equal(typeof aOpts[i], "number", "the type of option " + i + " is 'Number'");
@@ -330,7 +333,7 @@
         var aOpts = this.oQuestion.addAnswer(aTestOpts);
 
         ok(spy_getRandomInt.called, "getRandomInt called");
-        ok(spy_getRandomInt.calledWith(0, this.oConfig.falseOptCount - 1), " getRandomInt called with 0 and false opt count - 1");
+        ok(spy_getRandomInt.calledWith(0, this.oConfig.optCount - 2), " getRandomInt called with 0 and opt count - 2");
 
         ok(spy_insertValueInArray.called, "insertValueInArray called");
         ok(spy_insertValueInArray.calledWith(aOpts, sinon.match.any), "insertValueInArray called");

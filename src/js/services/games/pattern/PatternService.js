@@ -3,12 +3,19 @@ angular.module('PatternService', [])
     .service('Patterns', function() {
 
         // TODO: sort these according to difficulty
+        // TODO: remove the re-usable parts
         /**
          * Configuration used for generating patterns.
          *
          * @public
          */
         this.oConfig = {
+            questCount: 10,
+            optCount : 5,
+            deviance : {
+                min : -25,
+                max : 25
+            },
             startNum : {
                 min : 9,
                 max : 15
@@ -21,44 +28,38 @@ angular.module('PatternService', [])
                 min : -20,
                 max : 20
             },
-            itemCount : 5,
-            optCount : 5,
-            deviance : {
-                min : -25,
-                max : 25
-            },
-            patternCount: 10
+            itemCount : 5
         };
 
         /**
-         * Construct and return the specified number of patterns
+         * Construct and return the specified number of questions
          *
          * @public
-         * @returns {Array} patterns
+         * @returns {Array} questions
          */
-        this.generatePatterns = function() {
-            var aPatterns = [];
+        this.generateQuestions = function() {
+            var aQuests = [];
 
-            for (var i = 0 ; i < this.oConfig.patternCount; i++) {
-                var bIsLast = this._getIsLast(i, this.oConfig.patternCount),
-                    oPattern = this._getNewPattern(i, this.oConfig, bIsLast);
+            for (var i = 0 ; i < this.oConfig.questCount; i++) {
+                var bIsLast = this._getIsLast(i, this.oConfig.questCount),
+                    oQuest = this._getNewQuestion(i, this.oConfig, bIsLast);
 
-                aPatterns.push(oPattern);
+                aQuests.push(oQuest);
             }
 
-            return aPatterns;
+            return aQuests;
         };
 
         /**
-         * The constructor method for a pattern.
+         * The constructor method for a question.
          *
          * @private
          * @param {int} iIndex the number of the pattern
          * @param {Object} oConfig the question's config
-         * @param {bool} bIsLast indicator for if the pattern is the last one
+         * @param {boolean} bIsLast indicator for if the pattern is the last one
          * @returns {Object} generated pattern
          */
-        this._getNewPattern = function(iIndex, oConfig, bIsLast) {
+        this._getNewQuestion = function(iIndex, oConfig, bIsLast) {
             return new Pattern(iIndex, oConfig, bIsLast);
         };
 
@@ -68,7 +69,7 @@ angular.module('PatternService', [])
          * @private
          * @param {int} iIndex the number of the pattern
          * @param {int} iQuestCount total number of available patterns
-         * @returns {bool} indicator for whether the given pattern is the last one
+         * @returns {boolean} indicator for whether the given pattern is the last one
          */
         this._getIsLast = function(iIndex, iQuestCount) {
             return (iIndex + 1) >= iQuestCount;

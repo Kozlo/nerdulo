@@ -33,7 +33,7 @@ angular.module('PatternGameCtrl', [])
          * @public
          */
         vm.startGame = function() {
-            var aQuests = Patterns.generatePatterns();
+            var aQuests = Patterns.generateQuestions();
 
             vm._startGame(aQuests);
         };

@@ -64,17 +64,17 @@
     test("Does startGame instantiates questions and creates the correct properties", function() {
         var aTestQuestions = ["testQuestion"];
 
-        var stub_generatePatterns = sinon.stub(this.oPtrnSrv, "generatePatterns").returns(aTestQuestions),
+        var stub_generateQuestions = sinon.stub(this.oPtrnSrv, "generateQuestions").returns(aTestQuestions),
             stub_startGame = sinon.stub(this.oCtrl, "_startGame");
 
         this.oCtrl.startGame();
 
-        ok(stub_generatePatterns.called, "Answer service method generateQuestions called");
+        ok(stub_generateQuestions.called, "Answer service method generateQuestions called");
 
         ok(stub_startGame.called, "Private method _startGame called");
         ok(stub_startGame.calledWith(aTestQuestions), "Private method _startGame called with the generated questions");
 
-        stub_generatePatterns.restore();
+        stub_generateQuestions.restore();
         stub_startGame.restore();
     });
 }());

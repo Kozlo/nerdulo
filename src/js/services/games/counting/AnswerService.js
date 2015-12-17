@@ -4,10 +4,10 @@ angular.module('AnswerService', [])
 
         this.oConfig = {
             questCount: 10,
-            falseOptCount : 4,
+            optCount : 5,
             deviance : {
-                min : -20,
-                max : 20
+                min : -25,
+                max : 25
             },
             number : {
                 min : 11,
@@ -41,7 +41,7 @@ angular.module('AnswerService', [])
          * @private
          * @param {int} iIndex the number of the question
          * @param {Object} oConfig the question's config
-         * @param {bool} bIsLast indicator for if the questions is the last one
+         * @param {boolean} bIsLast indicator for if the questions is the last one
          * @returns {Object} generated question
          */
         this._getNewQuestion = function(iIndex, oConfig, bIsLast) {
@@ -54,7 +54,7 @@ angular.module('AnswerService', [])
          * @private
          * @param {int} iIndex the number of the question
          * @param {int} iQuestCount total number of available questions
-         * @returns {bool} indicator for whether the given question is the last one
+         * @returns {boolean} indicator for whether the given question is the last one
          */
         this._getIsLast = function(iIndex, iQuestCount) {
             return (iIndex + 1) >= iQuestCount;
@@ -66,11 +66,12 @@ angular.module('AnswerService', [])
          * @public
          * @param {int} iQuestNo the number given for the question
          * @param {Object} oConfig values used to differentiate questions
+         * @param {boolean} bIsLast is the given question last
          */
         function Question(iQuestNo, oConfig, bIsLast) {
             this.iQuestNo = iQuestNo;
             this.oConfig = {
-                falseOptCount : oConfig.falseOptCount,
+                optCount : oConfig.optCount,
                 deviance : {
                     min : oConfig.deviance.min,
                     max : oConfig.deviance.max
@@ -145,9 +146,10 @@ angular.module('AnswerService', [])
              * @returns {Array} the multiplied result
              */
             optionGenerator : function() {
-                var aOpts = [];
+                var aOpts = [],
+                    iFalseOptCount = this.oConfig.optCount - 1;
 
-                while (aOpts.length < this.oConfig.falseOptCount) {
+                while (aOpts.length < iFalseOptCount) {
                     this.createOption(aOpts);
                 }
 
