@@ -46,12 +46,15 @@
     test("Does the controller have all the necessary properties", function() {
         var sGame ="count",
             sAllStarTarget = "counting-allstar",
-            sTagline = "Select the correct answer to the given math problems.";
+            sTagline = "Select the correct answer to the given math problems.",
+            sGameName = "The Counting Game";
 
         notEqual(typeof this.oCtrl.oAllStarData, "undefined", "oAllStartData property exists on the controller");
         equal(this.oCtrl.oAllStarData.game, sGame, "game property on oAllStartData is " + sGame);
 
         equal(this.oCtrl.sAllStarTarget, sAllStarTarget, "sAllStarTarget property is set to : " + sAllStarTarget);
+
+        equal(this.oCtrl.sGameName, sGameName, "sGameName property is set to: " + sGameName);
 
         equal(this.oCtrl.sTagline, sTagline, "sTagline property is set to: " + sTagline);
     });

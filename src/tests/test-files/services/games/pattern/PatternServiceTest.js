@@ -207,7 +207,7 @@
         var aOptions = this.oPattern._optionGenerator(iRequiredOptionCount);
 
         ok(spy_getRandomOption.called, "_getRandomOption called");
-        ok(spy_getRandomOption.calledWith(this.oPattern.iAnswer, this.oPattern.iOptionValueNorm), "_getRandomOption called with the answer and value norm");
+        ok(spy_getRandomOption.calledWith(Math.abs(this.oPattern.iAnswer), this.oPattern.iOptionValueNorm), "_getRandomOption called with the absolute value of answer and value norm");
         ok(spy_getRandomOption.callCount >= iRequiredOptionCount, "_getRandomOption call count is equal or greater than the specified required option count");
 
         ok(spy_addOptionToArray.called, "_addOptionToArray called");

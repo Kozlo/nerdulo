@@ -47,12 +47,15 @@
     test("Does the controller have all the necessary properties", function() {
         var sGame ="pattern",
             sAllStarTarget = "pattern-allstar",
-            sTagline = "Choose the number that fits in the pattern.";
+            sTagline = "Choose the number that fits in the pattern.",
+            sGameName = "The Pattern Game";
 
         notEqual(typeof this.oCtrl.oAllStarData, "undefined", "oAllStartData property exists on the controller");
         equal(this.oCtrl.oAllStarData.game, sGame, "game property on oAllStartData is " + sGame);
 
         equal(this.oCtrl.sAllStarTarget, sAllStarTarget, "sAllStarTarget property is set to : " + sAllStarTarget);
+
+        equal(this.oCtrl.sGameName, sGameName, "sGameName property is set to: " + sGameName);
 
         equal(this.oCtrl.sTagline, sTagline, "sTagline property is set to: " + sTagline);
     });

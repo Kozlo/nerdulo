@@ -154,7 +154,6 @@ angular.module('PatternService', [])
              * @returns {Array} incorrect options to choose from with answer added
              */
             _getRandomOption: function(iAnswer, iNorm) {
-                console.log("iAnswer: " + iAnswer);
                 var iRandomOption;
 
                 // also, the absolute value of answer should not surpass the specified limit

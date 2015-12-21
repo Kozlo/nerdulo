@@ -20,6 +20,11 @@ angular.module('CountingGameCtrl', [])
         vm.sAllStarTarget = "counting-allstar";
 
         /**
+         * @property {string} sGameName the text describing the game shown before the game starts
+         */
+        vm.sGameName  = "The Counting Game";
+
+        /**
          * @property {string} sTagline the text describing the game shown before the game starts
          */
         vm.sTagline  = "Select the correct answer to the given math problems.";

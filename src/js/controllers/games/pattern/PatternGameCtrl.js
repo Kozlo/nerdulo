@@ -20,6 +20,11 @@ angular.module('PatternGameCtrl', [])
         vm.sAllStarTarget = "pattern-allstar";
 
         /**
+         * @property {string} sGameName the text describing the game shown before the game starts
+         */
+        vm.sGameName  = "The Pattern Game";
+
+        /**
          * @property {string} sTagline the text describing the game shown before the game starts
          */
         vm.sTagline  = "Choose the number that fits in the pattern.";
