@@ -14,7 +14,7 @@
             // TODO: move this to a test anc check if config values are correct
             this.oConfig =  {
                 questCount: 10,
-                optCount : 4,
+                optCount : 5,
                 deviance : {
                     min : -20,
                     max : 20
@@ -333,7 +333,7 @@
         var aOpts = this.oQuestion.addAnswer(aTestOpts);
 
         ok(spy_getRandomInt.called, "getRandomInt called");
-        ok(spy_getRandomInt.calledWith(0, this.oConfig.optCount - 1), " getRandomInt called with 0 and opt count - 1");
+        ok(spy_getRandomInt.calledWith(0, this.oConfig.optCount - 2), " getRandomInt called with 0 and opt count - 2");
 
         ok(spy_insertValueInArray.called, "insertValueInArray called");
         ok(spy_insertValueInArray.calledWith(aOpts, sinon.match.any), "insertValueInArray called");

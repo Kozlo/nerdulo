@@ -14,7 +14,7 @@
             // TODO: move this to a test anc check if config values are correct
             this.oConfig = {
                 questCount: 10,
-                optCount : 4,
+                optCount : 5,
                 deviance : {
                     min : -20,
                     max : 20

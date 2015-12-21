@@ -1,18 +1,18 @@
-<div class="game pattern-game" ng-controller="PatternGameController as oPattern">
+<div class="game pattern-game" ng-controller="PatternGameController as oCtrl">
     <div class="jumbotron text-center">
         <!-- only shown before game -->
-        <div ng-hide="oPattern.bIsPlaying">
+        <div ng-hide="oCtrl.bIsPlaying">
             <h1>The Pattern Game</h1>
 
-            <p>{{ oPattern.sTagline }}</p>
+            <p>{{ oCtrl.sTagline }}</p>
 
-            <button class="btn btn-lg btn-warning round" ng-click="oPattern.startGame()">Start</button>
+            <button class="btn btn-lg btn-warning round" ng-click="oCtrl.startGame()">Start</button>
         </div>
         <!-- TODO: if possible move this to a generic answer generation view (also for counting game) -->
         <!-- only shown when playing -->
-        <div ng-show="oPattern.bIsPlaying && !oPattern.bGameFinished">
-            <div ng-repeat="oQuest in oPattern.aQuests track by $index" ng-show="oQuest.bIsCurr">
-                <p> {{ "Pattern " + (oPattern.iQuestNo + 1) + " / " + oPattern.aQuests.length + ":" }}</p>
+        <div ng-show="oCtrl.bIsPlaying && !oCtrl.bGameFinished">
+            <div ng-repeat="oQuest in oCtrl.aQuests track by $index" ng-show="oQuest.bIsCurr">
+                <p> {{ "Pattern " + (oCtrl.iQuestNo + 1) + " / " + oCtrl.aQuests.length + ":" }}</p>
                 <!-- TODO: replace with pattern-game specific HTML -->
                 <div class="pattern-items-wrapper">
                     <div ng-repeat=" oPtrnItem in oQuest.aPattern track by $index" class="pattern-item-holder">
@@ -24,23 +24,10 @@
                     <button type="button" class="btn btn-lg btn-default outline btn-answer-option" ng-class="{ active: opt == oQuest.iPlayerAnswer }" ng-click="oQuest.setPlayerAnswer(opt)">{{ opt }}</button>
                 </div>
                 <p>{{ oQuest.sPlayerPrompt }}</p>
-                <button type="button" class="btn btn-lg btn-success round" ng-click="oPattern.submitAnswer()">Submit</button>
+                <button type="button" class="btn btn-lg btn-success round" ng-click="oCtrl.submitAnswer()">Submit</button>
             </div>
         </div>
-        <div ng-show="oPattern.bGameFinished">
-            <p>Good job! You got <strong>{{ oPattern.iGameScore }}</strong> out of <strong>{{ oPattern.aQuests.length }}</strong> questions right in <strong>{{ oPattern.sGameTime }}</strong>.</p>
-            <p>Submit your score to the wall of fame!</p>
-            <!-- FORM TO CREATE ALLSTARS -->
-            <div id="allstar-form" class="row">
-                <div class="col-sm-4 col-sm-offset-4 text-center">
-                    <form novalidate name="allStartForm" >
-                        <div class="form-group">
-                            <input type="text" class="form-control input-lg text-center" placeholder="Champ's name" ng-model="oPattern.oAllStarData.name" required />
-                        </div> <!-- form-group -->
-                        <button type="submit" ng-disabled="!allStartForm.$valid" class="btn btn-lg btn-primary round" ng-click="oPattern.createAllStar()">Submit</button>
-                    </form>
-                </div> <!-- col-sm-8 -->
-            </div> <!-- row -->
-        </div>
+
+        <div ng-include="'views/partials/games/endGame.html'"></div>
     </div>
 </div>

@@ -1,0 +1,15 @@
+<div ng-show="oCtrl.bGameFinished">
+    <p>Good job! You got <strong>{{ oCtrl.iGameScore }}</strong> out of <strong>{{ oCtrl.aQuests.length }}</strong> questions right in <strong>{{ oCtrl.sGameTime }}</strong>.</p>
+    <p>Submit your score to the wall of fame!</p>
+    <!-- FORM TO CREATE ALLSTARS -->
+    <div id="allstar-form" class="row">
+        <div class="col-sm-4 col-sm-offset-4 text-center">
+            <form novalidate name="allStartForm" >
+                <div class="form-group">
+                    <input type="text" class="form-control input-lg text-center" placeholder="Champ's name" ng-model="oCtrl.oAllStarData.name" required />
+                </div> <!-- form-group -->
+                <button type="submit" ng-disabled="!allStartForm.$valid" class="btn btn-lg btn-primary round" ng-click="oCtrl.createAllStar()">Submit</button>
+            </form>
+        </div> <!-- col-sm-8 -->
+    </div> <!-- row -->
+</div>

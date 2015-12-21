@@ -40,7 +40,7 @@
                 max : 20
             },
             itemCount : 5,
-            optCount : 4,
+            optCount : 5,
             deviance : {
                 min : -20,
                 max : 20
@@ -266,7 +266,7 @@
 
         ok(stub_getRandomInt.called, "_getRandomInt called");
         ok(stub_getRandomInt.calledOnce, "_getRandomInt called once");
-        ok(stub_getRandomInt.calledWith(-this.oPattern.oConfig.optCount, this.oPattern.oConfig.optCount), "_getRandomInt called with negative and positive option count");
+        ok(stub_getRandomInt.calledWith(-iNorm, iNorm), "_getRandomInt called with negative and positive iOptionValueNorm");
 
         ok(stub_convertDevToOption.notCalled, "_convertDevToOption not called");
 

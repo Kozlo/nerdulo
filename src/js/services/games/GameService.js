@@ -9,7 +9,7 @@ angular.module('GameService', [])
          */
         this.oConfig = {
             questCount: 10,
-            optCount : 4,
+            optCount : 5,
             deviance : {
                 min : -20,
                 max : 20

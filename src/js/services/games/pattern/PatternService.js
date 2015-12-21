@@ -131,11 +131,10 @@ angular.module('PatternService', [])
                 // also, the absolute value of answer should not surpass the specified limit
                 // if it does, then options should be calculated differently otherwise an infinite loop is possible
                 var aOptions = [],
-                    iAbsAnswer = Math.abs(this.iAnswer),
-                    iAbsOptionValueNorm = Math.abs(this.iOptionValueNorm);
+                    iAbsAnswer = Math.abs(this.iAnswer);
 
                 do {
-                    var iRandOpt = this._getRandomOption(iAbsAnswer, iAbsOptionValueNorm);
+                    var iRandOpt = this._getRandomOption(iAbsAnswer, this.iOptionValueNorm);
 
                     this._addOptionToArray(iRandOpt, aOptions);
                 } while (aOptions.length < iRequiredOptionCount);
@@ -155,6 +154,7 @@ angular.module('PatternService', [])
              * @returns {Array} incorrect options to choose from with answer added
              */
             _getRandomOption: function(iAnswer, iNorm) {
+                console.log("iAnswer: " + iAnswer);
                 var iRandomOption;
 
                 // also, the absolute value of answer should not surpass the specified limit
