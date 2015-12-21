@@ -1,54 +1,25 @@
 angular.module('PatternService', [])
 
-    .service('Patterns', function() {
+    .service('Patterns', function(Games) {
+        // make sure this service inherits from the base game service
+        angular.extend(this, Games);
 
-        // TODO: sort these according to difficulty
-        // TODO: remove the re-usable parts
-        /**
-         * Configuration used for generating patterns.
-         *
-         * @public
-         */
-        this.oConfig = {
-            questCount: 10,
-            optCount : 5,
-            deviance : {
-                min : -25,
-                max : 25
-            },
-            startNum : {
-                min : 9,
-                max : 15
-            },
-            multiple : {
-                min : 2,
-                max : 3
-            },
-            constant : {
-                min : -20,
-                max : 20
-            },
-            itemCount : 5
+        this.oConfig.startNum = {
+            min : 9,
+            max : 15
         };
 
-        /**
-         * Construct and return the specified number of questions
-         *
-         * @public
-         * @returns {Array} questions
-         */
-        this.generateQuestions = function() {
-            var aQuests = [];
-
-            for (var i = 0 ; i < this.oConfig.questCount; i++) {
-                var bIsLast = this._getIsLast(i, this.oConfig.questCount),
-                    oQuest = this._getNewQuestion(i, this.oConfig, bIsLast);
-
-                aQuests.push(oQuest);
-            }
-
-            return aQuests;
+        this.oConfig.multiple = {
+            min : 2,
+            max : 3
         };
+
+        this.oConfig.constant = {
+            min : -20,
+            max : 20
+        };
+
+        this.oConfig.itemCount = 5;
 
         /**
          * The constructor method for a question.
@@ -61,18 +32,6 @@ angular.module('PatternService', [])
          */
         this._getNewQuestion = function(iIndex, oConfig, bIsLast) {
             return new Pattern(iIndex, oConfig, bIsLast);
-        };
-
-        /**
-         * Calculates if the current pattern is the last one.
-         *
-         * @private
-         * @param {int} iIndex the number of the pattern
-         * @param {int} iQuestCount total number of available patterns
-         * @returns {boolean} indicator for whether the given pattern is the last one
-         */
-        this._getIsLast = function(iIndex, iQuestCount) {
-            return (iIndex + 1) >= iQuestCount;
         };
 
         /**
@@ -107,7 +66,7 @@ angular.module('PatternService', [])
             this.bIsLast = bIsLast;
             this.sPlayerPrompt = "Your answer is: ";
         }
-        //
+
         Pattern.prototype = {
             // TODO: move to a separate helper class
             /**

@@ -12,7 +12,7 @@
                 this._startGame = function() {};
             });
 
-            var injector = angular.injector(['ng', 'PatternGameCtrl', 'GameCtrl', 'PatternService']),
+            var injector = angular.injector(['ng', 'PatternGameCtrl', 'GameCtrl', 'GameService', 'PatternService']),
                 $controller = injector.get('$controller');
 
             // TODO see if this is needed

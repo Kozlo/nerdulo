@@ -6,6 +6,7 @@ angular.module('nerdulo', [
     'GameCtrl',
     'CountingGameCtrl',
     'PatternGameCtrl',
+    'GameService',
     'AnswerService',
     'PatternService',
     'AllStarCtrl',

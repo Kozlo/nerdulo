@@ -7,7 +7,7 @@
 
     module("Pattern Service", {
         setup: function () {
-            var injector = angular.injector(['ng', 'PatternGameCtrl', 'PatternService']);
+            var injector = angular.injector(['ng', 'GameService', 'PatternService']);
 
             this.oPtrnSrv = injector.get('Patterns');
 
@@ -40,10 +40,10 @@
                 max : 20
             },
             itemCount : 5,
-            optCount : 5,
+            optCount : 4,
             deviance : {
-                min : -25,
-                max : 25
+                min : -20,
+                max : 20
             }
         };
 

@@ -12,7 +12,7 @@
                 this._startGame = function() {};
             });
 
-            var injector = angular.injector(['ng', 'CountingGameCtrl', 'GameCtrl', 'AnswerService']),
+            var injector = angular.injector(['ng', 'CountingGameCtrl', 'GameCtrl', 'GameService', 'AnswerService']),
                 $controller = injector.get('$controller');
 
             this.ansSrv = injector.get('Answers');

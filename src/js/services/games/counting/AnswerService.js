@@ -1,38 +1,12 @@
 angular.module('AnswerService', [])
 
-    .service('Answers', function() {
+    .service('Answers', function(Games) {
+        // make sure this service inherits from the base game service
+        angular.extend(this, Games);
 
-        this.oConfig = {
-            questCount: 10,
-            optCount : 5,
-            deviance : {
-                min : -25,
-                max : 25
-            },
-            number : {
-                min : 11,
-                max : 29
-            }
-        };
-
-
-        /**
-         * Generates and returns questions for the counting game.
-         *
-         * @public
-         * @returns {Array} generated questions
-         */
-        this.generateQuestions = function() {
-            var aQuests= [];
-
-            for (var i = 0 ; i < this.oConfig.questCount ; i++) {
-                var bIsLast = this._getIsLast(i, this.oConfig.questCount),
-                    oQuestion = this._getNewQuestion(i, this.oConfig, bIsLast);
-
-                aQuests.push(oQuestion);
-            }
-
-            return aQuests;
+        this.oConfig.number = {
+            min : 11,
+            max : 29
         };
 
         /**
@@ -46,18 +20,6 @@ angular.module('AnswerService', [])
          */
         this._getNewQuestion = function(iIndex, oConfig, bIsLast) {
             return new Question(iIndex, oConfig, bIsLast);
-        };
-
-        /**
-         * Calculates if the current question is the last one.
-         *
-         * @private
-         * @param {int} iIndex the number of the question
-         * @param {int} iQuestCount total number of available questions
-         * @returns {boolean} indicator for whether the given question is the last one
-         */
-        this._getIsLast = function(iIndex, iQuestCount) {
-            return (iIndex + 1) >= iQuestCount;
         };
 
         /**

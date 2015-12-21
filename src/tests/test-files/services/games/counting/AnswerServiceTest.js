@@ -7,17 +7,17 @@
 
     module("Answer Service", {
         setup: function () {
-            var injector = angular.injector(['ng', 'CountingGameCtrl', 'AnswerService']);
+            var injector = angular.injector(['ng', 'GameService', 'AnswerService']);
 
             this.oAnsSrv = injector.get('Answers');
 
             // TODO: move this to a test anc check if config values are correct
             this.oConfig =  {
                 questCount: 10,
-                optCount : 5,
+                optCount : 4,
                 deviance : {
-                    min : -25,
-                    max : 25
+                    min : -20,
+                    max : 20
                 },
                 number : {
                     min : 11,
@@ -48,7 +48,7 @@
             }
         };
 
-        equal(JSON.stringify(this.oQuestion.oConfig), JSON.stringify(oExpectedConfig), "Actual and expected config match");
+        deepEqual(this.oQuestion.oConfig, oExpectedConfig, "Actual and expected config match");
     });
 
     test("Does generateQuestions return expected questions", function() {
@@ -333,7 +333,7 @@
         var aOpts = this.oQuestion.addAnswer(aTestOpts);
 
         ok(spy_getRandomInt.called, "getRandomInt called");
-        ok(spy_getRandomInt.calledWith(0, this.oConfig.optCount - 2), " getRandomInt called with 0 and opt count - 2");
+        ok(spy_getRandomInt.calledWith(0, this.oConfig.optCount - 1), " getRandomInt called with 0 and opt count - 1");
 
         ok(spy_insertValueInArray.called, "insertValueInArray called");
         ok(spy_insertValueInArray.calledWith(aOpts, sinon.match.any), "insertValueInArray called");
