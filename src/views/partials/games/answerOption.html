@@ -1,0 +1,5 @@
+<div class="answer-option" ng-repeat="nOpt in oQuest.aOptions track by $index">
+    <button type="button" class="btn btn-lg btn-default outline btn-answer-option" ng-class="{ active: nOpt == oQuest.iPlayerAnswer }" ng-click="oQuest.setPlayerAnswer(nOpt)">{{ nOpt }}</button>
+</div>
+<p>{{ oQuest.sPlayerPrompt }}</p>
+<button type="button" class="btn btn-lg btn-success round" ng-click="oCtrl.submitAnswer()">Submit</button>

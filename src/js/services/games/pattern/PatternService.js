@@ -60,7 +60,7 @@ angular.module('PatternService', [])
             this.aPattern = this._patternGenerator();
             // the answer is omitted and replaced with options
             this.iAnswer = this._hideOption();
-            this.oOptions = this._optionGenerator(oConfig.optCount - 1);
+            this.aOptions = this._optionGenerator(oConfig.optCount - 1);
             this.iPlayerAnswer = null;
             this.bIsCurr = false;
             this.bIsLast = bIsLast;

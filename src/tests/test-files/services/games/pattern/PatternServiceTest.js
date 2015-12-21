@@ -84,8 +84,8 @@
             notEqual(typeof oPattern.iAnswer, "undefined", "iAnswer property exists for question " + i);
             equal(typeof oPattern.iAnswer, "number", "iAnswer property type is number for question " + i);
 
-            ok(oPattern.oOptions, "oOptions property exists for question " + i);
-            equal(typeof oPattern.oOptions, "object", "oOptions property type is object for question " + i);
+            ok(oPattern.aOptions, "oOptions property exists for question " + i);
+            ok(Array.isArray(oPattern.aOptions), "aOptions property is an array for question " + i);
 
             equal(oPattern.iPlayerAnswer, null, "iPlayerAnswer is initialized to null for question " + i);
 

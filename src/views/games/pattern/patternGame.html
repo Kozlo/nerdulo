@@ -1,14 +1,8 @@
 <div class="game pattern-game" ng-controller="PatternGameController as oCtrl">
     <div class="jumbotron text-center">
-        <!-- only shown before game -->
-        <div ng-hide="oCtrl.bIsPlaying">
-            <h1>{{ oCtrl.sGameName }}</h1>
 
-            <p>{{ oCtrl.sTagline }}</p>
+        <div ng-include="'views/partials/games/startGame.html'"></div>
 
-            <button class="btn btn-lg btn-warning round" ng-click="oCtrl.startGame()">Start</button>
-        </div>
-        <!-- TODO: if possible move this to a generic answer generation view (also for counting game) -->
         <!-- only shown when playing -->
         <div ng-show="oCtrl.bIsPlaying && !oCtrl.bGameFinished">
             <div ng-repeat="oQuest in oCtrl.aQuests track by $index" ng-show="oQuest.bIsCurr">
@@ -20,11 +14,9 @@
                         <button type="button" class="btn btn-warning round" disabled>{{ oPtrnItem }}</button>
                     </div>
                 </div>
-                <div class="answer-option" ng-repeat="opt in oQuest.oOptions track by $index">
-                    <button type="button" class="btn btn-lg btn-default outline btn-answer-option" ng-class="{ active: opt == oQuest.iPlayerAnswer }" ng-click="oQuest.setPlayerAnswer(opt)">{{ opt }}</button>
-                </div>
-                <p>{{ oQuest.sPlayerPrompt }}</p>
-                <button type="button" class="btn btn-lg btn-success round" ng-click="oCtrl.submitAnswer()">Submit</button>
+
+                <div ng-include="'views/partials/games/answerOption.html'"></div>
+
             </div>
         </div>
 
