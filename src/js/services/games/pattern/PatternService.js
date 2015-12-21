@@ -128,10 +128,14 @@ angular.module('PatternService', [])
              */
             _optionGenerator : function(iRequiredOptionCount) {
                 // an array to hold all answers
-                var aOptions = [];
+                // also, the absolute value of answer should not surpass the specified limit
+                // if it does, then options should be calculated differently otherwise an infinite loop is possible
+                var aOptions = [],
+                    iAbsAnswer = Math.abs(this.iAnswer),
+                    iAbsOptionValueNorm = Math.abs(this.iOptionValueNorm);
 
                 do {
-                    var iRandOpt = this._getRandomOption(this.iAnswer, this.iOptionValueNorm);
+                    var iRandOpt = this._getRandomOption(iAbsAnswer, iAbsOptionValueNorm);
 
                     this._addOptionToArray(iRandOpt, aOptions);
                 } while (aOptions.length < iRequiredOptionCount);
@@ -146,20 +150,22 @@ angular.module('PatternService', [])
              * Generates a random integer based on how
              *
              * @private
-             * @param {int} iRequiredOptionCount how many options should be created
+             * @param {int} iAnswer how many options should be created
              * @param {int} iNorm at which point should lower value be considered
              * @returns {Array} incorrect options to choose from with answer added
              */
             _getRandomOption: function(iAnswer, iNorm) {
                 var iRandomOption;
 
+                // also, the absolute value of answer should not surpass the specified limit
+                // if it does, then options should be calculated differently otherwise an infinite loop is possible
                 if (iAnswer > iNorm) {
                     // generate a random number that is different from the correct answer by max % specified by the maxDev variable
                     var iRandDev = this._getRandomInt(this.oConfig.deviance.min, this.oConfig.deviance.max);
 
                     iRandomOption = this._convertDevToOption(iRandDev);
                 } else {
-                    iRandomOption =  this._getRandomInt(-this.oConfig.optCount, this.oConfig.optCount);
+                    iRandomOption =  this._getRandomInt(-iNorm, iNorm);
                 }
 
                 return iRandomOption;
@@ -187,7 +193,7 @@ angular.module('PatternService', [])
              */
             _addOptionToArray: function(iRandOpt, aOpts) {
                 // check if the option already is in the list
-                if (aOpts.indexOf(iRandOpt) === -1 && iRandOpt !== 0) {
+                if (iRandOpt !== this.iAnswer && aOpts.indexOf(iRandOpt) === -1 && iRandOpt !== 0) {
                     //push the non-zero option to the list of available options
                     aOpts.push(iRandOpt);
                 }
