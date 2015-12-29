@@ -1,8 +1,8 @@
 <!-- only shown before game -->
-<div ng-hide="oCtrl.bIsPlaying">
+<div id="start-game-wrapper" ng-hide="oCtrl.bIsPlaying">
     <h1>{{ oCtrl.sGameName }}</h1>
 
     <p>{{ oCtrl.sTagline }}</p>
 
-    <button class="btn btn-lg btn-warning round" ng-click="oCtrl.startGame()">Start</button>
+    <button id="game-start-button" class="btn btn-lg btn-warning round" ng-click="oCtrl.startGame()">Start</button>
 </div>
