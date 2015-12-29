@@ -2,7 +2,7 @@
  * countingGame.js - Counting game tests.
  */
 
-casper.test.begin('Counting Game works properly and result can be saved', 35, function suite(test) {
+casper.test.begin('Counting Game works properly and result can be saved', 45, function suite(test) {
     casper.start("http://localhost:8080/counting-game", function() {
         // check if the start game wrapper is visible
         test.assertVisible("#start-game-wrapper", "start game wrapper is visible");
@@ -53,7 +53,18 @@ casper.test.begin('Counting Game works properly and result can be saved', 35, fu
             // check if the submit button is visible
             test.assertVisible("button#game-submit-button-" + iQuestIdx, "submit button for question " + iQuestIdx + " is visible");
 
-            // make sure there are 4 options visible
+            // click on submit button, a prompt should appear, and the use should stay at current question
+            this.click("button#game-submit-button-" + iQuestIdx);
+
+            // the submit button for the same question should be visible
+            test.assertVisible("button#game-submit-button-" + iQuestIdx, "submit button for question " + iQuestIdx + " is still visible after clicking on submit");
+
+            // the prompt should ask the player to select an answer
+            test.assertEval(function(iQuestIdx) {
+                return __utils__.findAll("#game-prompt-question-" + iQuestIdx).value === "Please select an answer!";
+            }, "5 answer options for question found", iQuestIdx); // need to pass the question index variable
+
+            // make sure there are 5 options visible
             test.assertEval(function(iQuestIdx) {
                 return __utils__.findAll("#counting-game-question-" + iQuestIdx + " .btn-answer-option").length === 5;
             }, "5 answer options for question found", iQuestIdx); // need to pass the question index variable
