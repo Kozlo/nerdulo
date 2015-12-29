@@ -2,7 +2,7 @@
  * countingGame.js - Counting game tests.
  */
 
-casper.test.begin('Counting Game works properly and result can be saved', 45, function suite(test) {
+casper.test.begin('Counting Game works properly and result can be saved', 65, function suite(test) {
     casper.start("http://localhost:8080/counting-game", function() {
         // check if the start game wrapper is visible
         test.assertVisible("#start-game-wrapper", "start game wrapper is visible");
@@ -37,8 +37,6 @@ casper.test.begin('Counting Game works properly and result can be saved', 45, fu
         });
     });
 
-    // TODO: check if submit doesn't work unless an answer has been selected
-
     // work through the questions until the score can be submitted
     casper.then(function() {
         var oQuests = this.evaluate(function() {
@@ -46,34 +44,55 @@ casper.test.begin('Counting Game works properly and result can be saved', 45, fu
         });
 
         for (var i = 0; i < oQuests.length; i++) {
-            this.waitForSelector("button#game-submit-button-" + i, fnSubmitQuestion.bind(this, i));
+            this.waitForSelector("button#game-submit-button-" + i, submitQuestion.bind(this, i));
         }
 
-        function fnSubmitQuestion(iQuestIdx) {
+        function submitQuestion(iQuestIdx) {
+            var iSelectedOptionIdx = (iQuestIdx % 5);
+
             // check if the submit button is visible
             test.assertVisible("button#game-submit-button-" + iQuestIdx, "submit button for question " + iQuestIdx + " is visible");
 
+            // the prompt should ask the player to select an answer
+            checkPrompt.call(this, iQuestIdx, "Your answer is: ");
+
             // click on submit button, a prompt should appear, and the use should stay at current question
-            this.click("button#game-submit-button-" + iQuestIdx);
+            clickOnSubmit.call(this, iQuestIdx);
 
             // the submit button for the same question should be visible
             test.assertVisible("button#game-submit-button-" + iQuestIdx, "submit button for question " + iQuestIdx + " is still visible after clicking on submit");
 
             // the prompt should ask the player to select an answer
-            test.assertEval(function(iQuestIdx) {
-                return __utils__.findAll("#game-prompt-question-" + iQuestIdx).value === "Please select an answer!";
-            }, "5 answer options for question found", iQuestIdx); // need to pass the question index variable
+            checkPrompt.call(this, iQuestIdx, "Please select an answer!");
 
             // make sure there are 5 options visible
             test.assertEval(function(iQuestIdx) {
                 return __utils__.findAll("#counting-game-question-" + iQuestIdx + " .btn-answer-option").length === 5;
-            }, "5 answer options for question found", iQuestIdx); // need to pass the question index variable
+            }, "5 answer options for question found", iQuestIdx);
 
             // click on an answer option. select an option between 0 and 4, so all options are clicked
-            this.click("#counting-game-question-" + iQuestIdx + " .btn-answer-option-" + (iQuestIdx % 5));
+            this.click("#counting-game-question-" + iQuestIdx + " .btn-answer-option-" + iSelectedOptionIdx);
+
+            var iSelectedOption = this.evaluate(function(iQuestIdx, iSelectedOptionIdx) {
+                return __utils__.findAll("#counting-game-question-" + iQuestIdx +"btn-answer-option-" + iSelectedOptionIdx);
+            }, iQuestIdx, iSelectedOptionIdx);
+
+            // the prompt should ask the player to select an answer
+            checkPrompt.call(this, iQuestIdx, "Your answer is: " + iSelectedOption[0]);
+
+            // submit the question after an options has been selected
+            clickOnSubmit.call(this, iQuestIdx);
+        }
+
+        function clickOnSubmit(iQuestIdx) {
             this.click("button#game-submit-button-" + iQuestIdx);
         }
 
+        function checkPrompt(iQuestIdx, sPrompt) {
+            test.assertEval(function(aArgs) {
+                return document.querySelector('#game-prompt-question-' + aArgs[0]).innerHTML === aArgs[1];
+            }, "Prompt for question " + iQuestIdx + " is: " + sPrompt, [iQuestIdx, sPrompt]); // TODO: figure out how to pass arguments normally
+        }
     });
 
     // submit the score and check if it's on the score board
