@@ -2,7 +2,7 @@
  * countingGame.js - Counting game tests.
  */
 
-casper.test.begin('Counting Game works properly and result can be saved', 65, function suite(test) {
+casper.test.begin('Counting Game works properly and result can be saved', 75, function suite(test) {
     casper.start("http://localhost:8080/counting-game", function() {
         // check if the start game wrapper is visible
         test.assertVisible("#start-game-wrapper", "start game wrapper is visible");
@@ -74,11 +74,11 @@ casper.test.begin('Counting Game works properly and result can be saved', 65, fu
             this.click("#counting-game-question-" + iQuestIdx + " .btn-answer-option-" + iSelectedOptionIdx);
 
             var iSelectedOption = this.evaluate(function(iQuestIdx, iSelectedOptionIdx) {
-                return __utils__.findAll("#counting-game-question-" + iQuestIdx +"btn-answer-option-" + iSelectedOptionIdx);
+                return __utils__.findAll("#counting-game-question-" + iQuestIdx + " .btn-answer-option-" + iSelectedOptionIdx)[0].innerHTML;
             }, iQuestIdx, iSelectedOptionIdx);
 
             // the prompt should ask the player to select an answer
-            checkPrompt.call(this, iQuestIdx, "Your answer is: " + iSelectedOption[0]);
+            checkPrompt.call(this, iQuestIdx, "Your answer is: " + iSelectedOption);
 
             // submit the question after an options has been selected
             clickOnSubmit.call(this, iQuestIdx);
@@ -91,7 +91,7 @@ casper.test.begin('Counting Game works properly and result can be saved', 65, fu
         function checkPrompt(iQuestIdx, sPrompt) {
             test.assertEval(function(aArgs) {
                 return document.querySelector('#game-prompt-question-' + aArgs[0]).innerHTML === aArgs[1];
-            }, "Prompt for question " + iQuestIdx + " is: " + sPrompt, [iQuestIdx, sPrompt]); // TODO: figure out how to pass arguments normally
+            }, "Prompt for question " + iQuestIdx + " is: " + sPrompt, [iQuestIdx, sPrompt]);
         }
     });
 
