@@ -1,12 +1,16 @@
 /**
- * game.js - Re-usable browser tests for different games
+ * tests.js - Re-usable browser tests for different games
  */
 
 module.exports = {
-    runTests: function(test, oConfig) {
+    runTests: function(test, oCustomConfig) {
+        // import config used by all tests
+        var oConfig = require('./config');
+
         // all custom variables
-        var sGame = oConfig.custom.sGame,
-            regex_allstarUrl = oConfig.custom.regex_alltarUrl;
+        var sGame = oCustomConfig.game,
+            sGameUrl = oCustomConfig.gameUrl,
+            regex_allstarUrl = oCustomConfig.regex_alltarUrl;
 
         // all element id variables
         var id_startGameWrapper = oConfig.ids.id_startGameWrapper,
@@ -20,7 +24,7 @@ module.exports = {
 
         // all numbered (i.e. the variable only holds the first, unchanging, part) element id variables
         var id_num_gameSubmitButton = oConfig.numberedIds.id_num_gameSubmitButton,
-            id_num_countingGameQuestion = oConfig.numberedIds.id_num_countingGameQuestion,
+            id_num_GameQuestion = oConfig.numberedIds.id_num_GameQuestion,
             id_num_gamePromptQuestion = oConfig.numberedIds.id_num_gamePromptQuestion;
 
         // all element class variables
@@ -31,7 +35,7 @@ module.exports = {
         // all numbered (i.e. the variable only holds the first, unchanging, part) element class variables
         var class_num_answerOptionButton = oConfig.numberedClasses.class_num_answerOptionButton;
 
-        casper.start("http://localhost:8080/counting-game", function() {
+        casper.start(sGameUrl, function() {
             this.echo("Starting Browser tests for: " + sGame);
             // check if the start game wrapper is visible
             test.assertVisible(id_startGameWrapper, "start game wrapper is visible");
@@ -97,14 +101,14 @@ module.exports = {
                 // make sure there are 5 options visible
                 test.assertEval(function(aArgs) {
                     return __utils__.findAll(aArgs[0] + aArgs[1] + " " + aArgs[2]).length === 5;
-                }, "5 answer options for question found", [id_num_countingGameQuestion, iQuestIdx, class_answerOptionButton]);
+                }, "5 answer options for question found", [id_num_GameQuestion, iQuestIdx, class_answerOptionButton]);
 
                 // click on an answer option. select an option between 0 and 4, so all options are clicked
-                this.click(id_num_countingGameQuestion + iQuestIdx + " " + class_num_answerOptionButton + iSelectedOptionIdx);
+                this.click(id_num_GameQuestion + iQuestIdx + " " + class_num_answerOptionButton + iSelectedOptionIdx);
 
-                var iSelectedOption = this.evaluate(function(iQuestIdx, iSelectedOptionIdx, id_num_countingGameQuestion, class_num_answerOptionButton) {
-                    return __utils__.findAll(id_num_countingGameQuestion + iQuestIdx + " " + class_num_answerOptionButton + iSelectedOptionIdx)[0].innerHTML;
-                }, iQuestIdx, iSelectedOptionIdx, id_num_countingGameQuestion, class_num_answerOptionButton);
+                var iSelectedOption = this.evaluate(function(iQuestIdx, iSelectedOptionIdx, id_num_GameQuestion, class_num_answerOptionButton) {
+                    return __utils__.findAll(id_num_GameQuestion + iQuestIdx + " " + class_num_answerOptionButton + iSelectedOptionIdx)[0].innerHTML;
+                }, iQuestIdx, iSelectedOptionIdx, id_num_GameQuestion, class_num_answerOptionButton);
 
                 // the prompt should ask the player to select an answer
                 checkPrompt.call(this, iQuestIdx, "Your answer is: " + iSelectedOption);

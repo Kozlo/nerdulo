@@ -4,19 +4,19 @@
         <div ng-include="'views/partials/games/startGame.html'"></div>
 
         <!-- only shown when playing -->
-        <div ng-show="oCtrl.bIsPlaying && !oCtrl.bGameFinished">
-            <div ng-repeat="oQuest in oCtrl.aQuests track by $index" ng-show="oQuest.bIsCurr">
-                <p> {{ "Pattern " + (oCtrl.iQuestNo + 1) + " / " + oCtrl.aQuests.length + ":" }}</p>
-                <!-- TODO: replace with pattern-game specific HTML -->
-                <div class="pattern-items-wrapper">
-                    <div ng-repeat=" oPtrnItem in oQuest.aPattern track by $index" class="pattern-item-holder">
-                        <!--<span class="label label-default">{{ oPtrnItem }}</span>-->
-                        <button type="button" class="btn btn-warning round" disabled>{{ oPtrnItem }}</button>
+        <div id="game-question-wrapper" ng-show="oCtrl.bIsPlaying && !oCtrl.bGameFinished">
+            <div class="game-question" ng-repeat="oQuest in oCtrl.aQuests track by $index" ng-show="oQuest.bIsCurr">
+                <div id="{{'game-question-' + $index}}">
+                    <p> {{ "Pattern " + (oCtrl.iQuestNo + 1) + " / " + oCtrl.aQuests.length + ":" }}</p>
+                    <div class="pattern-items-wrapper">
+                        <div ng-repeat=" oPtrnItem in oQuest.aPattern track by $index" class="pattern-item-holder">
+                            <button type="button" class="btn btn-warning round" disabled>{{ oPtrnItem }}</button>
+                        </div>
                     </div>
+
+                    <div ng-include="'views/partials/games/answerOption.html'"></div>
+
                 </div>
-
-                <div ng-include="'views/partials/games/answerOption.html'"></div>
-
             </div>
         </div>
 

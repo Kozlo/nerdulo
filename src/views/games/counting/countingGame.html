@@ -4,9 +4,9 @@
         <div ng-include="'views/partials/games/startGame.html'"></div>
 
         <!-- only shown when playing -->
-        <div id="counting-game-question-wrapper" ng-show="oCtrl.bIsPlaying && !oCtrl.bGameFinished">
-            <div class="counting-game-question" ng-repeat="oQuest in oCtrl.aQuests" ng-show="oQuest.bIsCurr">
-                <div id="{{'counting-game-question-' + $index}}">
+        <div id="game-question-wrapper" ng-show="oCtrl.bIsPlaying && !oCtrl.bGameFinished">
+            <div class="game-question" ng-repeat="oQuest in oCtrl.aQuests" ng-show="oQuest.bIsCurr">
+                <div id="{{'game-question-' + $index}}">
                     <p> {{ "Problem " + (oCtrl.iQuestNo + 1) + " / " + oCtrl.aQuests.length + ":" }}</p>
                     <p>{{ oQuest.oNumbers.one }} * {{ oQuest.oNumbers.two }}</p>
 
