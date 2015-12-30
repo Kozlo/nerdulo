@@ -2,4 +2,4 @@
     <button type="button" class="{{'btn btn-lg btn-default outline btn-answer-option btn-answer-option-' + $index}}" ng-class="{ active: nOpt == oQuest.iPlayerAnswer }" ng-click="oQuest.setPlayerAnswer(nOpt)">{{ nOpt }}</button>
 </div>
 <p id="{{'game-prompt-question-' + $index}}">{{ oQuest.sPlayerPrompt }}</p>
-<button id="{{'game-submit-button-' + $index}}" type="button" class="btn btn-lg btn-success round" ng-click="oCtrl.submitAnswer()">Submit</button>
+<button id="{{'game-submit-button-' + $index}}" type="button" class="game-submit-button btn btn-lg btn-success round" ng-click="oCtrl.submitAnswer()">Submit</button>
