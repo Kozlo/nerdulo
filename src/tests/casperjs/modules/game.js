@@ -1,35 +1,36 @@
 /**
- * countingGame.js - Counting game tests.
+ * game.js - Re-usable browser tests for different games
  */
 
-(function() {
-    /**
-     * Here all variables for the tests can be found
-     */
-    var sGame = "Counting Game",
-        regex_allstarUrl = /http:\/\/localhost:8080\/allstars#counting-allstar/;
+module.exports = {
+    runTests: function(test, oConfig) {
+        // all custom variables
+        var sGame = oConfig.custom.sGame,
+            regex_allstarUrl = oConfig.custom.regex_alltarUrl;
 
-    var id_startGameWrapper = "#start-game-wrapper",
-        id_gameStartButton = "button#game-start-button",
-        id_gameQuestionWrapper= "#counting-game-question-wrapper",
-        id_gameEndWrapper = "#game-end-wrapper",
-        id_gameSubmitForm = "form#game-submit-form",
-        id_gameSubmitPlayerName = "input#game-submit-player-name",
-        id_gameScoreSubmitButton = "button#game-score-submit-button",
-        id_allstarList = "#allstar-list";
+        // all element id variables
+        var id_startGameWrapper = oConfig.ids.id_startGameWrapper,
+            id_gameStartButton = oConfig.ids.id_gameStartButton,
+            id_gameQuestionWrapper = oConfig.ids.id_gameQuestionWrapper,
+            id_gameEndWrapper = oConfig.ids.id_gameEndWrapper,
+            id_gameSubmitForm = oConfig.ids.id_gameSubmitForm,
+            id_gameSubmitPlayerName = oConfig.ids.id_gameSubmitPlayerName,
+            id_gameScoreSubmitButton = oConfig.ids.id_gameScoreSubmitButton,
+            id_allstarList = oConfig.ids.id_allstarList;
 
-    var id_num_gameSubmitButton = "button#game-submit-button-",
-        id_num_countingGameQuestion = "#counting-game-question-",
-        id_num_gamePromptQuestion = "#game-prompt-question-";
+        // all numbered (i.e. the variable only holds the first, unchanging, part) element id variables
+        var id_num_gameSubmitButton = oConfig.numberedIds.id_num_gameSubmitButton,
+            id_num_countingGameQuestion = oConfig.numberedIds.id_num_countingGameQuestion,
+            id_num_gamePromptQuestion = oConfig.numberedIds.id_num_gamePromptQuestion;
 
-    var class_gameQuestion = ".counting-game-question",
-        class_gameSubmitButton = ".game-submit-button",
-        class_answerOptionButton = ".btn-answer-option";
+        // all element class variables
+        var class_gameQuestion = oConfig.classes.class_gameQuestion,
+            class_gameSubmitButton = oConfig.classes.class_gameSubmitButton,
+            class_answerOptionButton = oConfig.classes.class_answerOptionButton;
 
-    var class_num_answerOptionButton = ".btn-answer-option-";
+        // all numbered (i.e. the variable only holds the first, unchanging, part) element class variables
+        var class_num_answerOptionButton = oConfig.numberedClasses.class_num_answerOptionButton;
 
-
-    casper.test.begin('Counting Game works properly and result can be saved', 75, function suite(test) {
         casper.start("http://localhost:8080/counting-game", function() {
             this.echo("Starting Browser tests for: " + sGame);
             // check if the start game wrapper is visible
@@ -158,5 +159,5 @@
         casper.run(function() {
             test.done();
         });
-    });
-}());
+    }
+};
