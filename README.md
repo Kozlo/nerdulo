@@ -17,5 +17,5 @@ If you have any questions, please contact Martins at [mkozlovskis@gmail.com](mko
 
 ## Running Browser Tests With CasperJS
 1. Install prerequisites: PhantomJS 1.9.1 or greater and Python 2.6 or greater
-2. Install CasperJS with the global flag: npm install -g casperjs
-3. Run the tests in the appropriate folder: casperjs test src/tests/casperjs/tests/
+2. Install CasperJS with the global flag: `npm install -g casperjs`
+3. Run the tests in the appropriate folder: `casperjs test src/tests/casperjs/tests/`
