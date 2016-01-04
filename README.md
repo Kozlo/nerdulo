@@ -29,4 +29,10 @@ If you have any questions, please contact Martins at [mkozlovskis@gmail.com](mko
 ## Running Browser Tests With CasperJS
 1. Install prerequisites: PhantomJS 1.9.1 or greater and Python 2.6 or greater
 2. Install CasperJS with the global flag: `npm install -g casperjs`
-3. Run the tests in the appropriate folder: `casperjs test src/tests/casperjs/tests/`
+3. Run the server: `npm start` or `node server.js`
+4. Run the tests: `npm run-script casperjs` or `casperjs test src/tests/casperjs/tests/`
+
+## Running Node.js Unit Tests With Mocha and Chai
+1. Install prerequisites: Mocha, Chai, Sinon, Sinon-Chai (included in package.json)
+2. Run the server: `npm start` or `node server.js`
+3. Run the tests: `npm run-script mocha` or `mocha src/tests/mocha/*`
