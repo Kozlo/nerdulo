@@ -15,13 +15,8 @@ This is a single page game application written in Angular.js. The front-end code
 1. Run the gulp start task
  * gulp start
 2. Build the code and run the app manually:
- * run the gulp build task:
-  * `gulp build` to simply build the files
-  * or `gulp default -end development` to also watch for file changes and automatic re-build
-   Note: Chrome's livereload plugin is needed for the page to reload automatically
- * start the server:
-  * `npm start`
-  * or `node server.js`
+ * run the gulp build task: `gulp build` to simply build the files or `gulp default -env development` to also watch for file changes and automatic re-build, but note that Chrome's livereload plugin is needed for the page to reload automatically
+ * start the server: `npm start` or `node server.js`
 3. View in browser at http://localhost:8080
 
 If you have any questions, please contact Martins at [mkozlovskis@gmail.com](mkozlovskis@gmail.com).
