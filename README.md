@@ -10,19 +10,19 @@ This is a single page game application written in Angular.js. The front-end code
 1. Download the repository
 2. Install npm modules: `npm install`
 3. Install bower dependencies `bower install`
-- - - -
+
 ## Running the app
-* Run the gulp start task
- * gulp start
-* Build the code and run the app manually:
- * run the gulp build task:
-  *`gulp build` to simply build the files
-  * or `gulp default -end development` to also watch for file changes and automatic re-build
-   * Chrome's livereload plugin is needed for the page to reload automatically
- * start the server:
-  *`npm start`
-  * or `node server.js`
-* View in browser at http://localhost:8080
+1. Run the gulp start task
+ 1. gulp start
+2. Build the code and run the app manually:
+ 1. run the gulp build task:
+  - `gulp build` to simply build the files
+  - or `gulp default -end development` to also watch for file changes and automatic re-build
+   - Chrome's livereload plugin is needed for the page to reload automatically
+ 2. start the server:
+  - `npm start`
+  - or `node server.js`
+3. View in browser at http://localhost:8080
 
 If you have any questions, please contact Martins at [mkozlovskis@gmail.com](mkozlovskis@gmail.com).
 - - - -
