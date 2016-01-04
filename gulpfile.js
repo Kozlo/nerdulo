@@ -5,7 +5,8 @@ var gulp = require('gulp'),
     plumber = require('gulp-plumber'), // let's gulp keep watching even if errors occur in the code
     imagemin = require('gulp-imagemin'),
     environments = require('gulp-environments'), // allows setting for which environments to
-    livereload = require('gulp-livereload');
+    livereload = require('gulp-livereload'),
+    nodemon = require('gulp-nodemon');
 
 var prod = environments.production,
     dev = environments.development;
@@ -97,8 +98,30 @@ gulp.task('watch', function() {
     }
 });
 
-// The default task simply runs other tasks by passing the name of the tasks in an array
-// the very first task cleans the directory to make sure no old files are there
-gulp.task('default', ['clean'], function() {
-    gulp.start(['sass', 'scripts', 'views', 'static', 'tests', 'watch'])
+// server start task. also runs build before starting
+gulp.task('start', ['build'], function () {
+    livereload.listen();
+    nodemon({
+        script: 'server.js'
+        , ext: 'js html css scss'
+        , env: { 'NODE_ENV': 'development' }
+        , ignore: ["dist/*"] // add this otherwise an infinite loop will occur
+        , tasks: ['build'] // only build the files, but don't watch them separately
+    })
+    .on('start', function() {
+        // even though this is not a great solution, this is the only way to livereload with nodemon
+        setTimeout(function () {
+            livereload.reload();
+        }, 500);
+    });
+});
+
+// The build task runs clean and all build tasks
+gulp.task('build', ['clean'], function() {
+    gulp.start(['sass', 'scripts', 'views', 'static', 'tests']);
+});
+
+// The default runs the build task and starts the watch task
+gulp.task('default', ['build'], function() {
+    gulp.start(['watch'])
 });
