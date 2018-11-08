@@ -2,14 +2,14 @@
   "name": "nerdulo",
   "version": "1.0.0",
   "dependencies": {
-    "bootstrap": "latest",
+    "bootstrap": "2.1.1",
     "font-awesome": "latest",
     "animate.css": "latest",
-    "angular": "latest",
-    "angular-route": "latest",
-    "qunit"         : "latest",
+    "angular": "1.7.5",
+    "angular-route": "1.7.5",
+    "qunit"         : "1.0.0",
     "sinonjs"       : "latest",
     "sinon-qunit"   : "latest",
-    "jquery"        : "latest"
+    "jquery"        : "2.2.4"
   }
 }
